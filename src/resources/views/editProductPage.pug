@@ -1,0 +1,90 @@
+doctype html
+head
+	meta(charset='utf-8')
+	title Update product
+	meta(name='viewport' content='width=device-width, initial-scale=1')
+	link(href='https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css' rel='stylesheet')
+	link(href='/css/profileAdmin.css', rel='stylesheet')
+	link(rel="shortcut icon" href="#")
+body
+	.container
+	  .row.gutters
+		.col-xl-4.col-lg-3.col-md-12.col-sm-12.col-12
+		  .card.h-100
+			.card-body
+			  .account-settings
+				.user-profile
+				  .user-avatar
+					img(src=`/img/product/${product.imageCover}` alt='Admin')
+				  h5.user-name= product.name                
+				.about 
+				  h5.b-2.text-primary= product.description 
+			.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12              
+		.col-xl-8.col-lg-9.col-md-12.col-sm-12.col-12        
+		  .card.h-100
+			.card-body
+			  form.form-info-user.row.gutters(action="/admin/update-info", method='POST')
+				.col-xl-12.col-lg-12.col-md-12.col-sm-12.col-12
+				  h6.mb-3.text-primary Product info
+				.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
+				  .form-group
+					label(for='name')= product.name
+					input#name.form-control(type='name'  placeholder='Enter name ', value=`${product.name}`  name='name')
+				.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
+				  .form-group
+					label(for='description')= product.description
+					input#description.form-control(type='text' placeholder='Enter description ', value=`${product.description}`)
+				.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
+				  .form-group
+					label(for='price')= product.price            
+					input#price.form-control(type='text' placeholder='Enter price ', value=`${product.price}` name='price')                                                    
+				.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
+				  .form-group
+					label(for='brand')= product.brand
+					input#brand.form-control(type='text' placeholder='Enter brand', value=`${product.brand}` name='brand')
+				.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
+				  .form-group
+					label(for='material')= product.brand
+					input#brand.form-control(type='text' placeholder='Enter brand', value=`${product.brand}` name='material')
+				.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
+				  .form-group
+					label(for='brand')= product.brand
+					input#brand.form-control(type='text' placeholder='Enter brand', value=`${product.brand}` name='pattern')
+				.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
+				  .form-group
+					label(for='discount')= product.discount
+					input#discount.form-control(type='number' placeholder='Enter discount', value=`${product.discount}` name='discount')									
+				.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
+				  .form-group
+					label(for='avatar') 
+					  u Choose new avatar:
+					input(type='file' accept='image/*' name='avatar' id='avatar')     
+				.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
+					br
+					.custom-control.custom-checkbox                        
+						input#chk-change-password.custom-control-input(type='checkbox' name='changePassword')
+						label.custom-control-label(for='chk-change-password') Change password
+						.contentShowOrHide
+							br
+							.col-xl-12.col-lg-12.col-md-12.col-sm-12.col-12
+							.form-group
+								label(for='currentPassword') Current Password
+								input#password.form-control(type='password' placeholder='Enter old password' name='currentPassword')
+							.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
+							.form-group
+								label(for='newPassword') new PW
+								input#newPassword.form-control(type='password' placeholder='Enter new password' name='newPassword')
+							.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
+							.form-group
+								label(for='confirmNewPW') confirm new PW
+								input#confirmNewPassword.form-control(type='password' placeholder='Enter new password again' )              
+				.col-xl-12.col-lg-12.col-md-12.col-sm-12.col-12
+				  .text-right
+					button#submit.btn.btn-primary(type='submit' name='submit') Update    
+	script(src='https://code.jquery.com/jquery-1.10.2.min.js')
+	script(src='https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js')
+	//-handle update
+	//-lib
+	script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js")
+	script(src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js')
+	script(src='//cdn.jsdelivr.net/npm/sweetalert2@11')

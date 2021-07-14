@@ -1,0 +1,101 @@
+doctype html
+head
+    meta(charset='utf-8')
+    title Update Profile
+    meta(name='viewport' content='width=device-width, initial-scale=1')
+    link(href='https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css' rel='stylesheet')
+    link(href='/css/profileAdmin.css', rel='stylesheet')
+    link(rel="shortcut icon" href="#")
+body
+    .container
+      .row.gutters
+        .col-xl-4.col-lg-3.col-md-12.col-sm-12.col-12
+          .card.h-100
+            .card-body
+              .account-settings
+                .user-profile
+                  .user-avatar
+                    img(src=`/img/users/${user.avatar}` alt='Admin')
+                  h5.user-name= user.name
+                  h6.user-email= user.email
+                .about 
+                  h5.b-2.text-primary= `sex: ${user.sex}`
+            .col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12              
+        .col-xl-8.col-lg-9.col-md-12.col-sm-12.col-12        
+          .card.h-100
+            .card-body
+              form.form-info-user.row.gutters(action="/admin/update-info", method='POST')
+                .col-xl-12.col-lg-12.col-md-12.col-sm-12.col-12
+                  h6.mb-3.text-primary Personal Details
+                .col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
+                  .form-group
+                    label(for='eMail') Email
+                    input#email.form-control(type='email'  placeholder='Enter email ID', value=`${user.email}`  name='email')
+                .col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
+                  .form-group
+                    label(for='phone') Phone
+                    input#phone.form-control(type='text' style="background-color:#000" placeholder='Enter phone number', value=`${user.phone}` disabled)
+                .col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
+                  .form-group
+                    label(for='fullName') Name               
+                    input#name.form-control(type='text' placeholder='Enter full name', value=`${user.name}` name='name')                                                    
+                .col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
+                  .form-group
+                    label(for='birthYear') BirthYear
+                    input#birthYear.form-control(type='text' placeholder='Birth Year', value=`${user.birthYear}` name='birthYear')                                                 
+                .col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
+                    .custom-control.custom-radio
+                        input#rdoNam.custom-control-input(type='radio' name='sex' value='male' checked)
+                        label.custom-control-label(for='rdoNam') male
+                    .custom-control.custom-radio
+                        input#rdoNu.custom-control-input(type='radio' name='sex' value='female')
+                        label.custom-control-label(for='rdoNu') female
+                .col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
+                  .form-group
+                    label(for='avatar') 
+                      u Choose new avatar:
+                    input(type='file' accept='image/*' name='avatar' id='avatar')     
+                .col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
+                    br
+                    .custom-control.custom-checkbox                        
+                        input#chk-change-password.custom-control-input(type='checkbox' name='changePassword')
+                        label.custom-control-label(for='chk-change-password') Change password
+                        .contentShowOrHide
+                            br
+                            .col-xl-12.col-lg-12.col-md-12.col-sm-12.col-12
+                            .form-group
+                                label(for='currentPassword') Current Password
+                                input#password.form-control(type='password' placeholder='Enter old password' name='currentPassword')
+                            .col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
+                            .form-group
+                                label(for='newPassword') new PW
+                                input#newPassword.form-control(type='password' placeholder='Enter new password' name='newPassword')
+                            .col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
+                            .form-group
+                                label(for='confirmNewPW') confirm new PW
+                                input#confirmNewPassword.form-control(type='password' placeholder='Enter new password again' )              
+                .col-xl-12.col-lg-12.col-md-12.col-sm-12.col-12
+                  .text-right
+                    button#submit.btn.btn-primary(type='submit' name='submit') Update    
+    script(src='https://code.jquery.com/jquery-1.10.2.min.js')
+    script(src='https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js')
+    //-handle update
+    script(src='/js/updateProfileAdmin.js')
+    //-lib
+    script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js")
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js')
+    script(src='//cdn.jsdelivr.net/npm/sweetalert2@11')
+    
+    script.
+        $('#chk-change-password').change(function(){
+          if($(this).is(':checked')) {
+            $("#password").attr('required', ''); 
+            $("#newPassword").attr('required', ''); 
+            $("#confirmNewPassword").attr('required', ''); 
+          }                                       
+          else {
+            $("#password").removeAttr('required');
+            $("#newPassword").removeAttr('required');
+            $("#confirmNewPassword").removeAttr('required');
+          }
+        })

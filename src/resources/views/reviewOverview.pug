@@ -1,0 +1,24 @@
+extends dashboard 
+
+block content
+	.body-tb-generic
+		h1.h1-tb-generic Reviews
+		table.rwd-table
+			tr
+				th Rating
+				th Review Updated
+					br
+					p (day/month/year)
+				th Review
+				th Name
+				th Avatar
+				th Reviewed Product
+			each review in reviews
+				tr
+					td(data-th='Rating')= `${review.rating}⭐`
+					td(data-th='UpdatedAt')= review.updatedAt.toLocaleString('vi-vn', {day: 'numeric', month: 'numeric', year: 'numeric'})
+					td(data-th='Review')= review.review
+					td(data-th='Name')= review.userId.name
+					td(data-th='Avatar')
+						img(src=`${review.userId.avatar}/img/otter.png` style="width:50px; height:50px; border-radius: 50%;")
+					td= review.productId.name

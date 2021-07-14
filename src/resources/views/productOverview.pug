@@ -1,0 +1,42 @@
+extends dashboard 
+
+block content   
+    .body-tb-generic
+        h1.h1-tb-generic Products👚
+        table.rwd-table
+            tr
+                th Image
+                th Name
+                th Description
+                th Price
+                th Size
+                th Color
+                th Brand-Material-Pattern
+                th Discount
+                th Rating
+                th State
+                th Updated At
+                    br 
+                    p (day/month/year)
+            each product in products
+                tr
+                    td(data-th='Image')
+                        img(src='' style='width:50px; height:50px;')
+                    td(data-th='Name')= product.name
+                    td(data-th='Description')= product.description
+                    td(data-th='Price')= `${(product.price/1000).toFixed(3)}đ`
+                    td(data-th='Size')= product.size.join(', ')
+                    td(data-th='Color')= product.color.join(', ')
+                    td(data-th='Info')= `${product.brand} - ${product.material} - ${product.pattern}`
+                    td(data-th='Discount' style='text-align:center')= product.discount
+                    td(data-th='Rating')= `${product.ratingsAverage}⭐/${product.ratingsQuantity}✔️`
+                    td(data-th='State')
+                        if(product.outOfStock)
+                            img(src='/icon/out-of-stock.png')
+                        else 
+                            img(src='/icon/left-stock.png')
+                    td(data-th='UpdatedAt')= product.updatedAt.toLocaleString('vi-vn', {day: 'numeric', month: 'numeric', year: 'numeric'})
+                    td
+                        a(href='#' title='Delete' style='text-align:center' data-slug=`${product.slug}`) Delete❎
+                    td
+                        a#btnEditProduct(href=`/admin/products/${product.slug}` title='Edit' style='text-align:center') Edit🖊️    
