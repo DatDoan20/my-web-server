@@ -18,6 +18,8 @@ const Product = new Schema(
 		pattern: { type: String, required: true },
 		discount: { type: Number, default: 0 },
 		outOfStock: { type: Boolean, default: false },
+		type: { type: String, required: true },
+		category: { type: String, required: true },
 		ratingsAverage: {
 			type: Number,
 			default: 5,

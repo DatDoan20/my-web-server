@@ -41,6 +41,9 @@ exports.getProductOverviewPage = async (req, res, next) => {
 };
 
 exports.getProductEditPage = async (req, res, next) => {
-	const product = await Product.find({ slug: req.params.slug });
+	const product = await Product.findOne({ slug: req.params.slug });
 	res.status(200).render('editProductPage', { product: product });
+};
+exports.updateProduct = async (req, res, next) => {
+	console.log(req.body);
 };
