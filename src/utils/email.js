@@ -29,10 +29,9 @@ module.exports = class Email {
 	//Send the actual email
 	async send(template, subject) {
 		// 1) render HTML based on pug template
-		const html = pug.renderFile(`${__dirname}/../resources/views/email/${template}.pug`,{
-			firstName = this.firstName,
-			url = this.url,
-			subject = this.subject
+		const html = pug.renderFile(`${__dirname}/../resources/views/email/${template}.pug`, {
+			firstName: this.firstName,
+			url: this.url,
 		});
 
 		// 2) define email options
@@ -45,10 +44,16 @@ module.exports = class Email {
 		};
 
 		// 3) create transport and send email
-		await this.createNewTransport().sendMail(mailOptions)
+		await this.createNewTransport().sendMail(mailOptions);
 	}
 
 	async sendWelcome() {
 		await this.send('welcome', 'Welcome to the clothes shop! ❤');
+	}
+	async sendPasswordReset() {
+		await this.send(
+			'passwordReset',
+			'Your password reset token (valid for only 10 minutes ⏳)'
+		);
 	}
 };
