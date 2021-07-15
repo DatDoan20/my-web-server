@@ -3,10 +3,9 @@ const User = require('../models/User');
 const appError = require('../handler/appError');
 const validator = require('validator');
 const jwt = require('jsonwebtoken');
-const sendEmail = require('../../utils/email');
+const Email = require('../../utils/email');
 const crypto = require('crypto');
 const factory = require('./HandlerFactory');
-const handlerImage = require('./HandlerImage');
 //----------------------------------------------------------------
 const createToken = (_id) => {
 	return jwt.sign({ _id }, process.env.JWT_SECRET, {
@@ -39,6 +38,11 @@ exports.singUp = catchAsync(async (req, res, next) => {
 	}
 
 	const newUser = await User.create(req.body);
+
+	//send email welcome
+	//http://127.0.0.1:3000/admin/sing-in
+	await new Email(newUser, `${req.protocal}://${req.get('host')}/admin/sing-in`).sendWelcome();
+
 	//return res for client
 	const token = createToken(newUser._id);
 	sendToken(token, res);
