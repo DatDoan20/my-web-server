@@ -21,12 +21,12 @@ block content
             each product in products
                 tr
                     td(data-th='Image')
-                        img(src='' style='width:50px; height:50px;')
+                        img(src=`/img/products/${product._id}/${product.imageCover}` style='width:200px; height:200px;')
                     td(data-th='Name')= product.name
                     td(data-th='Description')= product.description
                     td(data-th='Price')= `${(product.price/1000).toFixed(3)}đ`
-                    td(data-th='Size')= product.size.join(', ')
-                    td(data-th='Color')= product.color.join(', ')
+                    td(data-th='Size')= product.size
+                    td(data-th='Color')= product.color
                     td(data-th='Info')= `${product.brand} - ${product.material} - ${product.pattern}`
                     td(data-th='Discount' style='text-align:center')= product.discount
                     td(data-th='Rating')= `${product.ratingsAverage}⭐/${product.ratingsQuantity}✔️`

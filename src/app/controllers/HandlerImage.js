@@ -50,6 +50,7 @@ exports.resizeImages = catchAsync(async (req, res, next) => {
 		console.log('files imageCover or images not exists');
 		return next();
 	}
+
 	// create folder to process (1) and (2)
 	var pathSaveProductImg = `src/public/img/products/${req.params.id}`;
 	if (!fs.existsSync(pathSaveProductImg)) {
