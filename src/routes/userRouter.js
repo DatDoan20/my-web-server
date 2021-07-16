@@ -34,6 +34,7 @@ router.patch('/add-to-fav', userController.addToFav);
 // api/users/review
 router.use('/reviews', reviewRouter);
 router.use('/orders', orderRouter);
+
 // RestrictTo admin
 router.use(authController.restrictTo('admin'));
 

@@ -33,14 +33,18 @@ infoFormProduct.addEventListener('submit', async (e) => {
 	} else {
 		formData.append('outOfStock', true);
 	}
-	//add img
-	formData.append('imageCover', document.getElementById('imageCover').files[0]);
-	var numberFileOfImages = document.getElementById('images').files.length;
-
-	for (var index = 0; index < numberFileOfImages; index++) {
-		formData.append('images', document.getElementById('images').files[index]);
+	//add imageCover
+	if (document.getElementById('imageCover').files.length > 0) {
+		formData.append('imageCover', document.getElementById('imageCover').files[0]);
 	}
+	//add images
+	if (document.getElementById('images').files.length > 0) {
+		var numberFileOfImages = document.getElementById('images').files.length;
 
+		for (var index = 0; index < numberFileOfImages; index++) {
+			formData.append('images', document.getElementById('images').files[index]);
+		}
+	}
 	//Ok update here
 	var resultUpdate;
 	try {

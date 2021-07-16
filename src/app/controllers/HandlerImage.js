@@ -46,42 +46,44 @@ exports.uploadImages = uploads.fields([
 
 //--resize
 exports.resizeImages = catchAsync(async (req, res, next) => {
-	if (!req.files.imageCover && !req.files.images) {
-		console.log('files imageCover or images not exists');
-		return next();
+	if (req.files.imageCover || req.files.images) {
+		// create folder to process (1) and (2)
+		var pathSaveProductImg = `src/public/img/products/${req.params.id}`;
+		if (!fs.existsSync(pathSaveProductImg)) {
+			fs.mkdirSync(pathSaveProductImg);
+		}
 	}
 
-	// create folder to process (1) and (2)
-	var pathSaveProductImg = `src/public/img/products/${req.params.id}`;
-	if (!fs.existsSync(pathSaveProductImg)) {
-		fs.mkdirSync(pathSaveProductImg);
-	}
-
-	req.body.imageCover = `product-${req.params.id}-cover.png`;
 	// 1) imageCover file
-	await sharp(req.files.imageCover[0].buffer)
-		.resize(600, 800)
-		.toFormat('png')
-		.png({ quality: 90 })
-		.toFile(`src/public/img/products/${req.params.id}/${req.body.imageCover}`);
+	if (req.files.imageCover) {
+		req.body.imageCover = `product-${req.params.id}-cover.png`;
+
+		await sharp(req.files.imageCover[0].buffer)
+			.resize(600, 800)
+			.toFormat('png')
+			.png({ quality: 90 })
+			.toFile(`src/public/img/products/${req.params.id}/${req.body.imageCover}`);
+	}
 
 	// 2) images file,
 	/*async(file, index) will return promise -> use map to return all of promise into an Array
 	and ensure all of it finish then run line next() -> use promise.all*/
-	req.body.images = [];
-	await Promise.all(
-		req.files.images.map(async (singleFile, index) => {
-			const imageName = `product-${req.params.id}-${index + 1}.png`;
+	if (req.files.images) {
+		req.body.images = [];
+		await Promise.all(
+			req.files.images.map(async (singleFile, index) => {
+				const imageName = `product-${req.params.id}-${index + 1}.png`;
 
-			await sharp(singleFile.buffer)
-				.resize(600, 800)
-				.toFormat('png')
-				.png({ quality: 90 })
-				.toFile(`src/public/img/products/${req.params.id}/${imageName}`);
+				await sharp(singleFile.buffer)
+					.resize(600, 800)
+					.toFormat('png')
+					.png({ quality: 90 })
+					.toFile(`src/public/img/products/${req.params.id}/${imageName}`);
 
-			req.body.images.push(imageName);
-		})
-	);
+				req.body.images.push(imageName);
+			})
+		);
+	}
 	next();
 });
 

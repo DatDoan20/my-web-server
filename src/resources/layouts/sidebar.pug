@@ -1,14 +1,14 @@
-aside.flex-shrink-0.hidden.w-64.bg-white.border-r(class='dark:border-primary-darker dark:bg-darker md:block')
+aside.menu-d-shop.flex-shrink-0.hidden.w-64.bg-white.border-r(class='dark:border-primary-darker dark:bg-darker md:block')
   .flex.flex-col.h-full
-    // Sidebar links
+    // Sidebar links    
     nav.flex-1.px-2.py-4.space-y-2.overflow-y-hidden(aria-label='Main', class='hover:overflow-y-auto')
-      // Dashboards links
-      div(x-data='{ isActive: true, open: true}')
+      // Dashboards links     
+      div(x-data='{ isActive: true, open: true}')        
         // active & hover classes 'bg-primary-100 dark:bg-primary'
         a.flex.items-center.p-2.text-gray-500.transition-colors.rounded-md(href='#', @click='$event.preventDefault(); open = !open', class='dark:text-light hover:bg-primary-100 dark:hover:bg-primary', :class="{'bg-primary-100 dark:bg-primary': isActive || open}", role='button', aria-haspopup='true', :aria-expanded="(open || isActive) ? 'true' : 'false'")
           span(aria-hidden='true')
           img(src='/icon/home.png')
-          span.ml-2.text-sm  Dashboards 
+          span.ml-2.text-sm  Dashboards
           span.ml-auto(aria-hidden='true')
             // active class 'rotate-180'
             svg.w-4.h-4.transition-transform.transform(:class="{ 'rotate-180': open }", xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke='currentColor')
@@ -57,11 +57,11 @@ aside.flex-shrink-0.hidden.w-64.bg-white.border-r(class='dark:border-primary-dar
           a.block.p-2.text-sm.text-gray-400.transition-colors.duration-200.rounded-md(href='/admin/users-trash', role='menuitem', class='dark:text-gray-400 dark:hover:text-light hover:text-gray-700')
             | Users Trash
           a.block.p-2.text-sm.text-gray-400.transition-colors.duration-200.rounded-md(href='/admin/products-trash', role='menuitem', class='dark:text-gray-400 dark:hover:text-light hover:text-gray-700')
-            | Products Trash 
+            | Products Trash (out of stock products)
           a.block.p-2.text-sm.text-gray-400.transition-colors.duration-200.rounded-md(href='/admin/reviews-trash', role='menuitem', class='dark:text-gray-400 dark:hover:text-light hover:text-gray-700')
             | Reviews Trash
           a.block.p-2.text-sm.text-gray-400.transition-colors.duration-200.rounded-md(href='/admin/orders-trash', role='menuitem', class='dark:text-gray-400 dark:hover:text-light hover:text-gray-700')
-            | Orders Trash                    
+            | Orders Trash (canceled orders) 
       // Authentication links
       div(x-data='{ isActive: false, open: false}')
         // active & hover classes 'bg-primary-100 dark:bg-primary'

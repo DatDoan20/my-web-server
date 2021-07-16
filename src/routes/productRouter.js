@@ -27,4 +27,6 @@ router.patch(
 // create product api/products/ create
 router.post('/', productController.createProduct);
 
+//delete product
+router.delete('/:id', productController.deleteProduct);
 module.exports = router;

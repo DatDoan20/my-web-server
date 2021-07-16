@@ -1,12 +1,15 @@
 header.relative.bg-white(class='dark:bg-darker')
-  .flex.items-center.justify-between.p-2.border-b(class='dark:border-primary-darker')
+  .flex.items-center.justify-between.p-2.border-b(class='dark:border-primary-darker' )
+    input#btn-click-hide-show-menu-d-shop(type="checkbox" hidden)
+    label(for="btn-click-hide-show-menu-d-shop") 
+      img#img-click-hide-show-menu-d-shop(src="/img/btn-close.png", alt="" style="width:32px; height:32px")
     // Mobile menu button
     button.p-1.transition-colors.duration-200.rounded-md.text-primary-lighter.bg-primary-50(@click='isMobileMainMenuOpen = !isMobileMainMenuOpen', class='hover:text-primary hover:bg-primary-100 dark:hover:text-light dark:hover:bg-primary-dark dark:bg-dark md:hidden focus:outline-none focus:ring')
       span.sr-only Open main menu
       span(aria-hidden='true')
         svg.w-8.h-8(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke='currentColor')
           path(stroke-linecap='round', stroke-linejoin='round', stroke-width='2', d='M4 6h16M4 12h16M4 18h16')
-    // Brand
+    // Brand    
     a.inline-block.text-2xl.font-bold.tracking-wider.uppercase.text-primary-dark(href='index.html', class='dark:text-light')
       | Shop
     // Mobile sub menu button
@@ -55,7 +58,7 @@ header.relative.bg-white(class='dark:bg-darker')
           a.block.px-4.py-2.text-sm.text-gray-700.transition-colors#MyBtnLogout(href='#', role='menuitem', class='hover:bg-gray-100 dark:text-light dark:hover:bg-primary')
             | Logout
     // Mobile sub menu
-    nav.absolute.flex.items-center.p-4.bg-white.rounded-md.shadow-lg.top-16.inset-x-4(x-transition:enter='transition duration-200 ease-in-out transform sm:duration-500', x-transition:enter-start='-translate-y-full opacity-0', x-transition:enter-end='translate-y-0 opacity-100', x-transition:leave='transition duration-300 ease-in-out transform sm:duration-500', x-transition:leave-start='translate-y-0 opacity-100', x-transition:leave-end='-translate-y-full opacity-0', x-show='isMobileSubMenuOpen', @click.away='isMobileSubMenuOpen = false', class='dark:bg-darker md:hidden', aria-label='Secondary')
+    nav.absolute.flex.items-center.p-4.bg-white.rounded-md.shadow-lg.top-16.inset-x-4(x-transition:enter='transition duration-200 ease-in-out transform sm:duration-500', x-transition:enter-start='-translate-y-full opacity-0', x-transition:enter-end='translate-y-0 opacity-100', x-transition:leave='transition duration-300 ease-in-out transform sm:duration-500', x-transition:leave-start='translate-y-0 opacity-100', x-transition:leave-end='-translate-y-full opacity-0', x-show='isMobileSubMenuOpen', @click.away='isMobileSubMenuOpen = false', class='dark:bg-darker md:hidden', aria-label='Secondary')               
       .space-x-2
         // Toggle dark theme button
         button.relative(aria-hidden='true', class='focus:outline-none', x-cloak='', @click='toggleTheme')
@@ -134,7 +137,7 @@ header.relative.bg-white(class='dark:bg-darker')
             a.block.p-2.text-sm.text-gray-400.transition-colors.duration-200.rounded-md(href='/admin/reviews', role='menuitem', class='dark:text-gray-400 dark:hover:text-light hover:text-gray-700')
               | Reviews
             a.block.p-2.text-sm.text-gray-400.transition-colors.duration-200.rounded-md(href='/admin/orders', role='menuitem', class='dark:text-gray-400 dark:hover:text-light hover:text-gray-700')
-              | Orders                    
+              | Orders
         // Pages links
         div(x-data='{ isActive: false, open: false }')
           // active classes 'bg-primary-100 dark:bg-primary'
@@ -152,11 +155,11 @@ header.relative.bg-white(class='dark:bg-darker')
             a.block.p-2.text-sm.text-gray-400.transition-colors.duration-200.rounded-md(href='/admin/users-trash', role='menuitem', class='dark:text-gray-400 dark:hover:text-light hover:text-gray-700')
               | User Trash
             a.block.p-2.text-sm.text-gray-400.transition-colors.duration-200.rounded-md(href='/admin/products-trash', role='menuitem', class='dark:text-gray-400 dark:hover:text-light hover:text-gray-700')
-              | Product Trash
+              | Product Trash (out of stock products)
             a.block.p-2.text-sm.text-gray-400.transition-colors.duration-200.rounded-md(href='/admin/reviews-trash', role='menuitem', class='dark:text-gray-400 dark:hover:text-light hover:text-gray-700')
               | Review Trash
             a.block.p-2.text-sm.text-gray-400.transition-colors.duration-200.rounded-md(href='/admin/orders-trash', role='menuitem', class='dark:text-gray-400 dark:hover:text-light hover:text-gray-700')
-              | Orders Trash                    
+              | Orders Trash (canceled orders) 
         // Authentication links
         div(x-data='{ isActive: false, open: false}')
           // active & hover classes 'bg-primary-100 dark:bg-primary'

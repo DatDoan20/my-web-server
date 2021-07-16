@@ -21,7 +21,7 @@ block content
             each product in products
                 tr
                     td(data-th='Image')
-                        img(src=`/img/products/${product._id}/${product.imageCover}` style='width:200px; height:200px;')
+                        img(src=`/img/products/${product._id}/${product.imageCover}` style='width:300px; height:200px;')
                     td(data-th='Name')= product.name
                     td(data-th='Description')= product.description
                     td(data-th='Price')= `${(product.price/1000).toFixed(3)}đ`
@@ -37,6 +37,51 @@ block content
                             img(src='/icon/left-stock.png')
                     td(data-th='UpdatedAt')= product.updatedAt.toLocaleString('vi-vn', {day: 'numeric', month: 'numeric', year: 'numeric'})
                     td
-                        a(href='#' title='Delete' style='text-align:center' data-slug=`${product.slug}`) Delete❎
+                        a.btnDelete(href='#' title='Delete' style='text-align:center' data-name=`${product.name}` data-id=`${product._id}`) Delete(out of stock)❎
                     td
-                        a#btnEditProduct(href=`/admin/products/${product.slug}` title='Edit' style='text-align:center') Edit🖊️    
+                        a#btnEditProduct(href=`/admin/products/${product.slug}` title='Edit' style='text-align:center') Edit🖊️
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js')
+    script(src='//cdn.jsdelivr.net/npm/sweetalert2@11')
+    script.
+        var btnDelete = $('.btnDelete')       
+        btnDelete.click(function(e) {
+            e.preventDefault()
+            console.log('ahii')
+            Swal.fire({
+                title: 'Are you sure delete?',
+                text: $(this).data('name'),
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    deleteProduct($(this).data('id'));                    
+                }
+            })
+        })
+        async function deleteProduct(id){
+             try{
+                const res = await axios({
+                    method: 'DELETE',
+                    url: `http://127.0.0.1:3000/api/products/${id}`
+                })
+
+                if(res.data.status === 'success'){
+                    await Swal.fire(
+                        'Deleted!',
+                        'Your product has been deleted.',
+                        'success'                
+                    )
+                    location.reload()
+                }
+            }catch(err){
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong, can not sing out now! please try again',
+                })
+            }
+        }
