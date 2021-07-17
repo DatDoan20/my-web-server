@@ -173,12 +173,13 @@ html(lang='en')
               })
         }
       })
+      $('#btn-click-hide-show-menu-d-shop').prop('checked', true);
       $('#btn-click-hide-show-menu-d-shop').change(function(){
         if(this.checked){
-          $("#img-click-hide-show-menu-d-shop").attr("src","/img/btn-close.png");
+          $("#img-click-hide-show-menu-d-shop").text('🔒')
           $('.menu-d-shop').show()
         }else{
-          $("#img-click-hide-show-menu-d-shop").attr("src","/img/btn-open.png");
+          $("#img-click-hide-show-menu-d-shop").text('🔓')
           $('.menu-d-shop').hide()
         }
       })      

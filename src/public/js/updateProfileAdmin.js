@@ -45,6 +45,14 @@ infoFormUser.addEventListener('submit', async (e) => {
 	//update
 	var resultUpdate;
 	try {
+		const alertWaiting = Swal.fire({
+			title: 'Profile is being updated..., Please wait a moment, Do not dismiss!',
+			icon: 'warning',
+			showConfirmButton: false,
+			allowOutsideClick: false,
+			allowEscapeKey: false,
+			closeOnClickOutside: false,
+		});
 		//default when click -> update me (update info basic) + avatar
 		resultUpdate = await axios({
 			method: 'PATCH',
@@ -60,6 +68,7 @@ infoFormUser.addEventListener('submit', async (e) => {
 			});
 		}
 		if (resultUpdate.data.status === 'success') {
+			alertWaiting.close();
 			await showAlert('success', 'Update successfully!', 'Page will automatically reloaded');
 			location.reload();
 		}

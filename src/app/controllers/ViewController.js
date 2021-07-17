@@ -34,13 +34,17 @@ exports.getOrderOverviewPage = async (req, res, next) => {
 	const orders = await Order.find();
 	res.status(200).render('orderOverview', { orders: orders });
 };
-//----------------------------------------------------------------
+
+//-----------------------Product-----------------------------------------
 exports.getProductOverviewPage = async (req, res, next) => {
 	const products = await Product.find();
 	res.status(200).render('productOverview', { products: products });
 };
 
-exports.getProductEditPage = async (req, res, next) => {
+exports.getEditProductPage = async (req, res, next) => {
 	const product = await Product.findOne({ slug: req.params.slug });
 	res.status(200).render('editProductPage', { product: product });
+};
+exports.getCreateProductPage = async (req, res, next) => {
+	res.status(200).render('createProductPage');
 };

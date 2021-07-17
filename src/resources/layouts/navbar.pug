@@ -2,7 +2,9 @@ header.relative.bg-white(class='dark:bg-darker')
   .flex.items-center.justify-between.p-2.border-b(class='dark:border-primary-darker' )
     input#btn-click-hide-show-menu-d-shop(type="checkbox" hidden)
     label(for="btn-click-hide-show-menu-d-shop") 
-      img#img-click-hide-show-menu-d-shop(src="/img/btn-close.png", alt="" style="width:32px; height:32px")
+      //img#img-click-hide-show-menu-d-shop(src="/img/btn-close.png", alt="" style="width:32px; height:32px")
+      .flex-shrink-0.px-2.py-4.space-y-2
+        p#img-click-hide-show-menu-d-shop.flex.items-center.justify-center.w-full.px-4.py-2.text-sm.text-white.rounded-md.bg-primary(style='width:40px; height:40px; border-radius: 50%;' type='button', class='hover:bg-primary-dark focus:outline-none focus:ring focus:ring-primary-dark focus:ring-offset-1 focus:ring-offset-white dark:focus:ring-offset-dark') 🔒
     // Mobile menu button
     button.p-1.transition-colors.duration-200.rounded-md.text-primary-lighter.bg-primary-50(@click='isMobileMainMenuOpen = !isMobileMainMenuOpen', class='hover:text-primary hover:bg-primary-100 dark:hover:text-light dark:hover:bg-primary-dark dark:bg-dark md:hidden focus:outline-none focus:ring')
       span.sr-only Open main menu

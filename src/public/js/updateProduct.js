@@ -48,15 +48,21 @@ infoFormProduct.addEventListener('submit', async (e) => {
 	//Ok update here
 	var resultUpdate;
 	try {
-		//default when click -> update me (update info basic) + avatar
-		//var idProduct = document.getElementById('testIdProduct').value;
-		//console.log(idProduct);
+		const alertWaiting = Swal.fire({
+			title: 'Product is being updated..., Please wait a moment, Do not dismiss!',
+			icon: 'warning',
+			showConfirmButton: false,
+			allowOutsideClick: false,
+			allowEscapeKey: false,
+			closeOnClickOutside: false,
+		});
 		resultUpdate = await axios({
 			method: 'PATCH',
-			url: `http://127.0.0.1:3000/api/products/60dfbae36811c50618f6b101`,
+			url: `http://127.0.0.1:3000/api/products/${$('#submit').data('id')}`,
 			data: formData,
 		});
 		if (resultUpdate.data.status === 'success') {
+			alertWaiting.close();
 			await showAlert('success', 'Update successfully!', 'Page will automatically reloaded');
 			location.reload();
 		}

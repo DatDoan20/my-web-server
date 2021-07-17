@@ -17,7 +17,14 @@ exports.getOneProduct = factory.getOneDocument(Product, { path: 'reviews' });
 exports.getAllProductWithQuery = factory.getAllDocuments(Product, { path: 'reviews' });
 
 // DELETE /api/products/:id
-exports.deleteProduct = factory.softDeleteOneDocument(Product);
+exports.setOutOfStockProduct = (req, res, next) => {
+	req.body.outOfStock = true;
+	next();
+};
+exports.deleteProduct = factory.updateOneDocument(Product);
+
+//DESTROY /api/products/:id/force
+exports.destroyProduct = factory.forceDeleteOneDocument(Product);
 
 // exports.aliasNewestProducts = catchAsync( async (req, res, next) =>{
 // 	req.query.limit = '10'

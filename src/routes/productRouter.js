@@ -16,6 +16,9 @@ router.get('/:id', productController.getOneProduct);
 // RestrictTo admin after this middleware
 router.use(authController.restrictTo('admin'));
 
+// create product api/products/ create
+router.post('/', productController.createProduct);
+
 // update product api/products/:id
 router.patch(
 	'/:id',
@@ -24,9 +27,6 @@ router.patch(
 	productController.updateProduct
 );
 
-// create product api/products/ create
-router.post('/', productController.createProduct);
-
 //delete product
-router.delete('/:id', productController.deleteProduct);
+router.delete('/:id', productController.setOutOfStockProduct, productController.deleteProduct);
 module.exports = router;

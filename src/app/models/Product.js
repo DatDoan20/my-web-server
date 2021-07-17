@@ -7,8 +7,8 @@ const Product = new Schema(
 	{
 		name: { type: String, maxLength: 255, unique: true, required: true },
 		description: { type: String, maxLength: 600, required: true },
-		images: { type: [String], required: true },
-		imageCover: { type: String, required: true },
+		images: { type: [String] },
+		imageCover: { type: String },
 		slug: { type: String, slug: 'name', unique: true },
 		price: { type: Number, required: true },
 		brand: { type: String, required: true },

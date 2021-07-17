@@ -14,5 +14,6 @@ router.get('/products', viewController.getProductOverviewPage);
 router.get('/reviews', viewController.getReviewOverviewPage);
 router.get('/orders', viewController.getOrderOverviewPage);
 router.get('/my-profile', viewController.getProfileAdmin);
-router.get('/products/:slug', viewController.getProductEditPage);
+router.get('/products/create', viewController.getCreateProductPage);
+router.get('/products/:slug', viewController.getEditProductPage);
 module.exports = router;
