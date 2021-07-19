@@ -28,5 +28,15 @@ router.patch(
 );
 
 //delete product
-router.delete('/:id', productController.setOutOfStockProduct, productController.deleteProduct);
+router.delete(
+	'/:id',
+	productController.setOutOfStockProduct(true),
+	productController.updateProduct
+);
+//
+router.patch(
+	'/restore/:id',
+	productController.setOutOfStockProduct(false),
+	productController.updateProduct
+);
 module.exports = router;

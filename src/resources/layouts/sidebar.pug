@@ -16,7 +16,7 @@ aside.menu-d-shop.flex-shrink-0.hidden.w-64.bg-white.border-r(class='dark:border
         .mt-2.space-y-2.px-7(role='menu', x-show='open', aria-label='Dashboards')
           // active & hover classes 'text-gray-700 dark:text-light'
           // inActive classes 'text-gray-400 dark:text-gray-400'
-          a.block.p-2.text-sm.text-gray-400.transition-colors.duration-200.rounded-md(href='/admin/dashboard', role='menuitem', class='dark:hover:text-light hover:text-gray-700')
+          a.block.p-2.text-sm.text-gray-400.transition-colors.duration-200.rounded-md(href='/admin/statistics', role='menuitem', class='dark:hover:text-light hover:text-gray-700')
             | Statistic Management
       // Components links
       div(x-data='{ isActive: false, open: false }')
@@ -54,13 +54,13 @@ aside.menu-d-shop.flex-shrink-0.hidden.w-64.bg-white.border-r(class='dark:border
         .mt-2.space-y-2.px-7(x-show='open', role='menu', arial-label='Pages')
           // active & hover classes 'text-gray-700 dark:text-light'
           // inActive classes 'text-gray-400 dark:text-gray-400'
-          a.block.p-2.text-sm.text-gray-400.transition-colors.duration-200.rounded-md(href='/admin/users-trash', role='menuitem', class='dark:text-gray-400 dark:hover:text-light hover:text-gray-700')
+          a.block.p-2.text-sm.text-gray-400.transition-colors.duration-200.rounded-md(href='/admin/users/bin', role='menuitem', class='dark:text-gray-400 dark:hover:text-light hover:text-gray-700')
             | Users Trash
-          a.block.p-2.text-sm.text-gray-400.transition-colors.duration-200.rounded-md(href='/admin/products-trash', role='menuitem', class='dark:text-gray-400 dark:hover:text-light hover:text-gray-700')
+          a.block.p-2.text-sm.text-gray-400.transition-colors.duration-200.rounded-md(href='/admin/products/bin', role='menuitem', class='dark:text-gray-400 dark:hover:text-light hover:text-gray-700')
             | Products Trash (out of stock products)
-          a.block.p-2.text-sm.text-gray-400.transition-colors.duration-200.rounded-md(href='/admin/reviews-trash', role='menuitem', class='dark:text-gray-400 dark:hover:text-light hover:text-gray-700')
+          a.block.p-2.text-sm.text-gray-400.transition-colors.duration-200.rounded-md(href='/admin/reviews/bin', role='menuitem', class='dark:text-gray-400 dark:hover:text-light hover:text-gray-700')
             | Reviews Trash
-          a.block.p-2.text-sm.text-gray-400.transition-colors.duration-200.rounded-md(href='/admin/orders-trash', role='menuitem', class='dark:text-gray-400 dark:hover:text-light hover:text-gray-700')
+          a.block.p-2.text-sm.text-gray-400.transition-colors.duration-200.rounded-md(href='/admin/orders/bin', role='menuitem', class='dark:text-gray-400 dark:hover:text-light hover:text-gray-700')
             | Orders Trash (canceled orders) 
       // Authentication links
       div(x-data='{ isActive: false, open: false}')
@@ -75,7 +75,7 @@ aside.menu-d-shop.flex-shrink-0.hidden.w-64.bg-white.border-r(class='dark:border
               path(stroke-linecap='round', stroke-linejoin='round', stroke-width='2', d='M19 9l-7 7-7-7')
         .mt-2.space-y-2.px-7(x-show='open', role='menu', aria-label='Authentication')
           // active & hover classes 'text-gray-700 dark:text-light'
-          // inActive classes 'text-gray-400 dark:text-gray-400'                  
+          // inActive classes 'text-gray-400 dark:text-gray-400'
           a.block.p-2.text-sm.text-gray-400.transition-colors.duration-200.rounded-md(href='#', role='menuitem', class='dark:hover:text-light hover:text-gray-700')
             | Forgot Password
           a.block.p-2.text-sm.text-gray-400.transition-colors.duration-200.rounded-md(href='#', role='menuitem', class='dark:hover:text-light hover:text-gray-700')
@@ -87,7 +87,7 @@ aside.menu-d-shop.flex-shrink-0.hidden.w-64.bg-white.border-r(class='dark:border
           span(aria-hidden='true')
             svg.w-5.h-5(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke='currentColor')
               path(stroke-linecap='round', stroke-linejoin='round', stroke-width='2', d='M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z')
-          span.ml-2.text-sm  Others 
+          span.ml-2.text-sm  Others
           span.ml-auto(aria-hidden='true')
             // active class 'rotate-180'
             svg.w-4.h-4.transition-transform.transform(:class="{ 'rotate-180': open }", xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke='currentColor')

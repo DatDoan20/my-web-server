@@ -4,7 +4,7 @@ header.relative.bg-white(class='dark:bg-darker')
     label(for="btn-click-hide-show-menu-d-shop") 
       //img#img-click-hide-show-menu-d-shop(src="/img/btn-close.png", alt="" style="width:32px; height:32px")
       .flex-shrink-0.px-2.py-4.space-y-2
-        p#img-click-hide-show-menu-d-shop.flex.items-center.justify-center.w-full.px-4.py-2.text-sm.text-white.rounded-md.bg-primary(style='width:40px; height:40px; border-radius: 50%;' type='button', class='hover:bg-primary-dark focus:outline-none focus:ring focus:ring-primary-dark focus:ring-offset-1 focus:ring-offset-white dark:focus:ring-offset-dark') 🔒
+        p#img-click-hide-show-menu-d-shop.flex.items-center.justify-center.w-full.px-4.py-2.text-sm.text-white.rounded-md.bg-primary(style='width:40px; height:40px; border-radius: 50%;' type='button', class='hover:bg-primary-dark focus:outline-none focus:ring focus:ring-primary-dark focus:ring-offset-1 focus:ring-offset-white dark:focus:ring-offset-dark') ✖️
     // Mobile menu button
     button.p-1.transition-colors.duration-200.rounded-md.text-primary-lighter.bg-primary-50(@click='isMobileMainMenuOpen = !isMobileMainMenuOpen', class='hover:text-primary hover:bg-primary-100 dark:hover:text-light dark:hover:bg-primary-dark dark:bg-dark md:hidden focus:outline-none focus:ring')
       span.sr-only Open main menu
@@ -12,8 +12,8 @@ header.relative.bg-white(class='dark:bg-darker')
         svg.w-8.h-8(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke='currentColor')
           path(stroke-linecap='round', stroke-linejoin='round', stroke-width='2', d='M4 6h16M4 12h16M4 18h16')
     // Brand    
-    a.inline-block.text-2xl.font-bold.tracking-wider.uppercase.text-primary-dark(href='index.html', class='dark:text-light')
-      | Shop
+    //- a.inline-block.text-2xl.font-bold.tracking-wider.uppercase.text-primary-dark(href='index.html', class='dark:text-light')
+    //-   | Shop
     // Mobile sub menu button
     button.p-1.transition-colors.duration-200.rounded-md.text-primary-lighter.bg-primary-50(@click='isMobileSubMenuOpen = !isMobileSubMenuOpen', class='hover:text-primary hover:bg-primary-100 dark:hover:text-light dark:hover:bg-primary-dark dark:bg-dark md:hidden focus:outline-none focus:ring')
       span.sr-only Open sub menu
@@ -116,7 +116,7 @@ header.relative.bg-white(class='dark:bg-darker')
           .mt-2.space-y-2.px-7(role='menu', x-show='open', aria-label='Dashboards')
             // active & hover classes 'text-gray-700 dark:text-light'
             // inActive classes 'text-gray-400 dark:text-gray-400'                   
-            a.block.p-2.text-sm.text-gray-400.transition-colors.duration-200.rounded-md(href='/admin/dashboard', role='menuitem', class='dark:hover:text-light hover:text-gray-700')
+            a.block.p-2.text-sm.text-gray-400.transition-colors.duration-200.rounded-md(href='/admin/statistics', role='menuitem', class='dark:hover:text-light hover:text-gray-700')
               | Statistic Management                   
         // Components links
         div(x-data='{ isActive: false, open: false }')
@@ -156,11 +156,11 @@ header.relative.bg-white(class='dark:bg-darker')
             // inActive classes 'text-gray-400 dark:text-gray-400'
             a.block.p-2.text-sm.text-gray-400.transition-colors.duration-200.rounded-md(href='/admin/users-trash', role='menuitem', class='dark:text-gray-400 dark:hover:text-light hover:text-gray-700')
               | User Trash
-            a.block.p-2.text-sm.text-gray-400.transition-colors.duration-200.rounded-md(href='/admin/products-trash', role='menuitem', class='dark:text-gray-400 dark:hover:text-light hover:text-gray-700')
+            a.block.p-2.text-sm.text-gray-400.transition-colors.duration-200.rounded-md(href='/admin/products/bin', role='menuitem', class='dark:text-gray-400 dark:hover:text-light hover:text-gray-700')
               | Product Trash (out of stock products)
-            a.block.p-2.text-sm.text-gray-400.transition-colors.duration-200.rounded-md(href='/admin/reviews-trash', role='menuitem', class='dark:text-gray-400 dark:hover:text-light hover:text-gray-700')
+            a.block.p-2.text-sm.text-gray-400.transition-colors.duration-200.rounded-md(href='/admin/reviews/bin', role='menuitem', class='dark:text-gray-400 dark:hover:text-light hover:text-gray-700')
               | Review Trash
-            a.block.p-2.text-sm.text-gray-400.transition-colors.duration-200.rounded-md(href='/admin/orders-trash', role='menuitem', class='dark:text-gray-400 dark:hover:text-light hover:text-gray-700')
+            a.block.p-2.text-sm.text-gray-400.transition-colors.duration-200.rounded-md(href='/admin/orders/bin', role='menuitem', class='dark:text-gray-400 dark:hover:text-light hover:text-gray-700')
               | Orders Trash (canceled orders) 
         // Authentication links
         div(x-data='{ isActive: false, open: false}')

@@ -17,11 +17,10 @@ exports.getOneProduct = factory.getOneDocument(Product, { path: 'reviews' });
 exports.getAllProductWithQuery = factory.getAllDocuments(Product, { path: 'reviews' });
 
 // DELETE /api/products/:id
-exports.setOutOfStockProduct = (req, res, next) => {
-	req.body.outOfStock = true;
+exports.setOutOfStockProduct = (value) => (req, res, next) => {
+	req.body.outOfStock = value;
 	next();
 };
-exports.deleteProduct = factory.updateOneDocument(Product);
 
 //DESTROY /api/products/:id/force
 exports.destroyProduct = factory.forceDeleteOneDocument(Product);

@@ -19,32 +19,46 @@ exports.getErrorPage = (req, res, next) => {
 exports.getProfileAdmin = (req, res, next) => {
 	res.status(200).render('profileAdmin', { user: req.user });
 };
+exports.getStatisticsPage = (req, res, next) => {
+	res.status(200).render('statisticsPage');
+};
+//
 exports.getUserOverviewPage = async (req, res, next) => {
 	const users = await User.find();
 	res.status(200).render('userOverview', { users: users });
 };
 exports.getReviewOverviewPage = async (req, res, next) => {
-	const reviews = await Review.find().populate({
-		path: 'productId',
-		select: 'name',
-	});
+	const reviews = await Review.find()
+		.populate({
+			path: 'productId',
+			select: 'name',
+		})
+		.sort({ createdAt: -1 });
 	res.status(200).render('reviewOverview', { reviews: reviews });
 };
+// -------------------------------Order
 exports.getOrderOverviewPage = async (req, res, next) => {
-	const orders = await Order.find();
-	res.status(200).render('orderOverview', { orders: orders });
+	const orders = await Order.find().sort({ createdAt: -1 });
+	res.status(200).render('order/orderOverview', { orders: orders });
 };
-
+exports.getOrderBinOverviewPage = async (req, res, next) => {
+	const orders = await Order.findDeleted().sort({ createdAt: -1 });
+	res.status(200).render('order/orderBinOverview', { orders: orders });
+};
 //-----------------------Product-----------------------------------------
 exports.getProductOverviewPage = async (req, res, next) => {
-	const products = await Product.find();
-	res.status(200).render('productOverview', { products: products });
+	const products = await Product.find({ outOfStock: false }).sort({ createdAt: -1 });
+	res.status(200).render('product/productOverview', { products: products });
+};
+exports.getProductBinOverviewPage = async (req, res, next) => {
+	const products = await Product.find({ outOfStock: true }).sort({ createdAt: -1 });
+	res.status(200).render('product/productBinOverview', { products: products });
 };
 
 exports.getEditProductPage = async (req, res, next) => {
 	const product = await Product.findOne({ slug: req.params.slug });
-	res.status(200).render('editProductPage', { product: product });
+	res.status(200).render('product/editProductPage', { product: product });
 };
 exports.getCreateProductPage = async (req, res, next) => {
-	res.status(200).render('createProductPage');
+	res.status(200).render('product/createProductPage');
 };

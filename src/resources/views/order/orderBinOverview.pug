@@ -1,0 +1,39 @@
+extends ../dashboard 
+
+block content
+	.body-tb-generic
+		h1.h1-tb-generic= `Orders 🗑️ ( ${orders.length} )`
+		table.rwd-table
+			tr
+				th Id
+				th Date
+					br 
+					p (D/M/Y)
+				th Purchased Products
+				th Total Payment 
+				th State
+				th Payment Mode
+			if orders.length > 0
+				each order in orders
+					tr
+						td(data-th='Id') 
+							a(href='#')= order._id
+						td(data-th='Date')= order.createdAt.toLocaleString('vi-vn')
+						td(data-th='PurchasedProducts')
+							each product, index in order.purchasedProducts
+								p= `${index+1}. ${product.name}.`
+								br
+						td(data-th='TotalPayment')= order.totalPayment
+						if order.state === 'waiting'
+							td(data-th='Sate') Chờ xác nhận ⏳
+						else 
+							td(data-th='Sate') Đã xác nhận, chờ giao hàng... ✔️
+						td(data-th='paymentMode' style="text-align:center")= order.paymentMode
+						td
+							a.btnRestore(href='#' title='restore' style='text-align:center' data-id=`${order._id}` data-total=`${order.totalPayment}`) Restore⤴️
+			else
+				h1.h1-tb-generic Chưa có order nào bị xóa
+	script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
+	script(src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js')
+	script(src='//cdn.jsdelivr.net/npm/sweetalert2@11')
+	script(src='/js/restoreOrder.js')

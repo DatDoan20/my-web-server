@@ -5,7 +5,6 @@
 	margin-right: auto;
 	border-collapse: collapse;
 	border-style: hidden;
-	min-width: 300px;
 }
 .rwd-table tr {
 	border-top: 1px solid #ddd;

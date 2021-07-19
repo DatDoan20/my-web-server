@@ -28,6 +28,15 @@ exports.forceDeleteOneDocument = (Model) =>
 		}
 		returnResultOfRequest(res, 200);
 	});
+//----------------------------------------------------RESTORE
+exports.restoreOneDocument = (Model) =>
+	catchAsync(async (req, res, next) => {
+		const doc = await Model.restore({ _id: req.params.id });
+		if (!doc) {
+			return next(new appError('No document found with that ID', 404));
+		}
+		returnResultOfRequest(res, 200, doc);
+	});
 
 //-------------------------------------------------CREATE
 exports.createOneDocument = (Model) =>

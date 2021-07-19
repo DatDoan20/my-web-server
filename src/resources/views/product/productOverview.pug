@@ -1,53 +1,56 @@
-extends dashboard 
+extends ../dashboard 
 
 block content   
     .body-tb-generic
-        h1.h1-tb-generic Products👚
+        h1.h1-tb-generic= `Product ( ${products.length} )`
+        img(src='/icon/icon-product.png' style='width:50px; height:50px; margin-left: auto; margin-right: auto;')
         .flex-shrink-0.px-2.py-4.space-y-2
             a.flex.items-center.justify-center.w-full.px-4.py-2.text-sm.text-white.rounded-md.bg-primary(href='/admin/products/create', target='_blank' style='width:80px; height:30px;' class='hover:bg-primary-dark focus:outline-none focus:ring focus:ring-primary-dark focus:ring-offset-1 focus:ring-offset-white dark:focus:ring-offset-dark') Thêm
-        table.rwd-table
+        table.rwd-table(style='width:100%')
             tr
-                th Image
-                th Name
-                th Description
-                th Price
-                th Size
-                th Color
-                th Brand-Material-Pattern
-                th Discount
-                th Rating
-                th State
-                th Updated At
+                th(style='width:13%') Image
+                th(style='width:13%') Name
+                th(style='width:30%') Description
+                th(style='width:5%') Price
+                th(style='width:5%') Size
+                th(style='width:5%') Color
+                th(style='width:15%') Brand-Material-Pattern
+                th(style='width:2%') %
+                th(style='width:2%') Rating
+                th(style='width:5%') State
+                th(style='width:5%') Updated At
                     br 
                     p (day/month/year)
             each product in products
                 tr
                     td(data-th='Image')
-                        img(src=`/img/products/${product._id}/${product.imageCover}` style='width:300px; height:200px;')
+                        img(src=`/img/products/${product._id}/${product.imageCover}` style='width:250px; height:165px; border-radius:5px;')
                     td(data-th='Name')= product.name
                     td(data-th='Description')= product.description
                     td(data-th='Price')= `${(product.price/1000).toFixed(3)}đ`
                     td(data-th='Size')= product.size
                     td(data-th='Color')= product.color
-                    td(data-th='Info')= `${product.brand} - ${product.material} - ${product.pattern}`
-                    td(data-th='Discount' style='text-align:center')= product.discount
+                    td(data-th='Info')
+                        p=`B: ${product.brand}`
+                        p=`M: ${product.material}`
+                        p=`P: ${product.pattern}`
+                    td(data-th='Discount' style='text-align:center')= product.discount+'%'
                     td(data-th='Rating')= `${product.ratingsAverage}⭐/${product.ratingsQuantity}✔️`
                     td(data-th='State')
                         if(product.outOfStock)
                             img(src='/icon/out-of-stock.png')
                         else 
                             img(src='/icon/left-stock.png')
-                    td(data-th='UpdatedAt')= product.updatedAt.toLocaleString('vi-vn', {day: 'numeric', month: 'numeric', year: 'numeric'})
+                    td(data-th='UpdatedAt')= product.updatedAt.toLocaleString('vi-vn')
                     td
-                        a.btnDelete(href='#' title='Delete' style='text-align:center' data-name=`${product.name}` data-id=`${product._id}`) Delete(out of stock)❎
+                        a.btnDelete(href='#' title='Delete' style='text-align:center' data-name=`${product.name}` data-id=`${product._id}`) ❎
                     td
-                        a#btnEditProduct(href=`/admin/products/${product.slug}` title='Edit' style='text-align:center') Edit🖊️
+                        a#btnEditProduct(href=`/admin/products/${product.slug}` title='Edit' style='text-align:center') 🖊️
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js')
-    link(rel="stylesheet", href="/css/addProduct.css")
     script(src='//cdn.jsdelivr.net/npm/sweetalert2@11')
     script.
-        var btnDelete = $('.btnDelete')       
+        var btnDelete = $('.btnDelete')
         btnDelete.click(function(e) {
             e.preventDefault()
             console.log('ahii')
@@ -61,7 +64,7 @@ block content
                 confirmButtonText: 'Yes, delete it!',               
             }).then((result) => {
                 if (result.isConfirmed) {
-                    deleteProduct($(this).data('id'));                    
+                    deleteProduct($(this).data('id'));
                 }
             })
         })
