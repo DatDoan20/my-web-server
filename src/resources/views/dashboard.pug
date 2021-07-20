@@ -1,14 +1,14 @@
 doctype html
 html(lang='en')
-  head
-    block head
-      meta(charset='utf-8')
-      meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
-      title Shop|Dashboard
-      link(href='https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;700;900&display=swap', rel='stylesheet')
-      link(rel='stylesheet', href='/css/tailwind.css')
-      link(rel="shortcut icon" href="#")
-      link(rel='stylesheet', href='/css/tableGeneric.css')    
+  head    
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+    title Shop|Dashboard
+    link(href='https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;700;900&display=swap', rel='stylesheet')
+    link(rel='stylesheet', href='/css/tailwind.css')
+    link(rel="shortcut icon" href="#")
+    link(rel='stylesheet', href='/css/tableGeneric.css')
+    block extraStyle
   body
     div(x-data='setup()', x-init="$refs.loading.classList.add('hidden'); setColors(color);", :class="{ 'dark': isDark}")
       .flex.h-screen.antialiased.text-gray-900.bg-gray-100(class='dark:bg-dark dark:text-light')

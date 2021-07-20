@@ -45,6 +45,9 @@ exports.getOrderBinOverviewPage = async (req, res, next) => {
 	const orders = await Order.findDeleted().sort({ createdAt: -1 });
 	res.status(200).render('order/orderBinOverview', { orders: orders });
 };
+exports.getTest = async (req, res, next) => {
+	res.status(200).render('order/orderOverview2');
+};
 //-----------------------Product-----------------------------------------
 exports.getProductOverviewPage = async (req, res, next) => {
 	const products = await Product.find({ outOfStock: false }).sort({ createdAt: -1 });

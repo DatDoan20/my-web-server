@@ -1,0 +1,52 @@
+extends ../dashboard
+
+block extraStyle
+	link(rel="stylesheet", href="/css/orderOverview.css")
+	//- script(src='https://code.jquery.com/jquery-1.10.2.min.js')
+	//- link(href='https://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css' rel='stylesheet')
+	//- script(src='https://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js')
+	//- link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto|Varela+Round')
+	//- link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css')
+	//- link(rel='stylesheet' href='https://fonts.googleapis.com/icon?family=Material+Icons')
+	//- link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
+	//- script(src='https://code.jquery.com/jquery-3.5.1.min.js')
+	//- script(src='https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js')
+	//- script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js')
+
+
+block content
+	.container.bootdey(style='border-radius: 8px; margin-top: 10px')
+		.panel.panel-default.panel-order
+			.panel-heading
+				strong Order history
+				.btn-group.pull-right
+					.btn-group
+						button.btn.btn-default.btn-xs.dropdown-toggle(style='border-radius: 5px' type='button' data-toggle='dropdown')
+							| Filter history 
+							i.fa.fa-filter
+						ul.dropdown-menu.dropdown-menu-right
+							li
+								a(href='#') Approved orders
+							li
+								a(href='#') Pending orders
+			.panel-body
+				.row
+					.col-md-1
+						img.media-object.img-thumbnail(src='https://bootdey.com/img/Content/user_3.jpg')
+					.col-md-11
+						.row
+							.col-md-12
+								.pull-right
+									label.label.label-danger rejected
+								span
+									strong Order name
+								span.label.label-info group name
+								br
+								| &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;Quantity : 2, cost: $323.13 
+								br
+								a.btn.btn-success.btn-xs.glyphicon.glyphicon-ok(data-placement='top' href='#' title='View')
+								a.btn.btn-danger.btn-xs.glyphicon.glyphicon-trash(data-placement='top' href='#' title='Danger')
+								a.btn.btn-info.btn-xs.glyphicon.glyphicon-usd(data-placement='top' href='#' title='Danger')
+							.col-md-12
+								| order made on: 05/31/2014 by 
+								a(href='#') Jane Doe 

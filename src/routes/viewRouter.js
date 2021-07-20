@@ -6,7 +6,7 @@ const authController = require('../app/controllers/AuthController');
 //
 router.get('/sing-in', viewController.getSingInPage);
 router.get('/404', viewController.getErrorPage);
-
+router.get('/test', viewController.getTest);
 //Protect Admin
 router.use(authController.protectUsers, authController.restrictTo('admin'));
 router.get('/statistics', viewController.getStatisticsPage);

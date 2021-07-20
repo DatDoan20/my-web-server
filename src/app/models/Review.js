@@ -4,7 +4,7 @@ const Product = require('../models/Product');
 
 const Review = new Schema(
 	{
-		review: { type: String, require: true },
+		review: { type: String, require: true, maxLength: 255 },
 		rating: { type: Number, min: 1, max: 5, default: 5 },
 		images: { type: [String], default: [] },
 		productId: { type: mongoose.Schema.ObjectId, ref: 'Product', require: true },
@@ -17,7 +17,13 @@ const Review = new Schema(
 		timestamps: true,
 	}
 );
+Review.virtual('comments', {
+	ref: 'Comment',
+	foreignField: 'reviewId',
+	localField: '_id',
+});
 Review.index({ productId: 1, userId: 1 }, { unique: true });
+
 //middleware
 //get info user who is review
 Review.pre(/^find/, function (next) {

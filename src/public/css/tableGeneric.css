@@ -88,3 +88,6 @@
 		padding: 1em !important;
 	}
 }
+tr:hover {
+	background-color: #787677;
+}

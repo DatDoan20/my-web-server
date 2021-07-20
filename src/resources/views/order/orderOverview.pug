@@ -2,7 +2,8 @@ extends ../dashboard
 
 block content
 	.body-tb-generic
-		h1.h1-tb-generic Orders
+		h1.h1-tb-generic= `Orders ( ${orders.length} )`
+		img(src='/icon/icon-order.png' style='width:50px; height:50px; margin-left: auto; margin-right: auto;')
 		table.rwd-table
 			tr
 				th Id
@@ -35,4 +36,4 @@ block content
 	script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
 	script(src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js')
 	script(src='//cdn.jsdelivr.net/npm/sweetalert2@11')
-	script(src='/js/handleOrder.js')
+	script(src='/js/handleOrder.js' type='module')

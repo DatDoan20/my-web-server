@@ -28,7 +28,7 @@ const Product = new Schema(
 			//4.555 -> 45.55 -> 46 -> 4.6
 			set: (val) => Math.round(val * 10) / 10,
 		},
-		ratingsQuantity: { type: Number, default: 1 },
+		ratingsQuantity: { type: Number, default: 0 },
 	},
 	{
 		toJSON: { virtuals: true },
