@@ -31,7 +31,7 @@ async function actionOrder(actionMethod, titleWaiting, titleResult, url, data) {
 			allowEscapeKey: false,
 			closeOnClickOutside: false,
 		});
-		resultUpdate = await axios({
+		var resultUpdate = await axios({
 			method: actionMethod,
 			url: url,
 			data: data,
@@ -42,6 +42,7 @@ async function actionOrder(actionMethod, titleWaiting, titleResult, url, data) {
 			location.reload();
 		}
 	} catch (err) {
+		console.log(err);
 		await showAlertResult(
 			'error',
 			'Oops...!',
@@ -59,8 +60,7 @@ btnAccept.click(function (e) {
 				'PATCH',
 				'Order is being processed(accepted)',
 				'Accepted Order successfully!',
-				`http://127.0.0.1:3000/admin/orders/accept/${$(this).data('id')}`,
-				{ state: 'accepted' }
+				`http://127.0.0.1:3000/admin/orders/accept/${$(this).data('id')}`
 			);
 		}
 	});
@@ -70,14 +70,23 @@ var btnCancel = $('.btnCancel');
 btnCancel.click(function (e) {
 	e.preventDefault();
 
-	showAlertConfirmAction($(this).data('id'), $(this).data('total'), 'delete').then((result) => {
-		if (result.isConfirmed) {
-			actionOrder(
-				'DELETE',
-				'Order is being Cancel(delete)',
-				'Canceled Order successfully!, You can check in Bin late. 🗑️',
-				`http://127.0.0.1:3000/admin/${$(this).data('id')}/soft`
-			);
+	showAlertConfirmAction($(this).data('id'), $(this).data('total'), 'delete').then(
+		async (result) => {
+			if (result.isConfirmed) {
+				//update state -> canceled -> delete soft
+				var resultCancel = await axios({
+					method: 'PATCH',
+					url: `http://127.0.0.1:3000/admin/orders/cancel/${$(this).data('id')}`,
+				});
+				if (resultCancel.data.status === 'success') {
+					actionOrder(
+						'DELETE',
+						'Order is being Cancel(delete)',
+						'Canceled Order successfully!, You can check in Bin late. 🗑️',
+						`http://127.0.0.1:3000/admin/${$(this).data('id')}/soft`
+					);
+				}
+			}
 		}
-	});
+	);
 });

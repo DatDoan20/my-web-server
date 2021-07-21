@@ -45,7 +45,7 @@ infoFormProduct.addEventListener('submit', async (e) => {
 			allowEscapeKey: false,
 			closeOnClickOutside: false,
 		});
-		resultCreate = await axios({
+		var resultCreate = await axios({
 			method: 'POST',
 			url: 'http://127.0.0.1:3000/api/products',
 			data: formData,
@@ -88,6 +88,7 @@ infoFormProduct.addEventListener('submit', async (e) => {
 						'Page will automatically reloaded',
 						false
 					);
+					location.reload();
 				}
 			} else {
 				alertWaiting.close();
@@ -98,8 +99,8 @@ infoFormProduct.addEventListener('submit', async (e) => {
 					text: '⚠️⚡Create product was missing images⚡⚠️, please update product with image later 😥',
 					showConfirmButton: true,
 				});
+				location.reload();
 			}
-			location.reload();
 		}
 	} catch (err) {
 		console.log(err);

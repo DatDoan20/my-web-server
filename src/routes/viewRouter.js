@@ -6,7 +6,6 @@ const authController = require('../app/controllers/AuthController');
 //
 router.get('/sing-in', viewController.getSingInPage);
 router.get('/404', viewController.getErrorPage);
-router.get('/test', viewController.getTest);
 //Protect Admin
 router.use(authController.protectUsers, authController.restrictTo('admin'));
 router.get('/statistics', viewController.getStatisticsPage);
@@ -35,6 +34,20 @@ router.delete('/:id/soft', orderController.deleteOrder);
 router.patch('/orders/restore/:id', orderController.restoreOrder);
 
 //UPDATE(accept sate of order: waiting -> accepted)
-router.patch('/orders/accept/:id', orderController.acceptOrder);
+router.patch(
+	'/orders/accept/:id',
+	orderController.setStateOrder('accepted'),
+	orderController.updateStateOrder
+);
+router.patch(
+	'/orders/wait/:id',
+	orderController.setStateOrder('waiting'),
+	orderController.updateStateOrder
+);
+router.patch(
+	'/orders/cancel/:id',
+	orderController.setStateOrder('canceled'),
+	orderController.updateStateOrder
+);
 
 module.exports = router;

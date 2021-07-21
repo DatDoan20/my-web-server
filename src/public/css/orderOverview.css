@@ -1,40 +1,69 @@
-.panel-order .row {
-	border-bottom: 1px solid #ccc;
+.order-history {
+	display: flex;
+	margin-right: auto;
+	margin-left: auto;
+	margin-top: 10px;
+	padding: 15px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	background-color: rgb(132, 99, 99);
 }
-.panel-order .row:last-child {
-	border: 0px;
+.order-history-img {
+	display: flex;
+	border-radius: 3px;
+	margin-right: 10px;
 }
-.panel-order .row .col-md-1 {
+
+.order-history-info {
+	margin-left: 10px;
+}
+
+.history-info-name {
+	margin-top: 6px;
+	font-weight: 700;
+}
+
+.history-info-label {
+	display: inline-block;
+	padding: 8px;
+	font-size: 75%;
+	font-weight: 700;
+	color: rgb(0, 0, 0);
 	text-align: center;
-	padding-top: 15px;
+	white-space: nowrap;
+	vertical-align: baseline;
+	border-radius: 0.25em;
 }
-.panel-order .row .col-md-1 img {
-	width: 50px;
-	max-height: 50px;
+
+.history-info-group-name {
+	background-color: #5bc0de;
 }
-.panel-order .row .row {
-	border-bottom: 0;
+
+.history-info-group-waiting {
+	cursor: default;
+	background-color: #d8cd2d;
 }
-.panel-order .row .col-md-11 {
-	border-left: 1px solid #ccc;
+.history-info-group-canceled {
+	cursor: default;
+	background-color: #912626;
 }
-.panel-order .row .row .col-md-12 {
-	padding-top: 7px;
-	padding-bottom: 7px;
+.history-info-group-accepted {
+	cursor: default;
+	background-color: #247527;
 }
-.panel-order .row .row .col-md-12:last-child {
-	font-size: 11px;
-	color: #555;
-	background: #efefef;
+
+.history-info-made-name {
+	text-decoration: none;
 }
-.panel-order .btn-group {
-	margin: 0px;
-	padding: 0px;
+
+.history-info-made-name:hover {
+	opacity: 0.6;
+	text-decoration: underline;
 }
-.panel-order .panel-body {
-	padding-top: 0px;
-	padding-bottom: 0px;
+.info-need {
+	color: #000;
+	font-weight: bold;
 }
-.panel-order .panel-deading {
-	margin-bottom: 0;
+.history-info-btn {
+	display: flex;
 }

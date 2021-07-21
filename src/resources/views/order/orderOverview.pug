@@ -1,39 +1,46 @@
-extends ../dashboard 
+extends ../dashboard
 
+block extraStyle
+	link(rel='stylesheet' href='/css/orderOverview.css')
+	link(rel='stylesheet' href='/css/grid.css')
 block content
-	.body-tb-generic
-		h1.h1-tb-generic= `Orders ( ${orders.length} )`
-		img(src='/icon/icon-order.png' style='width:50px; height:50px; margin-left: auto; margin-right: auto;')
-		table.rwd-table
-			tr
-				th Id
-				th Date
-					br 
-					p (D/M/Y)
-				th Purchased Products
-				th Total Payment 
-				th State
-				th Payment Mode
-			each order in orders
-				tr
-					td(data-th='Id') 
-						a(href='#')= order._id
-					td(data-th='Date')= order.createdAt.toLocaleString('vi-vn')
-					td(data-th='PurchasedProducts')
-						each product, index in order.purchasedProducts
-							p= `${index+1}. ${product.name}.`
-							br
-					td(data-th='TotalPayment')= order.totalPayment
-					if order.state === 'waiting'
-						td(data-th='Sate') Chờ xác nhận ⏳
-					else 
-						td(data-th='Sate') Đã xác nhận, chờ giao hàng... ✔️
-					td(data-th='paymentMode' style="text-align:center")= order.paymentMode
-					td
-						a.btnCancel(href='#' title='cancel' style='text-align:center' data-id=`${order._id}` data-total=`${order.totalPayment}`) Cancel❎
-					td
-						a.btnAccept(href='#' title='accept' style='text-align:center' data-id=`${order._id}` data-total=`${order.totalPayment}`) Accepted✅
+	h1.h1-tb-generic= `Orders ( ${orders.length} )`
+	img(src='/icon/icon-order.png' style='width:50px; height:50px; margin-left: auto; margin-right: auto;')
+	each order in orders
+		.grid.wide
+			.order-history.row
+				.order-history-img
+					img(src='/img/otter.png' style='width:50px; height:50px;' alt='a')
+				.order-history-info
+					.history-info-name
+						| Order id: 
+						span.history-info-label.history-info-group-name= `${order._id}`
+						| 
+						if order.state === 'waiting'
+							span.history-info-label.history-info-group-waiting Chờ xác nhận ⏳
+						else if order.state === 'accepted'
+							span.history-info-label.history-info-group-accepted Đã xác nhận, chờ giao hàng...✔️️
+						else if order.state === 'canceled'
+							span.history-info-label.history-info-group-canceled Đã hủy ❌
+					each product, index in order.purchasedProducts
+						p= `${index+1}. ${product.name}`
+					div(style='border: 1px solid #000; width:400px;')
+					p.history-info-quantity Tổng giá:
+						span.info-need= `${order.totalPayment}đ`
+					p.history-info-quantity Hình thức thanh toán:
+						span.info-need= `${order.paymentMode}`
+					p.history-info-made Ngày đặt:	
+						span.info-need= `${order.createdAt.toLocaleString('vi-vn')}`
+					p.history-info-made Người đặt: 
+						span.info-need= `${order.nameUser}`
+					.history-info-btn
+						.flex-shrink-0.px-2.py-4.space-y-2
+							a.btnAccept.flex.items-center.justify-center.w-full.px-4.py-2.text-sm.text-white.rounded-md.bg-primary(href='#',style='width:80px; height:30px;' data-id=`${order._id}` data-total=`${order.totalPayment}` class='hover:bg-primary-dark focus:outline-none focus:ring focus:ring-primary-dark focus:ring-offset-1 focus:ring-offset-white dark:focus:ring-offset-dark') Accept✔️
+						.flex-shrink-0.px-2.py-4.space-y-2
+							a.btnCancel.flex.items-center.justify-center.w-full.px-4.py-2.text-sm.text-white.rounded-md.bg-primary(href='#', style='width:80px; height:30px;' data-id=`${order._id}` data-total=`${order.totalPayment}` class='hover:bg-primary-dark focus:outline-none focus:ring focus:ring-primary-dark focus:ring-offset-1 focus:ring-offset-white dark:focus:ring-offset-dark') Cancel❌
 	script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
 	script(src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js')
 	script(src='//cdn.jsdelivr.net/npm/sweetalert2@11')
 	script(src='/js/handleOrder.js' type='module')
+
+

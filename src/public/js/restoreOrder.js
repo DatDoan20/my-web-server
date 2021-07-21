@@ -31,12 +31,14 @@ async function action(actionMethod, titleWaiting, titleResult, url, data) {
 			allowEscapeKey: false,
 			closeOnClickOutside: false,
 		});
-		resultUpdate = await axios({
+		//restore(delete: true)
+		var resultRestore = await axios({
 			method: actionMethod,
 			url: url,
 			data: data,
 		});
-		if (resultUpdate.data.status === 'success') {
+
+		if (resultRestore.data.status === 'success') {
 			alertWaiting.close();
 			await showAlertResult('success', `${titleResult}`, 'Page will automatically reloaded');
 			location.reload();
@@ -47,6 +49,7 @@ async function action(actionMethod, titleWaiting, titleResult, url, data) {
 			'Oops...!',
 			'Something went wrong!, please try again later.'
 		);
+		location.reload();
 	}
 }
 var btnRestore = $('.btnRestore');
@@ -54,11 +57,12 @@ btnRestore.click(function (e) {
 	e.preventDefault();
 	showAlertConfirmAction($(this).data('id'), $(this).data('total'), 'restore').then((result) => {
 		if (result.isConfirmed) {
+			var idOrder = $(this).data('id');
 			action(
 				'PATCH',
 				'Order is being processed(restore)',
 				'Restore Order successfully!',
-				`http://127.0.0.1:3000/admin/orders/restore/${$(this).data('id')}`
+				`http://127.0.0.1:3000/admin/orders/restore/${idOrder}`
 			);
 		}
 	});

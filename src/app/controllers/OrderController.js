@@ -26,4 +26,9 @@ exports.destroyOrder = factory.forceDeleteOneDocument(Order);
 exports.restoreOrder = factory.restoreOneDocument(Order);
 
 //UPDATE accept order /api/orders/accept/:id
-exports.acceptOrder = factory.updateOneDocument(Order);
+exports.updateStateOrder = factory.updateOneDocument(Order);
+exports.setStateOrder = (stateValue) =>
+	catchAsync(async (req, res, next) => {
+		req.body.state = stateValue;
+		next();
+	});
