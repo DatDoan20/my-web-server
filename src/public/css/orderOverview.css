@@ -41,15 +41,15 @@
 
 .history-info-group-waiting {
 	cursor: default;
-	background-color: #d8cd2d;
+	background-color: #d6c90f;
 }
 .history-info-group-canceled {
 	cursor: default;
-	background-color: #912626;
+	background-color: #d50505;
 }
 .history-info-group-accepted {
 	cursor: default;
-	background-color: #247527;
+	background-color: #0faf14;
 }
 
 .history-info-made-name {

@@ -26,7 +26,7 @@ exports.forceDeleteOneDocument = (Model) =>
 		if (!doc) {
 			return next(new appError('No document found with that ID', 404));
 		}
-		returnResultOfRequest(res, 200);
+		returnResultOfRequest(res, 200, doc);
 	});
 //----------------------------------------------------RESTORE
 exports.restoreOneDocument = (Model) =>

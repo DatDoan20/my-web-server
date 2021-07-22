@@ -1,7 +1,7 @@
 const catchAsync = require('../handler/catchAsync');
 const Order = require('../models/Order');
 const factory = require('./HandlerFactory');
-
+const Email = require('../../utils/email');
 // GET /api/orders/search?OrderId
 exports.setOrderIdOfUser = catchAsync(async (req, res, next) => {
 	if (!req.query.userId) {
@@ -32,3 +32,25 @@ exports.setStateOrder = (stateValue) =>
 		req.body.state = stateValue;
 		next();
 	});
+
+exports.sendEmailInfoOrder = catchAsync(async (req, res, next) => {
+	if (req.params.actionType === 'accept') {
+		const order = await Order.findOne({ _id: req.params.idOrder });
+		const user = {
+			name: order.nameUser,
+			email: order.emailUser,
+		};
+		const nameKey = 'order';
+		await new Email(user, '', nameKey, order).sendInfoOrder(req.params.actionType);
+	} else if (req.params.actionType === 'cancel') {
+		const order = await Order.findOneDeleted({ _id: req.params.idOrder });
+		console.log(order);
+		const user = {
+			name: order.nameUser,
+			email: order.emailUser,
+		};
+		const nameKey = 'order';
+		await new Email(user, '', nameKey, order).sendInfoOrder(req.params.actionType);
+	}
+	res.status(200).json({ status: 'success', message: 'email was sent' });
+});

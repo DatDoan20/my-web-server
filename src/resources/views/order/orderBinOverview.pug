@@ -25,7 +25,10 @@ block content
 						p= `${index+1}. ${product.name}`
 					div(style='border: 1px solid #000; width:400px;')
 					p.history-info-quantity Tổng giá:
-						span.info-need= `${order.totalPayment}đ`
+						if(order.totalPayment > 1000)
+							span.info-need= (order.totalPayment/1000).toFixed(3) + 'đ' 
+						else 
+							span.info-need= `${order.totalPayment}đ`						
 					p.history-info-quantity Hình thức thanh toán:
 						span.info-need= `${order.paymentMode}`
 					p.history-info-made Ngày đặt:	

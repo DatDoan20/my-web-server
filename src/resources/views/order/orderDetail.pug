@@ -1,0 +1,85 @@
+-
+	function customDisplayPrice(price){
+		var value;
+		if(price > 1000)
+			value = (price/1000).toFixed(3)
+		else
+			value = price
+		return value 
+	}
+
+doctype html
+head
+	meta(charset='UTF-8')
+	meta(http-equiv='X-UA-Compatible' content='IE=edge')
+	meta(name='viewport' content='width=device-width, initial-scale=1.0')
+	title CHI TIẾT ĐƠN HÀNG
+	style 
+		include ../../../public/css/orderDetail.css
+		include ../../../public/css/grid.css
+.order
+	header.order-header.grid.wide
+		.order-status
+			.order-status-id= `CHI TIẾT ĐƠN HÀNG #${order._id}`
+			if order.state === 'waiting'
+				h2.order-status-result(style='color: #d6c90f;')= ` Chờ xác nhận`
+			else if order.state === 'accepted'
+				h2.order-status-result(style='color: #0faf14;')= ` Đã xác nhận, chờ giao hàng`
+			else if order.state === 'canceled'
+				h2.order-status-result(style='color: #d50505;')= ` Đã hủy`
+		.order-status-total
+			a.order-status-view(href='#') Xem hóa đơn
+			.order-date= `Ngày đặt hàng: ${order.createdAt.toLocaleString('vi-vn')}`
+	.order-body.grid.wide
+		.order-notify
+			p(style="font-weight: bold; color: #000;") THÔNG BÁO
+			.notify-result
+				span.notify-result-date.col.l-2.m-2.c-12= `${order.updatedAt.toLocaleString('vi-vn')}`
+				span.notify-result-user.col.l-10.m-10.c-12 Chúng tôi đã chuyển sang bên giao hàng, nội thành từ 3 - 4 ngày, còn ngoại thành thì sẽ lâu hơn vài ngày, tình hình dịch bệnh có lẽ sẽ lâu hơn dự kiến, mong bạn thông cảm. Chúc bạn sức khỏe và bình an bên gia đình
+		.row
+			.order-main-info.col.l-4.m-4.c-12
+				h5.main-info-title THÔNG TIN NGƯỜI NHẬN
+				.main-info-content
+					.main-info-content-name= `${order.nameUser}`
+					.main-info-content-doc= `Địa chỉ: ${order.addressDelivery}`
+					.main-info-content-doc= `Số điện thoại: ${order.phoneUser}`
+			.order-main-info.col.l-4.m-4.c-6
+				h5.main-info-title GIAO HÀNG
+				.main-info-content
+					.main-info-content-doc Vận chuyển: tiết kiệm
+					.main-info-content-doc= `Phí vận chuyển: ${order.costDelivery}`
+			.order-main-info.col.l-4.m-4.c-6
+				h5.main-info-title THANH TOÁN
+				.main-info-content
+					.main-info-content-doc COD: Thanh toán tiền mặt khi nhận hàng ( được phép kiểm tra khi nhận)
+		.order-product
+			.product-header-bar
+				.product-header-label.col.l-7.m-4.c-4 Sản phẩm
+				.product-header-label.col.l-1.m-2.c-2 Giá
+				.product-header-label.col.l-1.m-2.c-2 Số lượng
+				.product-header-label.col.l-1.m-2.c-2 Giảm giá
+				.product-header-label.col.l-2.m-2.c-2 Tạm tính
+			each product in order.purchasedProducts
+				.product-contain.grid.wide.row
+					.product-img.col.l-1.m-2.c-1
+						img(src=`/img/products/${product._id}/${product.imageCover}` alt='ảnh sản phẩm')
+					p.product-name.col.l-6.m-2.c-3= product.name
+					span.product-cost.col.l-1.m-2.c-2= customDisplayPrice(product.price) + 'đ'
+					span.product-quantity.col.l-1.m-2.c-2= product.quantity
+					span.product-sell-off.col.l-1.m-2.c-2= `${product.discount}%`
+					span.product-cost-sum.col.l-2.m-2.c-2= customDisplayPrice(product.finalPrice) + 'đ'
+		.box-final-order
+			.product-total.grid.wide.row
+				span.product-total-item.col.l-2.m-4.c-4 Phí vận chuyển:
+				span.product-total-item.col.l-2.m-3.c-4= customDisplayPrice(order.costDelivery) + 'đ'
+			.product-total.grid.wide.row
+				span.product-total-item.col.l-2.m-4.c-4 Khuyến mãi:
+				span.product-total-item.col.l-2.m-3.c-4=  customDisplayPrice(order.specialOffer) + 'đ'
+			.product-total.grid.wide.row
+				span.product-total-item.col.l-2.m-4.c-4 Tổng thanh toán:
+				span.product-total-item-totalPayment.col.l-2.m-3.c-4= customDisplayPrice(order.totalPayment) + 'đ'
+	.order-footer
+		.footer__bottom
+			.grid.wide
+				p.footer__text Clothes DShop
+

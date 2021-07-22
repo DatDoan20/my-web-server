@@ -21,7 +21,7 @@ function showAlertConfirmAction(idOrder, totalPaymentOrder, title) {
 	});
 }
 
-async function actionOrder(actionMethod, titleWaiting, titleResult, url, data) {
+async function actionOrder(actionMethod, titleWaiting, titleResult, url, actionType, idOrder) {
 	try {
 		const alertWaiting = Swal.fire({
 			title: `${titleWaiting}..., Please wait a moment, Do not dismiss!`,
@@ -34,11 +34,18 @@ async function actionOrder(actionMethod, titleWaiting, titleResult, url, data) {
 		var resultUpdate = await axios({
 			method: actionMethod,
 			url: url,
-			data: data,
 		});
 		if (resultUpdate.data.status === 'success') {
 			alertWaiting.close();
 			await showAlertResult('success', `${titleResult}`, 'Page will automatically reloaded');
+			if (actionType === 'cancel' || actionType === 'accept') {
+				//can nnot use resultUpdate.data.data._id to get idOrder because update(PATCH) will get it,
+				//but update(Delete) will not return _id to get
+				await axios({
+					method: 'GET',
+					url: `http://127.0.0.1:3000/admin/orders/send-email/${idOrder}/${actionType}`,
+				});
+			}
 			location.reload();
 		}
 	} catch (err) {
@@ -60,7 +67,9 @@ btnAccept.click(function (e) {
 				'PATCH',
 				'Order is being processed(accepted)',
 				'Accepted Order successfully!',
-				`http://127.0.0.1:3000/admin/orders/accept/${$(this).data('id')}`
+				`http://127.0.0.1:3000/admin/orders/accept/${$(this).data('id')}`,
+				'accept',
+				$(this).data('id')
 			);
 		}
 	});
@@ -83,7 +92,9 @@ btnCancel.click(function (e) {
 						'DELETE',
 						'Order is being Cancel(delete)',
 						'Canceled Order successfully!, You can check in Bin late. 🗑️',
-						`http://127.0.0.1:3000/admin/${$(this).data('id')}/soft`
+						`http://127.0.0.1:3000/admin/${$(this).data('id')}/soft`,
+						'cancel',
+						$(this).data('id')
 					);
 				}
 			}

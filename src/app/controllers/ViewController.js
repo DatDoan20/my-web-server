@@ -46,6 +46,10 @@ exports.getOrderBinOverviewPage = async (req, res, next) => {
 	const orders = await Order.findDeleted().sort({ createdAt: -1 });
 	res.status(200).render('order/orderBinOverview', { orders: orders });
 };
+exports.getOrderDetailPage = async (req, res, next) => {
+	const order = await Order.findOne({ _id: req.params.id });
+	res.status(200).render('order/orderDetail', { order: order });
+};
 
 //-----------------------Product-----------------------------------------
 exports.getProductOverviewPage = async (req, res, next) => {

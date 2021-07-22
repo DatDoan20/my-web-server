@@ -3,11 +3,13 @@ const pug = require('pug');
 const { convert } = require('html-to-text');
 
 module.exports = class Email {
-	constructor(user, url) {
+	constructor(user, url, nameKey, data) {
 		this.to = user.email;
 		this.firstName = user.name.split(' ')[0];
 		this.url = url;
 		this.from = `Admin Clothes Shop <${process.env.EMAIL_FROM}>`;
+		this.data = data;
+		this.nameKey = nameKey;
 	}
 	createNewTransport() {
 		if (process.env.NODE_ENV === 'production') {
@@ -27,11 +29,12 @@ module.exports = class Email {
 	}
 
 	//Send the actual email
-	async send(template, subject) {
+	async send(templateLink, subject) {
 		// 1) render HTML based on pug template
-		const html = pug.renderFile(`${__dirname}/../resources/views/email/${template}.pug`, {
+		const html = pug.renderFile(`${__dirname}/../resources/views/${templateLink}`, {
 			firstName: this.firstName,
 			url: this.url,
+			[this.nameKey]: this.data,
 		});
 
 		// 2) define email options
@@ -48,12 +51,22 @@ module.exports = class Email {
 	}
 
 	async sendWelcome() {
-		await this.send('welcome', 'Welcome to the clothes shop! ❤');
+		await this.send('email/welcome.pug', 'Welcome to the clothes shop! ❤');
 	}
 	async sendPasswordReset() {
 		await this.send(
-			'passwordReset',
+			'email/passwordReset.pug',
 			'Your password reset token (valid for only 10 minutes ⏳)'
 		);
+	}
+	async sendInfoOrder(actionType) {
+		var msg;
+		if (actionType === 'accept') {
+			msg =
+				'Cảm ơn bạn đã đặt hàng, đây là đơn hàng của bạn, bạn có thể vào tài khoản cả nhân để kiểm tra đơn hàng này';
+		} else if (actionType === 'cancel') {
+			msg = 'Đơn hàng của bạn đã bị hủy, đây là thông tin đơn hàng đã hủy của bạn!';
+		}
+		await this.send('order/orderDetail.pug', msg);
 	}
 };
