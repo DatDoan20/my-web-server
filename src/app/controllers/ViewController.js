@@ -22,6 +22,12 @@ exports.getProfileAdmin = (req, res, next) => {
 exports.getStatisticsPage = (req, res, next) => {
 	res.status(200).render('statisticsPage');
 };
+exports.getResetPasswordPage = (req, res, next) => {
+	res.status(200).render('resetPassword', { resetToken: req.params.resetToken });
+};
+exports.sendEmailPage = (req, res, next) => {
+	res.status(200).render('sendEmail');
+};
 //
 exports.getUserOverviewPage = async (req, res, next) => {
 	const users = await User.find();

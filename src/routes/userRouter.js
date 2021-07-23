@@ -5,6 +5,7 @@ const authController = require('../app/controllers/AuthController');
 const reviewRouter = require('./reviewRouter');
 const orderRouter = require('./orderRouter');
 const handlerImage = require('../app/controllers/handlerImage');
+const viewController = require('../app/controllers/viewController');
 //
 router.post('/sing-up', userController.singUp);
 router.get('/sing-out', userController.singOut);
@@ -12,7 +13,7 @@ router.post('/sing-in-user', userController.singIn('user'));
 router.post('/sing-in-admin', userController.singIn('admin'));
 
 router.post('/forgot-password', userController.forgotPassword);
-router.patch('/reset-password/:token', userController.resetPassword);
+router.patch('/reset-password/:resetToken', userController.resetPassword);
 
 // Protect all routes
 router.use(authController.protectUsers);

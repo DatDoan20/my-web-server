@@ -91,10 +91,9 @@ User.methods.createPasswordResetToken = function () {
 
 	//encrypt the resetToken and save it into database
 	this.passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
-	console.log({ resetToken }, this.passwordResetToken);
 
 	//10 minutes, * this line is assign value but not really update document-> need to save it
-	this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+	this.passwordResetExpires = Date.now() + 60 * 60 * 1000;
 	return resetToken;
 };
 

@@ -92,10 +92,10 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 
 	//3.send it to user'email
 	try {
-		const resetURL = `${req.protocol}://${req.get(
-			'host'
-		)}/api/users/reset-password/${resetToken}`;
+		const resetURL = `${req.protocol}://${req.get('host')}/admin/new-password/${resetToken}`;
+
 		await new Email(user, resetURL).sendPasswordReset();
+
 		returnResultOfRequest(res, 200, 'Token sent to email!');
 	} catch (err) {
 		user.passwordResetToken = undefined;
@@ -107,7 +107,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 // AFTER forgotPassword, USER CHECK MAIL TO CHANGED PASSWORD -> resetPassword WILL BE CALLED
 exports.resetPassword = catchAsync(async (req, res, next) => {
 	//1. encrypt token was send
-	const hashedToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
+	const hashedToken = crypto.createHash('sha256').update(req.params.resetToken).digest('hex');
 	// + check correct: encrypted token that user was send VS encrypted token was stored in DB
 	// + time click link reset have to < time expired (+10minute)
 	const user = await User.findOne({

@@ -1,0 +1,60 @@
+doctype html
+html(lang='en')
+	head
+		meta(charset='UTF-8')
+		meta(http-equiv='X-UA-Compatible', content='IE=edge')
+		meta(name='viewport', content='width=device-width, initial-scale=1.0')
+		link(rel='stylesheet', href='/css/formValidator.css')
+		link(rel="shortcut icon" href="#")
+		title Shop | SingIn				
+	body
+		.main
+			form#forgot-password-form.form(action='' method='GET')
+				.spacer
+				.form-group
+					label.form-label(for='email') Nhập Email
+					input#email.form-control(name='email' rules='required|email' type='text' placeholder="VD: email@gmail.com" )
+					span.form-message
+				button.form-submit Gửi
+
+	script(src='/js/formValidator.js' type='text/javascript')
+	script(src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js')
+	script(src='//cdn.jsdelivr.net/npm/sweetalert2@11')
+	script.
+		var forgotForm = new Validator('#forgot-password-form')
+		const forgot = async(formData) => {			
+			try{
+				const alertWaiting = Swal.fire({
+					title: 'Email is being sent..., Please wait a moment, Do not dismiss!',
+					icon: 'warning',
+					showConfirmButton: false,
+					allowOutsideClick: false,
+					allowEscapeKey: false,
+					closeOnClickOutside: false,
+				});
+				const res = await axios({
+					method: 'POST',
+					url: 'http://127.0.0.1:3000/api/users/forgot-password',
+					data: formData	
+				})
+				if(res.data.status ==='success'){
+					alertWaiting.close();
+					await Swal.fire({
+						position: 'center',
+						icon: 'success',
+						title: 'send email successfully!',
+						showConfirmButton: false,
+						timer: 1500
+					})									
+				}
+			}catch(err){
+				Swal.fire({
+						icon: 'error',
+						title: 'Oops...',
+						text: 'Something wrong, please try again!',						
+					})
+			}
+		}		
+		forgotForm.onSingIn = function (formData) {
+			forgot(formData)
+		}
