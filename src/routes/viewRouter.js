@@ -8,6 +8,7 @@ router.get('/sing-in', viewController.getSingInPage);
 router.get('/404', viewController.getErrorPage);
 router.get('/new-password/:resetToken', viewController.getResetPasswordPage);
 router.get('/send-email-page', viewController.sendEmailPage);
+
 //Protect Admin
 router.use(authController.protectUsers, authController.restrictTo('admin'));
 router.get('/statistics', viewController.getStatisticsPage);
@@ -31,14 +32,12 @@ router.get('/orders', viewController.getOrderOverviewPage);
 router.get('/orders/bin', viewController.getOrderBinOverviewPage);
 router.get('/orders-detail/:id', viewController.getOrderDetailPage);
 router.get('/orders/send-email/:idOrder/:actionType', orderController.sendEmailInfoOrder);
-//DELETE-DESTROY Order ( :id -> orderId)
+//Delete
 router.delete('/:id/force', orderController.destroyOrder);
 router.delete('/:id/soft', orderController.deleteOrder);
-
 //Restore
 router.patch('/orders/restore/:id', orderController.restoreOrder);
-
-//UPDATE(accept sate of order: waiting -> accepted)
+//Update state of order, (create: wait, accept: accept, delete-soft: cancel)
 router.patch(
 	'/orders/accept/:id',
 	orderController.setStateOrder('accepted'),

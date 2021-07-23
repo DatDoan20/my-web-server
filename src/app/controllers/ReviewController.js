@@ -20,8 +20,8 @@ exports.setProductIdAndUserId = catchAsync(async (req, res, next) => {
 });
 exports.createReview = factory.createOneDocument(Review);
 
-// DELETE /api/reviews/:id (reviewId)
-exports.destroyReview = factory.forceDeleteOneDocument(Review);
-
 // PATCH /api/reviews/:id , only update rating, review
 exports.updateReview = factory.updateOneDocument(Review);
+
+// DELETE /api/reviews/:id (reviewId)
+exports.destroyReview = factory.forceDeleteOneDocument(Review);

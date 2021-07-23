@@ -2,7 +2,8 @@ const catchAsync = require('../handler/catchAsync');
 const Order = require('../models/Order');
 const factory = require('./HandlerFactory');
 const Email = require('../../utils/email');
-// GET /api/orders/search?OrderId
+
+// GET /api/orders/me (query to get all order of current user)
 exports.setOrderIdOfUser = catchAsync(async (req, res, next) => {
 	if (!req.query.userId) {
 		req.query.userId = req.user._id;
@@ -12,27 +13,30 @@ exports.setOrderIdOfUser = catchAsync(async (req, res, next) => {
 exports.getAllOrderWithQuery = factory.getAllDocuments(Order);
 
 //POST /api/orders
-exports.createOrder = factory.createOneDocument(Order);
 exports.clearCartUser = catchAsync(async (req, res, next) => {
 	req.user.cart = [];
 	await req.user.save();
 	next();
 });
+exports.createOrder = factory.createOneDocument(Order);
 
+//---------------------------ADMIN-------------------------------------
+//DELETE admin/:id/force
+exports.destroyOrder = factory.forceDeleteOneDocument(Order);
 // DELETE /api/orders/:id (orderId)
 exports.deleteOrder = factory.softDeleteOneDocument(Order);
-exports.destroyOrder = factory.forceDeleteOneDocument(Order);
-//Restore
+//PATCH admin/orders/restore/:id
 exports.restoreOrder = factory.restoreOneDocument(Order);
 
-//UPDATE accept order /api/orders/accept/:id
-exports.updateStateOrder = factory.updateOneDocument(Order);
+//PATCH accept order /api/orders/accept/:id
 exports.setStateOrder = (stateValue) =>
 	catchAsync(async (req, res, next) => {
 		req.body.state = stateValue;
 		next();
 	});
+exports.updateStateOrder = factory.updateOneDocument(Order);
 
+//GET	admin/orders/send-email/:idOrder/:actionType
 exports.sendEmailInfoOrder = catchAsync(async (req, res, next) => {
 	if (req.params.actionType === 'accept') {
 		const order = await Order.findOne({ _id: req.params.idOrder });

@@ -4,17 +4,17 @@ const appError = require('../handler/appError');
 const APIFeature = require('../../utils/apiFeature');
 const factory = require('./HandlerFactory');
 
+// GET /api/products/search?
+exports.getAllProductWithQuery = factory.getAllDocuments(Product, { path: 'reviews' });
+
+// GET / api/products/:id  get one product
+exports.getOneProduct = factory.getOneDocument(Product, { path: 'reviews' });
+
 // POST /api/products (admin)
 exports.createProduct = factory.createOneDocument(Product);
 
 //	PATCH api/products (update any field - admin) - NOT DELETE -> set outOfStock: true  (admin)
 exports.updateProduct = factory.updateOneDocument(Product);
-
-// GET / api/products/:id  get one product
-exports.getOneProduct = factory.getOneDocument(Product, { path: 'reviews' });
-
-// GET /api/products/search?
-exports.getAllProductWithQuery = factory.getAllDocuments(Product, { path: 'reviews' });
 
 // DELETE /api/products/:id
 exports.setOutOfStockProduct = (value) => (req, res, next) => {

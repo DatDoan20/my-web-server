@@ -32,6 +32,7 @@ const sendToken = (token, res) => {
 	res.cookie('jwt', token, cookieOptions);
 };
 //----------------------------------------------------------------
+//POST api/users/sing-up
 exports.singUp = catchAsync(async (req, res, next) => {
 	if (!validator.isEmail(req.body.email) || !validator.isMobilePhone(req.body.phone, 'vi-VN')) {
 		return next(new appError('Please provide valid email address or phone!', 400));
@@ -54,6 +55,7 @@ exports.singUp = catchAsync(async (req, res, next) => {
 	);
 });
 //----------------------------------------------------------------
+//POST api/users/sing-in-user or api/users/sing-in-admin
 exports.singIn = (roleInput) =>
 	catchAsync(async (req, res, next) => {
 		const { phone, password } = req.body;
@@ -70,7 +72,8 @@ exports.singIn = (roleInput) =>
 		sendToken(token, res);
 		returnResultOfRequest(res, 200, user.role, token);
 	});
-//--------------------------------
+//-----------------------------------------------------------------
+//GET api/users/sing-up
 exports.singOut = (req, res) => {
 	res.cookie('jwt', 'singOut', {
 		expires: new Date(Date.now() + 10 * 1000),
@@ -79,6 +82,7 @@ exports.singOut = (req, res) => {
 	returnResultOfRequest(res, 200, 'SingOut successfully');
 };
 //----------------------------------------------------------------
+//POST  api/users/forgot-password
 exports.forgotPassword = catchAsync(async (req, res, next) => {
 	// 1.get user base on posted email
 	const user = await User.findOne({ email: req.body.email });
@@ -104,7 +108,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 		return next(new appError(err, 500));
 	}
 });
-// AFTER forgotPassword, USER CHECK MAIL TO CHANGED PASSWORD -> resetPassword WILL BE CALLED
+//PATCH api/users/reset-password/:resetToken, AFTER forgotPassword, USER CHECK MAIL TO CHANGED PASSWORD -> resetPassword WILL BE CALLED
 exports.resetPassword = catchAsync(async (req, res, next) => {
 	//1. encrypt token was send
 	const hashedToken = crypto.createHash('sha256').update(req.params.resetToken).digest('hex');
@@ -130,7 +134,17 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 	returnResultOfRequest(res, 200, 'Changed password successfully');
 });
 //----------------------------------------------------------------
-// UPDATE PASSWORD AFTER LOGIN FOR USER
+// GET api/users/me or api/users/:id
+exports.getUser = factory.getOneDocument(User, {
+	path: 'cart.infoProduct',
+	select: 'name discount images price _id',
+});
+exports.getMe = (req, res, next) => {
+	req.params.id = req.user.id;
+	next();
+};
+// ------------------------------------------------UPDATE PASSWORD AFTER LOGIN FOR USER
+//PATCH api/users/update-password
 //body consists of :  currentPassword, newPassword
 exports.updatePassword = catchAsync(async (req, res, next) => {
 	const user = await User.findById(req.user._id);
@@ -144,6 +158,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 	returnResultOfRequest(res, 200, 'Changed password successfully');
 });
 //----------------------------------------------------------------
+//PATCH api/users/update-me
 //change info consists of: name, email, birthYear, sex
 exports.updateMe = catchAsync(async (req, res, next) => {
 	const user = await User.findById(req.user._id);
@@ -158,20 +173,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 	returnResultOfRequest(res, 200, 'Update information successfully');
 });
 //----------------------------------------------------------------
-//only show account user to admin click delete (SOFT DELETE)
-exports.deleteUser = factory.softDeleteOneDocument(User);
-// (FORCE DELETE)
-exports.destroyUser = factory.forceDeleteOneDocument(User);
-//----------------------------------------------------------------
-exports.getUser = factory.getOneDocument(User, {
-	path: 'cart.infoProduct',
-	select: 'name discount images price _id',
-});
-exports.getMe = (req, res, next) => {
-	req.params.id = req.user.id;
-	next();
-};
-//----------------------------------------------------------------
+//PATCH api/users/add-to-cart
 exports.addToCart = catchAsync(async (req, res, next) => {
 	const user = req.user;
 	user.cart = user.cart.concat(req.body.cart);
@@ -179,9 +181,16 @@ exports.addToCart = catchAsync(async (req, res, next) => {
 	returnResultOfRequest(res, 200, 'Add product to cart of user successfully', user);
 });
 //----------------------------------------------------------------
+//PATCH api/users/add-to-fav
 exports.addToFav = catchAsync(async (req, res, next) => {
 	const user = req.user;
 	user.favProducts = user.favProducts.concat(req.body.favProducts);
 	await user.save();
 	returnResultOfRequest(res, 200, 'Add product to favorite list of user successfully', user);
 });
+//-----------------------------ADMIN-----------------------------------
+//only show account user to admin click delete (SOFT DELETE)
+exports.deleteUser = factory.softDeleteOneDocument(User);
+// (FORCE DELETE)
+exports.destroyUser = factory.forceDeleteOneDocument(User);
+//----------------------------------------------------------------

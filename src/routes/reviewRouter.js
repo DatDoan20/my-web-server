@@ -17,7 +17,7 @@ router.post('/:productId', reviewController.setProductIdAndUserId, reviewControl
 router.patch('/:id', reviewController.updateReview);
 
 //---------------------------------comments of review-------------------------------
-//user/reviews/:id(reviewId)/comment
+// api/users/reviews/:id(reviewId)/comment
 router.post('/:id/comment', commentController.setCommentInfo, commentController.createComment);
 
 //delete force
@@ -25,7 +25,7 @@ router.delete('/comment/:id/force', commentController.deleteComment);
 //get comment of review
 router.get('/comments', commentController.getComments);
 
-//
+//------ADMIN
 router.use(authController.restrictTo('admin'));
 //DELETE :id (reviewId)
 router.delete('/:id', reviewController.destroyReview);

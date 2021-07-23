@@ -8,9 +8,9 @@ const handlerImage = require('../app/controllers/handlerImage');
 const viewController = require('../app/controllers/viewController');
 //
 router.post('/sing-up', userController.singUp);
-router.get('/sing-out', userController.singOut);
 router.post('/sing-in-user', userController.singIn('user'));
 router.post('/sing-in-admin', userController.singIn('admin'));
+router.get('/sing-out', userController.singOut);
 
 router.post('/forgot-password', userController.forgotPassword);
 router.patch('/reset-password/:resetToken', userController.resetPassword);
@@ -20,7 +20,6 @@ router.use(authController.protectUsers);
 
 router.get('/me', userController.getMe, userController.getUser);
 router.get('/:id', userController.getUser);
-
 router.patch('/update-password', userController.updatePassword);
 router.patch(
 	'/update-me',
@@ -28,7 +27,6 @@ router.patch(
 	handlerImage.resizeImage,
 	userController.updateMe
 );
-
 router.patch('/add-to-cart', userController.addToCart);
 router.patch('/add-to-fav', userController.addToFav);
 
@@ -39,7 +37,6 @@ router.use('/orders', orderRouter);
 
 // RestrictTo admin
 router.use(authController.restrictTo('admin'));
-
 router.delete('/:id', userController.deleteUser);
 router.delete('/:id/force', userController.destroyUser);
 

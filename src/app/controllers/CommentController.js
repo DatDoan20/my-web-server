@@ -2,11 +2,16 @@ const catchAsync = require('../handler/catchAsync');
 const Comment = require('../models/Comment');
 const factory = require('./HandlerFactory');
 
-exports.createComment = factory.createOneDocument(Comment);
+//POST api/users/reviews/:id/comment
 exports.setCommentInfo = (req, res, next) => {
 	req.body.userId = req.user._id;
 	req.body.reviewId = req.params.id;
 	next();
 };
+exports.createComment = factory.createOneDocument(Comment);
+
+//DELETE api/users/reviews/comment/:id/force
 exports.deleteComment = factory.forceDeleteOneDocument(Comment);
+
+// GET api/users/reviews/comments
 exports.getComments = factory.getAllDocuments(Comment);
