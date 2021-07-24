@@ -32,7 +32,10 @@
 		"sharp": "^0.28.3",
 		"sweetalert2": "^11.0.20",
 		"validator": "^13.6.0",
-		"xss-clean": "^0.1.1"
+		"xss-clean": "^0.1.1",
+		"morgan": "^1.10.0",
+		"nodemon": "^2.0.12",
+		"parcel-bundler": "^1.12.5"
 	},
 	"devDependencies": {
 		"morgan": "^1.10.0",
