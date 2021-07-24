@@ -4,7 +4,7 @@ const userController = require('../app/controllers/UserController');
 const authController = require('../app/controllers/AuthController');
 const reviewRouter = require('./reviewRouter');
 const orderRouter = require('./orderRouter');
-const handlerImage = require('../app/controllers/HandlerImage');
+const handleImg = require('../app/controllers/HandlerImage');
 const viewController = require('../app/controllers/viewController');
 //
 router.post('/sing-up', userController.singUp);
@@ -21,12 +21,7 @@ router.use(authController.protectUsers);
 router.get('/me', userController.getMe, userController.getUser);
 router.get('/:id', userController.getUser);
 router.patch('/update-password', userController.updatePassword);
-router.patch(
-	'/update-me',
-	handlerImage.uploadImage,
-	handlerImage.resizeImage,
-	userController.updateMe
-);
+router.patch('/update-me', handleImg.uploadImage, handleImg.resizeImage, userController.updateMe);
 router.patch('/add-to-cart', userController.addToCart);
 router.patch('/add-to-fav', userController.addToFav);
 
