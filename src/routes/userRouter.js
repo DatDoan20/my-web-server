@@ -6,10 +6,10 @@ const reviewRouter = require('./reviewRouter');
 const orderRouter = require('./orderRouter');
 const handleImg = require('../app/controllers/HandlerImage');
 //
-router.post('/sing-up', userController.singUp);
-router.post('/sing-in-user', userController.singIn('user'));
-router.post('/sing-in-admin', userController.singIn('admin'));
-router.get('/sing-out', userController.singOut);
+router.post('/sign-up', userController.singUp);
+router.post('/sign-in-user', userController.singIn('user'));
+router.post('/sign-in-admin', userController.singIn('admin'));
+router.get('/sign-out', userController.singOut);
 
 router.post('/forgot-password', userController.forgotPassword);
 router.patch('/reset-password/:resetToken', userController.resetPassword);

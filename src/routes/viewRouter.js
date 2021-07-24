@@ -4,7 +4,7 @@ const viewController = require('../app/controllers/ViewController');
 const orderController = require('../app/controllers/OrderController');
 const authController = require('../app/controllers/AuthController');
 //
-router.get('/sing-in', viewController.getSingInPage);
+router.get('/sign-in', viewController.getSingInPage);
 router.get('/404', viewController.getErrorPage);
 router.get('/new-password/:resetToken', viewController.getResetPasswordPage);
 router.get('/send-email-page', viewController.sendEmailPage);

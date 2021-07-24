@@ -42,7 +42,7 @@ exports.singUp = catchAsync(async (req, res, next) => {
 
 	//send email welcome
 	//http://127.0.0.1:3000/admin/sing-in
-	await new Email(newUser, `${req.protocal}://${req.get('host')}/admin/sing-in`).sendWelcome();
+	await new Email(newUser, `${req.protocal}://${req.get('host')}/admin/sign-in`).sendWelcome();
 
 	//return res for client
 	const token = createToken(newUser._id);

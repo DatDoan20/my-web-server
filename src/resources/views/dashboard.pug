@@ -52,7 +52,7 @@ html(lang='en')
               url: '/api/users/sing-out',       	
             })
             if(res.data.status === 'success'){
-              location.assign('/admin/sing-in')
+              location.assign('/admin/sign-in')
             }
           }catch(err){
             Swal.fire({
