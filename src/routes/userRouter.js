@@ -4,7 +4,7 @@ const userController = require('../app/controllers/UserController');
 const authController = require('../app/controllers/AuthController');
 const reviewRouter = require('./reviewRouter');
 const orderRouter = require('./orderRouter');
-const handlerImage = require('../app/controllers/handlerImage');
+const handlerImage = require('../app/controllers/HandlerImage');
 const viewController = require('../app/controllers/viewController');
 //
 router.post('/sing-up', userController.singUp);
