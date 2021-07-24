@@ -34,7 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //-----------------MIDDLEWARE
 app.use(express.urlencoded({ extended: true }));
-app.use(morgan('dev'));
+// app.use(morgan('dev'));
 app.use(methodOverride('_method'));
 
 // Body parser, reading data from body into req.body
