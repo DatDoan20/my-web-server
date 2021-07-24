@@ -56,14 +56,14 @@ infoFormUser.addEventListener('submit', async (e) => {
 		//default when click -> update me (update info basic) + avatar
 		resultUpdate = await axios({
 			method: 'PATCH',
-			url: '/api/users/update-me',
+			url: 'http://127.0.0.1:3000/api/users/update-me',
 			data: formData,
 		});
 		//if check change password -> update password
 		if (document.getElementById('chk-change-password').checked) {
 			resultUpdate = await axios({
 				method: 'PATCH',
-				url: '/api/users/update-password',
+				url: 'http://127.0.0.1:3000/api/users/update-password',
 				data: formData,
 			});
 		}

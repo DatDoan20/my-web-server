@@ -1,6 +1,6 @@
 const path = require('path');
 const express = require('express');
-//const morgan = require('morgan');
+const morgan = require('morgan');
 require('dotenv').config({ path: `${__dirname}/setup.env` });
 const app = express();
 const methodOverride = require('method-override');
@@ -34,7 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //-----------------MIDDLEWARE
 app.use(express.urlencoded({ extended: true }));
-// app.use(morgan('dev'));
+app.use(morgan('dev'));
 app.use(methodOverride('_method'));
 
 // Body parser, reading data from body into req.body

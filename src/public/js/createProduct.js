@@ -47,7 +47,7 @@ infoFormProduct.addEventListener('submit', async (e) => {
 		});
 		var resultCreate = await axios({
 			method: 'POST',
-			url: '/api/products',
+			url: 'http://127.0.0.1:3000/api/products',
 			data: formData,
 		});
 
@@ -77,7 +77,7 @@ infoFormProduct.addEventListener('submit', async (e) => {
 			if (formDataUploadSecond.has('imageCover') || formDataUploadSecond.has('images')) {
 				resultUpImage = await axios({
 					method: 'PATCH',
-					url: `/api/products/${idProduct}`,
+					url: `http://127.0.0.1:3000/api/products/${idProduct}`,
 					data: formDataUploadSecond,
 				});
 				if (resultUpImage.data.status === 'success') {

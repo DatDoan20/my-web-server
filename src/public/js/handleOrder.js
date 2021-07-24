@@ -43,7 +43,7 @@ async function actionOrder(actionMethod, titleWaiting, titleResult, url, actionT
 				//but update(Delete) will not return _id to get
 				await axios({
 					method: 'GET',
-					url: `/admin/orders/send-email/${idOrder}/${actionType}`,
+					url: `http://127.0.0.1:3000/admin/orders/send-email/${idOrder}/${actionType}`,
 				});
 			}
 			location.reload();
@@ -67,7 +67,7 @@ btnAccept.click(function (e) {
 				'PATCH',
 				'Order is being processed(accepted)',
 				'Accepted Order successfully!',
-				`/admin/orders/accept/${$(this).data('id')}`,
+				`http://127.0.0.1:3000/admin/orders/accept/${$(this).data('id')}`,
 				'accept',
 				$(this).data('id')
 			);
@@ -85,14 +85,14 @@ btnCancel.click(function (e) {
 				//update state -> canceled -> delete soft
 				var resultCancel = await axios({
 					method: 'PATCH',
-					url: `/admin/orders/cancel/${$(this).data('id')}`,
+					url: `http://127.0.0.1:3000/admin/orders/cancel/${$(this).data('id')}`,
 				});
 				if (resultCancel.data.status === 'success') {
 					actionOrder(
 						'DELETE',
 						'Order is being Cancel(delete)',
 						'Canceled Order successfully!, You can check in Bin late. 🗑️',
-						`/admin/${$(this).data('id')}/soft`,
+						`http://127.0.0.1:3000/admin/${$(this).data('id')}/soft`,
 						'cancel',
 						$(this).data('id')
 					);
