@@ -72,7 +72,7 @@ Review.post('save', function () {
 //query middleware only supports for /^find/ and /deleteOne/ Review in collection
 Review.pre([/^findOneAnd/, /^delete/], async function (next) {
 	this.r = await this.findOne();
-	console.log(this.r); //only use findOne, it's will get document which pre update or delete
+	//console.log(this.r); //only use findOne, it's will get document which pre update or delete
 	next(); // next is post
 });
 Review.post([/^findOneAnd/, /^delete/], async function () {

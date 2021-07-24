@@ -48,7 +48,7 @@ exports.sendEmailInfoOrder = catchAsync(async (req, res, next) => {
 		await new Email(user, '', nameKey, order).sendInfoOrder(req.params.actionType);
 	} else if (req.params.actionType === 'cancel') {
 		const order = await Order.findOneDeleted({ _id: req.params.idOrder });
-		console.log(order);
+		// console.log(order);
 		const user = {
 			name: order.nameUser,
 			email: order.emailUser,

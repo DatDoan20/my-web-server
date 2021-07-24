@@ -53,7 +53,6 @@ block content
         var btnDelete = $('.btnDelete')
         btnDelete.click(function(e) {
             e.preventDefault()
-            console.log('ahii')
             Swal.fire({
                 title: 'Are you sure? (this action will make this product out of stock)',
                 text: $(this).data('name'),

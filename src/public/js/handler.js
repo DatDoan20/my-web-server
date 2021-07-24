@@ -24,7 +24,6 @@ export const showAlertConfirmAction = (idOrder, totalPaymentOrder, title) => {
 };
 
 export const actionOrder = async (actionMethod, titleWaiting, titleResult, url, data) => {
-	console.log('custom nè hihi');
 	try {
 		const alertWaiting = Swal.fire({
 			title: `${titleWaiting}..., Please wait a moment, Do not dismiss!`,
