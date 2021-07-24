@@ -58,7 +58,7 @@ btnRestore.click(function (e) {
 				'PATCH',
 				'Product is being processed(restore)',
 				'Restore product successfully!',
-				`http://127.0.0.1:3000/api/products/restore/${$(this).data('id')}`
+				`/api/products/restore/${$(this).data('id')}`
 			);
 		}
 	});

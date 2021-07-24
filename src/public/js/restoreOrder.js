@@ -62,7 +62,7 @@ btnRestore.click(function (e) {
 				'PATCH',
 				'Order is being processed(restore)',
 				'Restore Order successfully!',
-				`http://127.0.0.1:3000/admin/orders/restore/${idOrder}`
+				`/admin/orders/restore/${idOrder}`
 			);
 		}
 	});
