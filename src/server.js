@@ -1,8 +1,12 @@
 const path = require('path');
 const express = require('express');
-//const morgan = require('morgan');
+const morgan = require('morgan');
 require('dotenv').config({ path: `${__dirname}/setup.env` });
 const app = express();
+
+//help secure cookie(send token) check https
+app.enable('trust proxy');
+
 const methodOverride = require('method-override');
 const mainRouter = require('./routes/mainRouter.js');
 const database = require('./config/database');
@@ -10,6 +14,7 @@ const port = process.env.PORT || 3000;
 const appError = require('./app/handler/appError');
 const errController = require('./app/handler/ErrorController');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 
 const compression = require('compression');
 //import SECURITY Lib
@@ -26,6 +31,7 @@ process.on('uncaughtException', (err) => {
 	process.exit(1);
 });
 //----------------------------------------------------------------
+
 database.connect();
 //-----------------CONFIG structure file
 app.set('view engine', 'pug');
@@ -33,8 +39,20 @@ app.set('views', path.join(__dirname, 'resources', 'views')); //use join auto jo
 app.use(express.static(path.join(__dirname, 'public')));
 
 //-----------------MIDDLEWARE
+// Implement CORS
+// Access-Control-Allow-Origin * in header: GET, POST
+app.use(cors());
+//Specific otherDomain use api
+//app.use(cors({
+// 	origin: 'hppts://www.ortherdomain.com'
+// }));
+// DELETE, PATCH
+app.options('*', cors());
+//Only use DELETE, PATCH with below api
+//app.options('/api/users/:id', cors());
+
 app.use(express.urlencoded({ extended: true }));
-// app.use(morgan('dev'));
+app.use(morgan('dev'));
 app.use(methodOverride('_method'));
 
 // Body parser, reading data from body into req.body
@@ -45,8 +63,8 @@ app.use(cookieParser());
 //     console.log(req.cookies)
 //     next()
 // })
-// -------------- SECURITY: **(Make sure the body is parsed beforehand)**
 
+// -------------- SECURITY: **(Make sure the body is parsed beforehand)**
 // Set security HTTP headers
 app.use(helmet());
 app.use(
@@ -67,7 +85,6 @@ app.use(
 		},
 	})
 );
-
 // Limit request same IP - have to run before "mainRouter(app)"
 const limiter = rateLimit({
 	windowMs: 60 * 60 * 1000, // 1h
@@ -85,7 +102,7 @@ app.use(xss());
 // prevent parameter pollution (eg. name=a&name=b -> query with name=b)
 app.use(hpp());
 
-// COMPRESSION
+// COMPRESSION ALL MIDDLEWARE
 app.use(compression());
 //run routes and handle error for those routes
 mainRouter(app);
@@ -98,7 +115,7 @@ app.use(errController);
 
 //listen port
 const server = app.listen(port, () => {
-	console.log(`App listening at http://127.0.0.1:${port}`);
+	console.log(`App running on port: ${port}`);
 });
 // const server = https.createServer(app).listen(port, () => {
 //     console.log(`App listening at https://127.0.0.1:${port}`)
@@ -110,5 +127,12 @@ process.on('unhandledRejection', (err) => {
 	console.log('UNHANDLED REJECTION! 🔥 Shutting down...');
 	server.close(() => {
 		process.exit(1);
+	});
+});
+//SIGTERM  config heroku
+process.on('SIGTERM', () => {
+	console.log('👋SIGTERM RECEIVED. Shutting down gracefully');
+	server.close(() => {
+		console.log('👋Process terminated!');
 	});
 });

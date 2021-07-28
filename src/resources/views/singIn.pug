@@ -9,7 +9,7 @@ html(lang='en')
 		title Shop | SingIn				
 	body
 		.main
-			form#singIn-form.form(action='/api/users/sing-in' method='POST')
+			form#singIn-form.form(action='/api/users/sign-in' method='POST')
 				h3.heading
 				img(src='/img/logo_shop.png' height="300px" width = "300px")
 				.spacer
@@ -33,7 +33,7 @@ html(lang='en')
 			try{
 				const res = await axios({
 					method: 'POST',
-					url: '/api/users/sing-in-admin',
+					url: 'http://127.0.0.1:3000/api/users/sign-in-admin',
 					data: formData	
 				})
 				if(res.data.status ==='success'){

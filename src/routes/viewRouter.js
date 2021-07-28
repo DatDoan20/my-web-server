@@ -8,7 +8,6 @@ router.get('/sign-in', viewController.getSingInPage);
 router.get('/404', viewController.getErrorPage);
 router.get('/new-password/:resetToken', viewController.getResetPasswordPage);
 router.get('/send-email-page', viewController.sendEmailPage);
-
 //Protect Admin
 router.use(authController.protectUsers, authController.restrictTo('admin'));
 router.get('/statistics', viewController.getStatisticsPage);
@@ -20,6 +19,7 @@ router.get('/users', viewController.getUserOverviewPage);
 
 //--Review
 router.get('/reviews', viewController.getReviewOverviewPage);
+router.get('/review-detail/:productId', viewController.getReviewDetailPage);
 
 //--Product
 router.get('/products', viewController.getProductOverviewPage);

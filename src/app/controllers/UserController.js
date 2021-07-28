@@ -19,16 +19,17 @@ const returnResultOfRequest = (res, statusCode, message, data = 'No token return
 		data: data,
 	});
 };
-const sendToken = (token, res) => {
+const sendToken = (token, req, res) => {
 	const cookieOptions = {
 		expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
 		//not allow any browser to access, modify cookie
 		httpOnly: true,
 	};
-	if (process.env.NODE_ENV === 'production') {
-		// the cookie will only be sent on an encrypted connection. only work in https(production)
-		cookieOptions.secure = true;
-	}
+	// if (req.secure || req.headers('x-forwarded-proto') === 'https') {
+	// 	// the cookie will only be sent on an encrypted connection. only work in https(production)
+	// 	// dont forget set : app.enable('trust proxy'); in server.js
+	// 	cookieOptions.secure = true;
+	// }
 	res.cookie('jwt', token, cookieOptions);
 };
 //----------------------------------------------------------------
@@ -46,7 +47,7 @@ exports.singUp = catchAsync(async (req, res, next) => {
 
 	//return res for client
 	const token = createToken(newUser._id);
-	sendToken(token, res);
+	sendToken(token, req, res);
 	returnResultOfRequest(
 		res,
 		201,
@@ -69,7 +70,7 @@ exports.singIn = (roleInput) =>
 			return next(new appError('Incorrect phone or password!'));
 		}
 		const token = createToken(user._id);
-		sendToken(token, res);
+		sendToken(token, req, res);
 		returnResultOfRequest(res, 200, user.role, token);
 	});
 //-----------------------------------------------------------------
