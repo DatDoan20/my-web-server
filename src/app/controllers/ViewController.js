@@ -68,9 +68,35 @@ exports.getReviewDetailPage = catchAsync(async (req, res, next) => {
 		path: 'reviews',
 		select: '-createdAt',
 	});
+	var statisticsRating = product.reviews.reduce(
+		(acc, crr) => {
+			switch (crr.rating) {
+				case 1:
+					acc.one = acc.one + 1;
+					break;
+				case 2:
+					acc.two = acc.two + 1;
+					break;
+				case 3:
+					acc.three = acc.three + 1;
+					break;
+				case 4:
+					acc.four = acc.four + 1;
+					break;
+				case 5:
+					acc.five = acc.five + 1;
+					break;
+				default:
+					break;
+			}
+			return acc;
+		},
+		{ five: 0, four: 0, three: 0, two: 0, one: 0 }
+	);
 	res.status(200).render('review/reviewDetail', {
 		product: product,
 		avatarAdmin: req.user.avatar,
+		statisticsRating: statisticsRating,
 	});
 	// res.status(200).json({ product: product });
 });

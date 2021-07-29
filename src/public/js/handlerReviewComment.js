@@ -3,6 +3,7 @@ import {
 	showAlertFail,
 	showAlertSuccess,
 	showAlertConfirmAction,
+	catchAsyncAction,
 } from './handlerActionGeneric.js';
 
 function showBoxReply(index) {
@@ -22,8 +23,8 @@ function sendReply(index) {
 	}
 }
 
-async function handleReply(contentReply, reviewId) {
-	try {
+function handleReply(contentReply, reviewId) {
+	catchAsyncAction(async function () {
 		const alertWaiting = showAlertWaiting('Comment is being sent');
 		var data = { comment: contentReply };
 		var resultReply = await axios({
@@ -37,16 +38,13 @@ async function handleReply(contentReply, reviewId) {
 			await showAlertSuccess('Success', 'Comment was sent');
 			location.reload();
 		}
-	} catch (err) {
-		console.log(err);
-		showAlertFail('Oops...!', 'Something went wrong!, please try again later.');
-	}
+	});
 }
-async function handleDeleteComment(commentId) {
+function handleDeleteComment(commentId) {
 	showAlertConfirmAction('Are you sure?', 'You are sure delete this comment').then(
 		async (result) => {
 			if (result.isConfirmed) {
-				try {
+				catchAsyncAction(async function () {
 					const alertWaiting = showAlertWaiting('Comment is deleted');
 					var resultReply = await axios({
 						method: 'DELETE',
@@ -58,10 +56,7 @@ async function handleDeleteComment(commentId) {
 						await showAlertSuccess('Success', 'Comment was deleted');
 						location.reload();
 					}
-				} catch (err) {
-					console.log(err);
-					showAlertFail('Oops...!', 'Something went wrong!, please try again later.');
-				}
+				});
 			}
 		}
 	);

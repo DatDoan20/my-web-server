@@ -89,6 +89,19 @@ body
 									.custom-control.custom-radio
 										input#rdoOutOfStock.custom-control-input(type='radio' name='outOfStock' value='true'  checked)
 										label.custom-control-label(for='rdoOutOfStock') hết hàng
+							.col-xl-12.col-lg-6.col-md-6.col-sm-6.col-12
+								h6.mb-3.text-primary Statistic Rating
+								label(style='font-size:21px; item-content:center;')= `${product.ratingsAverage}⭐/ ${product.reviews.length} lượt đánh giá`								
+								br
+								label= `5⭐ ${statisticsRating.five} đánh giá`
+								br
+								label= `4⭐ ${statisticsRating.four} đánh giá`
+								br
+								label= `3⭐ ${statisticsRating.three} đánh giá`
+								br
+								label= `2⭐ ${statisticsRating.two} đánh giá`														
+								br
+								label= `1⭐ ${statisticsRating.one} đánh giá`
 		br
 		.row.gutters
 			.col-xl-12.col-lg-3.col-md-12.col-sm-12.col-12

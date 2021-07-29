@@ -41,3 +41,12 @@ export const showAlertFail = (title, text) => {
 		showConfirmButton: true,
 	});
 };
+export const catchAsyncAction = async (fn) => {
+	try {
+		await fn();
+	} catch (err) {
+		console.log(err);
+		console.log('loi ru ne');
+		showAlertFail('Oops...!', 'Something went wrong!, please try again later.');
+	}
+};
