@@ -1,36 +1,13 @@
-async function showAlertResult(icon, title, text) {
-	await Swal.fire({
-		position: 'center',
-		icon: icon,
-		title: title,
-		text: text,
-		showConfirmButton: false,
-		timer: 1500,
-	});
-}
+import {
+	showAlertWaiting,
+	showAlertSuccess,
+	showAlertConfirmAction,
+	catchAsyncAction,
+} from './handlerActionGeneric.js';
 
-function showAlertConfirmAction(idOrder, price, title) {
-	return Swal.fire({
-		title: `Are you sure? (this action will ${title} this order)`,
-		text: `Order - ${idOrder} - TotalPayment: ${price}`,
-		icon: 'warning',
-		showCancelButton: true,
-		confirmButtonColor: '#3085d6',
-		cancelButtonColor: '#d33',
-		confirmButtonText: `Yes, ${title} it!`,
-	});
-}
-
-async function action(actionMethod, titleWaiting, titleResult, url, data) {
-	try {
-		const alertWaiting = Swal.fire({
-			title: `${titleWaiting}..., Please wait a moment, Do not dismiss!`,
-			icon: 'warning',
-			showConfirmButton: false,
-			allowOutsideClick: false,
-			allowEscapeKey: false,
-			closeOnClickOutside: false,
-		});
+function action(actionMethod, titleWaiting, titleResult, url, data) {
+	catchAsyncAction(async function () {
+		const alertWaiting = showAlertWaiting(titleWaiting);
 		//restore(delete: true)
 		var resultRestore = await axios({
 			method: actionMethod,
@@ -40,22 +17,18 @@ async function action(actionMethod, titleWaiting, titleResult, url, data) {
 
 		if (resultRestore.data.status === 'success') {
 			alertWaiting.close();
-			await showAlertResult('success', `${titleResult}`, 'Page will automatically reloaded');
+			await showAlertSuccess(`${titleResult}`, 'Page will automatically reloaded');
 			location.reload();
 		}
-	} catch (err) {
-		await showAlertResult(
-			'error',
-			'Oops...!',
-			'Something went wrong!, please try again later.'
-		);
-		location.reload();
-	}
+	});
 }
 var btnRestore = $('.btnRestore');
 btnRestore.click(function (e) {
 	e.preventDefault();
-	showAlertConfirmAction($(this).data('id'), $(this).data('total'), 'restore').then((result) => {
+	showAlertConfirmAction(
+		`Order - ${$(this).data('id')} - TotalPayment: ${$(this).data('total')}`,
+		'Are you sure? (this action will restore this order)'
+	).then((result) => {
 		if (result.isConfirmed) {
 			var idOrder = $(this).data('id');
 			action(

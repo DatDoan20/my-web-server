@@ -76,5 +76,6 @@ module.exports = class Email {
 			msg = 'Đơn hàng của bạn đã bị hủy, đây là thông tin đơn hàng đã hủy của bạn!';
 		}
 		await this.send('order/orderDetail.pug', msg);
+		return true;
 	}
 };

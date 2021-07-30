@@ -1,13 +1,10 @@
-async function showAlert(icon, title, text) {
-	await Swal.fire({
-		position: 'center',
-		icon: icon,
-		title: title,
-		text: text,
-		showConfirmButton: false,
-		timer: 1500,
-	});
-}
+import {
+	showAlertWaiting,
+	showAlertSuccess,
+	showAlertConfirmAction,
+	catchAsyncAction,
+} from './handlerActionGeneric.js';
+
 const infoFormProduct = document.querySelector('.form-info-product');
 //set Event
 infoFormProduct.addEventListener('submit', async (e) => {
@@ -47,27 +44,17 @@ infoFormProduct.addEventListener('submit', async (e) => {
 	}
 	//Ok update here
 	var resultUpdate;
-	try {
-		const alertWaiting = Swal.fire({
-			title: 'Product is being updated..., Please wait a moment, Do not dismiss!',
-			icon: 'warning',
-			showConfirmButton: false,
-			allowOutsideClick: false,
-			allowEscapeKey: false,
-			closeOnClickOutside: false,
-		});
+	catchAsyncAction(async function () {
+		const alertWaiting = showAlertWaiting('Product is being updated');
 		resultUpdate = await axios({
 			method: 'PATCH',
-			url: `/api/products/${$('#submit').data('id')}`,
+			url: `http://127.0.0.1:3000/api/products/${$('#submit').data('id')}`,
 			data: formData,
 		});
 		if (resultUpdate.data.status === 'success') {
 			alertWaiting.close();
-			await showAlert('success', 'Update successfully!', 'Page will automatically reloaded');
+			await showAlertSuccess('Update successfully!', 'Page will automatically reloaded');
 			location.reload();
 		}
-	} catch (err) {
-		await showAlert('error', 'Oops...!', 'Something went wrong!, please try again later.');
-		location.reload();
-	}
+	});
 });

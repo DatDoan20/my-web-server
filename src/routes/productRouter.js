@@ -33,6 +33,8 @@ router.delete(
 	productController.setOutOfStockProduct(true),
 	productController.updateProduct
 );
+//delete force product + delete all file img of that product
+router.delete('/:id/force', handleImg.deleteFileImg, productController.destroyProduct);
 //
 router.patch(
 	'/restore/:id',

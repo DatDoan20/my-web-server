@@ -36,7 +36,12 @@ head
 			p(style="font-weight: bold; color: #000;") THÔNG BÁO
 			.notify-result
 				span.notify-result-date.col.l-2.m-2.c-12= `${order.updatedAt.toLocaleString('vi-vn')}`
-				span.notify-result-user.col.l-10.m-10.c-12 Chúng tôi đã chuyển sang bên giao hàng, nội thành từ 3 - 4 ngày, còn ngoại thành thì sẽ lâu hơn vài ngày, tình hình dịch bệnh có lẽ sẽ lâu hơn dự kiến, mong bạn thông cảm. Chúc bạn sức khỏe và bình an bên gia đình
+				if order.state === 'waiting'
+					span.notify-result-user.col.l-10.m-10.c-12 Đơn hàng đang chờ xác nhận!
+				else if order.state === 'accepted'
+					span.notify-result-user.col.l-10.m-10.c-12 Chúng tôi đã chuyển sang bên giao hàng, nội thành từ 3 - 4 ngày, còn ngoại thành thì sẽ lâu hơn vài ngày, tình hình dịch bệnh có lẽ sẽ lâu hơn dự kiến, mong bạn thông cảm. Chúc bạn sức khỏe và bình an bên gia đình
+				else if order.state === 'canceled'
+					pan.notify-result-user.col.l-10.m-10.c-12 Sau khi đơn hàng này được xác nhận, vì một số lý do nên chúng tôi đã hủy nó. thông tin đến bạn.
 		.row
 			.order-main-info.col.l-4.m-4.c-12
 				h5.main-info-title THÔNG TIN NGƯỜI NHẬN

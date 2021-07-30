@@ -12,6 +12,6 @@ router.get('/me', OrderController.setOrderIdOfUser, OrderController.getAllOrderW
 router.post('/', OrderController.clearCartUser, OrderController.createOrder);
 
 // DELETE-CANCEL my order
-router.delete('/:id', OrderController.deleteOrder);
+router.delete('/:id/force', OrderController.destroyOrder);
 
 module.exports = router;

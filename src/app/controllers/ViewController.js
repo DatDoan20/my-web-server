@@ -32,12 +32,12 @@ exports.sendEmailPage = catchAsync(async (req, res, next) => {
 //----------------------------------------------------------------
 //GET /admin/statistics
 exports.getStatisticsPage = catchAsync(async (req, res, next) => {
-	res.status(200).render('statisticsPage');
+	res.status(200).render('statisticsPage', { userAdmin: req.user });
 });
 
 //GET /admin/dashboard
 exports.getDashboardPage = catchAsync(async (req, res, next) => {
-	res.status(200).render('dashboard');
+	res.status(200).render('dashboard', { userAdmin: req.user });
 });
 
 //GET /admin/my-profile
@@ -49,7 +49,7 @@ exports.getProfileAdmin = catchAsync(async (req, res, next) => {
 //GET admin/users
 exports.getUserOverviewPage = catchAsync(async (req, res, next) => {
 	const users = await User.find();
-	res.status(200).render('userOverview', { users: users });
+	res.status(200).render('userOverview', { users: users, userAdmin: req.user });
 });
 
 //------------------------------REVIEW------------------------------
@@ -61,7 +61,7 @@ exports.getReviewOverviewPage = catchAsync(async (req, res, next) => {
 			select: 'name _id',
 		})
 		.sort({ createdAt: -1 });
-	res.status(200).render('review/reviewOverview', { reviews: reviews });
+	res.status(200).render('review/reviewOverview', { reviews: reviews, userAdmin: req.user });
 });
 exports.getReviewDetailPage = catchAsync(async (req, res, next) => {
 	const product = await Product.findOne({ _id: req.params.productId }).populate({
@@ -104,13 +104,16 @@ exports.getReviewDetailPage = catchAsync(async (req, res, next) => {
 //GET /admin/products
 exports.getProductOverviewPage = catchAsync(async (req, res, next) => {
 	const products = await Product.find({ outOfStock: false }).sort({ createdAt: -1 });
-	res.status(200).render('product/productOverview', { products: products });
+	res.status(200).render('product/productOverview', { products: products, userAdmin: req.user });
 });
 
 //GET admin/products/bin
 exports.getProductBinOverviewPage = catchAsync(async (req, res, next) => {
 	const products = await Product.find({ outOfStock: true }).sort({ createdAt: -1 });
-	res.status(200).render('product/productBinOverview', { products: products });
+	res.status(200).render('product/productBinOverview', {
+		products: products,
+		userAdmin: req.user,
+	});
 });
 
 //GET /admin/products/create
@@ -127,12 +130,12 @@ exports.getEditProductPage = catchAsync(async (req, res, next) => {
 //GET admin/orders
 exports.getOrderOverviewPage = catchAsync(async (req, res, next) => {
 	const orders = await Order.find().sort({ createdAt: -1 });
-	res.status(200).render('order/orderOverview', { orders: orders });
+	res.status(200).render('order/orderOverview', { orders: orders, userAdmin: req.user });
 });
 //GET admin/orders/bin
 exports.getOrderBinOverviewPage = catchAsync(async (req, res, next) => {
 	const orders = await Order.findDeleted().sort({ createdAt: -1 });
-	res.status(200).render('order/orderBinOverview', { orders: orders });
+	res.status(200).render('order/orderBinOverview', { orders: orders, userAdmin: req.user });
 });
 //GET admin/orders-detail/:id
 exports.getOrderDetailPage = catchAsync(async (req, res, next) => {

@@ -17,11 +17,11 @@ block content
 						a.history-info-label.history-info-group-name(href=`/admin/orders-detail/${order._id}` target='_blank')= `${order._id}`
 						| 
 						if order.state === 'waiting'
-							span.history-info-label.history-info-group-waiting Chờ xác nhận ⏳
+							span#state-order.history-info-label.history-info-group-waiting(state=`${order.state}`) Chờ xác nhận ⏳
 						else if order.state === 'accepted'
-							span.history-info-label.history-info-group-accepted Đã xác nhận, chờ giao hàng...✔️️
+							span#state-order.history-info-label.history-info-group-accepted(state=`${order.state}`) Đã xác nhận, chờ giao hàng...✔️️
 						else if order.state === 'canceled'
-							span.history-info-label.history-info-group-canceled Đã hủy ❌
+							span#state-order.history-info-label.history-info-group-canceled(state=`${order.state}`) Đã hủy ❌
 					each product, index in order.purchasedProducts
 						p= `${index+1}. ${product.name}`
 					div(style='border: 1px solid #000; width:400px;')

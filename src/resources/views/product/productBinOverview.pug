@@ -3,8 +3,6 @@ extends ../dashboard
 block content   
 	.body-tb-generic
 		h1.h1-tb-generic= `Products👚 Bin 🗑️ ${products.length}`
-		.flex-shrink-0.px-2.py-4.space-y-2
-			a.flex.items-center.justify-center.w-full.px-4.py-2.text-sm.text-white.rounded-md.bg-primary(href='/admin/products/create', target='_blank' style='width:80px; height:30px;' class='hover:bg-primary-dark focus:outline-none focus:ring focus:ring-primary-dark focus:ring-offset-1 focus:ring-offset-white dark:focus:ring-offset-dark') Thêm
 		table.rwd-table
 			tr
 				th(style='width:13%') Image
@@ -40,7 +38,9 @@ block content
 					td(data-th='UpdatedAt')= product.updatedAt.toLocaleString('vi-vn')
 					td
 						a.btnRestore(href='#' title='Restore' style='text-align:center' data-price=`${product.price}` data-id=`${product._id}`) Restore(In stock)⤴️
+					td
+						a.btnDelete(href='#' title='Delete' style='text-align:center' data-price=`${product.price}` data-id=`${product._id}`) Delete❌
 	script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
 	script(src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js')
 	script(src='//cdn.jsdelivr.net/npm/sweetalert2@11')
-	script(src='/js/restoreProduct.js')
+	script(src='/js/handleProductBin.js' type='module')

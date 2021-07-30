@@ -5,6 +5,7 @@ const sharp = require('sharp');
 const catchAsync = require('../handler/catchAsync');
 const appError = require('../handler/appError');
 const fs = require('fs');
+//const rimraf = require('rimraf');
 //defined destination and name of file
 // const multerStorage = multer.diskStorage({
 // 	destination: function (req, file, cb) {
@@ -100,5 +101,18 @@ exports.resizeImage = catchAsync(async (req, res, next) => {
 		.toFormat('png')
 		.png({ quality: 90 })
 		.toFile(`src/public/img/users/${req.file.filename}`);
+	next();
+});
+
+//delete file img (eg. when delete product)
+exports.deleteFileImg = catchAsync(async (req, res, next) => {
+	var pathSaveProductImg = `src/public/img/products/${req.params.id}`;
+	if (fs.existsSync(pathSaveProductImg)) {
+		try {
+			fs.rmdirSync(pathSaveProductImg, { recursive: true });
+		} catch (err) {
+			console.error(err);
+		}
+	}
 	next();
 });

@@ -1,13 +1,22 @@
-async function showAlert(icon, title, text) {
-	await Swal.fire({
-		position: 'center',
-		icon: icon,
-		title: title,
-		text: text,
-		showConfirmButton: false,
-		timer: 1500,
-	});
-}
+import {
+	showAlertWaiting,
+	showAlertFail,
+	showAlertSuccess,
+	catchAsyncAction,
+} from './handlerActionGeneric.js';
+
+$('#chk-change-password').change(function () {
+	if ($(this).is(':checked')) {
+		$('#password').attr('required', '');
+		$('#newPassword').attr('required', '');
+		$('#confirmNewPassword').attr('required', '');
+	} else {
+		$('#password').removeAttr('required');
+		$('#newPassword').removeAttr('required');
+		$('#confirmNewPassword').removeAttr('required');
+	}
+});
+
 function checkTheSamePassword() {
 	if (document.getElementById('chk-change-password').checked) {
 		if (
@@ -24,7 +33,7 @@ const infoFormUser = document.querySelector('.form-info-user');
 infoFormUser.addEventListener('submit', async (e) => {
 	e.preventDefault();
 	if (!checkTheSamePassword()) {
-		await showAlert('error', 'Oops...!', 'New password and confirm password not the same! 😫');
+		showAlertFail('Oops...!', 'New password and confirm password not the same! 😫');
 		return;
 	}
 
@@ -43,18 +52,10 @@ infoFormUser.addEventListener('submit', async (e) => {
 		formData.append('sex', 'female');
 	}
 	//update
-	var resultUpdate;
-	try {
-		const alertWaiting = Swal.fire({
-			title: 'Profile is being updated..., Please wait a moment, Do not dismiss!',
-			icon: 'warning',
-			showConfirmButton: false,
-			allowOutsideClick: false,
-			allowEscapeKey: false,
-			closeOnClickOutside: false,
-		});
+	catchAsyncAction(async function () {
+		const alertWaiting = showAlertWaiting('Profile is being updated');
 		//default when click -> update me (update info basic) + avatar
-		resultUpdate = await axios({
+		var resultUpdate = await axios({
 			method: 'PATCH',
 			url: '/api/users/update-me',
 			data: formData,
@@ -69,11 +70,9 @@ infoFormUser.addEventListener('submit', async (e) => {
 		}
 		if (resultUpdate.data.status === 'success') {
 			alertWaiting.close();
-			await showAlert('success', 'Update successfully!', 'Page will automatically reloaded');
+			await showAlertSuccess('Update successfully!', 'Page will automatically reloaded');
 			location.reload();
 		}
-	} catch (err) {
-		await showAlert('error', 'Oops...!', 'Something went wrong!, please try again later.');
-		location.reload();
-	}
+	});
 });
+//update profile chưa test + order chưa lam

@@ -21,9 +21,10 @@ exports.clearCartUser = catchAsync(async (req, res, next) => {
 exports.createOrder = factory.createOneDocument(Order);
 
 //---------------------------ADMIN-------------------------------------
-//DELETE admin/:id/force
+/*	DELETE admin/:id/force  (admin delete force) || 
+ 	api/users/orders/:id/force (user can delete force if that order has not been accepted, constraint client side )*/
 exports.destroyOrder = factory.forceDeleteOneDocument(Order);
-// DELETE /api/orders/:id (orderId)
+// DELETE admin/:id/soft (user delete)
 exports.deleteOrder = factory.softDeleteOneDocument(Order);
 //PATCH admin/orders/restore/:id
 exports.restoreOrder = factory.restoreOneDocument(Order);
@@ -38,6 +39,7 @@ exports.updateStateOrder = factory.updateOneDocument(Order);
 
 //GET	admin/orders/send-email/:idOrder/:actionType
 exports.sendEmailInfoOrder = catchAsync(async (req, res, next) => {
+	var resultSendEmail;
 	if (req.params.actionType === 'accept') {
 		const order = await Order.findOne({ _id: req.params.idOrder });
 		const user = {
@@ -45,7 +47,9 @@ exports.sendEmailInfoOrder = catchAsync(async (req, res, next) => {
 			email: order.emailUser,
 		};
 		const nameKey = 'order';
-		await new Email(user, '', nameKey, order).sendInfoOrder(req.params.actionType);
+		resultSendEmail = await new Email(user, '', nameKey, order).sendInfoOrder(
+			req.params.actionType
+		);
 	} else if (req.params.actionType === 'cancel') {
 		const order = await Order.findOneDeleted({ _id: req.params.idOrder });
 		// console.log(order);
@@ -54,7 +58,13 @@ exports.sendEmailInfoOrder = catchAsync(async (req, res, next) => {
 			email: order.emailUser,
 		};
 		const nameKey = 'order';
-		await new Email(user, '', nameKey, order).sendInfoOrder(req.params.actionType);
+		resultSendEmail = await new Email(user, '', nameKey, order).sendInfoOrder(
+			req.params.actionType
+		);
 	}
-	res.status(200).json({ status: 'success', message: 'email was sent' });
+	if (resultSendEmail) {
+		res.status(200).json({ status: 'success', message: 'email was sent' });
+	} else {
+		res.status(500).json({ status: 'error', message: 'send email failed' });
+	}
 });

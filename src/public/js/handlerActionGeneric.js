@@ -41,12 +41,20 @@ export const showAlertFail = (title, text) => {
 		showConfirmButton: true,
 	});
 };
+export const showAlertWarning = async (title, text) => {
+	await Swal.fire({
+		position: 'center',
+		icon: 'warning',
+		title: title,
+		text: text,
+		showConfirmButton: true,
+	});
+};
 export const catchAsyncAction = async (fn) => {
 	try {
 		await fn();
 	} catch (err) {
 		console.log(err);
-		console.log('loi ru ne');
 		showAlertFail('Oops...!', 'Something went wrong!, please try again later.');
 	}
 };
