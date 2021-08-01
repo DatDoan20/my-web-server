@@ -8,7 +8,7 @@ exports.setCommentInfo = (req, res, next) => {
 	req.body.reviewId = req.params.id;
 	next();
 };
-exports.createComment = factory.createOneDocument(Comment);
+exports.createComment = factory.createOneDocument(Comment, 'Comment');
 
 //DELETE api/users/reviews/comment/:id/force
 exports.deleteComment = factory.forceDeleteOneDocument(Comment);

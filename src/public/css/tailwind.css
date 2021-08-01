@@ -2184,3 +2184,21 @@ footer {
 	bottom: 0;
 	width: 100%;
 }
+#block-notify-comment-review,
+#block-notify-order {
+	margin: 5px;
+}
+.box-notify-order {
+	padding: 5px;
+	border-radius: 5px;
+}
+.box-notify-comment-review {
+	padding: 5px;
+	border-radius: 5px;
+}
+.box-notify-order:hover {
+	background-color: rgb(50, 50, 50);
+}
+.box-notify-comment-review:hover {
+	background-color: rgb(50, 50, 50);
+}

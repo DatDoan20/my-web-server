@@ -42,33 +42,10 @@ html(lang='en')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js')
     //-alert
     script(src='//cdn.jsdelivr.net/npm/sweetalert2@11')
+    //-socket
+    script(src='https://cdn.socket.io/4.1.2/socket.io.min.js' integrity='sha384-toS6mmwu70G0fw54EGlWWeA4z3dyJ+dlXBtSURSKN4vyRFOcxd3Bzjj/AoOwY+Rg' crossorigin='anonymous')
+    //-
     script(src='/js/script1Dashboard.js')
-    script(src='/js/script2Dashboard.js')
-    script.
-      $("#MyBtnLogout").click( async function(){
-          try{
-            const res = await axios({
-              method: 'GET',
-              url: '/api/users/sign-out',       	
-            })
-            if(res.data.status === 'success'){
-              location.assign('/admin/sign-in')
-            }
-          }catch(err){
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Something went wrong, can not sing out now! please try again',
-              })
-        }
-      })
-      $('#btn-click-hide-show-menu-d-shop').prop('checked', true);
-      $('#btn-click-hide-show-menu-d-shop').change(function(){
-        if(this.checked){
-          $("#img-click-hide-show-menu-d-shop").text('✖️')
-          $('.menu-d-shop').show()
-        }else{
-          $("#img-click-hide-show-menu-d-shop").text('➕')
-          $('.menu-d-shop').hide()
-        }
-      })      
+    script(src='/js/script2Dashboard.js')    
+    script(src='/js/handleDashboard.js')
+    block extraScript

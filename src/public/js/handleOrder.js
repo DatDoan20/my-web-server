@@ -45,7 +45,7 @@ function actionOrder(actionMethod, titleWaiting, titleResult, url, actionType, i
 var btnAccept = $('.btnAccept');
 btnAccept.click(function (e) {
 	e.preventDefault();
-	if ($('#state-order').attr('state') === 'accepted') {
+	if ($(`#state-order-${$(this).data('id')}`).attr('state') === 'accepted') {
 		showAlertWarning('Can not do it', 'this order is already accepted');
 		return;
 	}

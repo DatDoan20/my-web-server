@@ -17,7 +17,7 @@ block content
 			each review in reviews
 				tr
 					td(data-th='Rating')= `${review.rating}⭐`
-					td(data-th='UpdatedAt')= review.updatedAt.toLocaleString('vi-vn', {day: 'numeric', month: 'numeric', year: 'numeric'})
+					td(data-th='UpdatedAt')= review.updatedAt.toLocaleString('vi-vn')
 					td(data-th='Review')= review.review
 					td(data-th='Name')= review.userId.name
 					td(data-th='Avatar')
@@ -25,4 +25,8 @@ block content
 					td= review.productId.name
 					td(data-th='Comments' style="text-align:center;")= review.comments.length
 					td 
-						a(href=`/admin/review-detail/${review.productId._id}` target='_blank') Reply↩️
+						a.btnReply.link(href='#' data-id=`${review._id}`) Reply↩️
+					td 
+						a.link(href=`/admin/review-detail/${review.productId._id}` target='_blank') Overview↩️
+	//lib
+	script(src='/js/handleReviewOverview.js' type='module')

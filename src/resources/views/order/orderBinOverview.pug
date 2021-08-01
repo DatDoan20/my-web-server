@@ -38,7 +38,6 @@ block content
 					.history-info-btn
 						.flex-shrink-0.px-2.py-4.space-y-2
 							a.btnRestore.flex.items-center.justify-center.w-full.px-4.py-2.text-sm.text-white.rounded-md.bg-primary(href='#',style='width:80px; height:30px;' data-id=`${order._id}` data-total=`${order.totalPayment}` class='hover:bg-primary-dark focus:outline-none focus:ring focus:ring-primary-dark focus:ring-offset-1 focus:ring-offset-white dark:focus:ring-offset-dark') ️Restore⏫
-	script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
-	script(src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js')
-	script(src='//cdn.jsdelivr.net/npm/sweetalert2@11')
+block extraScript
 	script(src='/js/restoreOrder.js' type='module')
+	

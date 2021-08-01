@@ -22,7 +22,8 @@ Review.virtual('comments', {
 	foreignField: 'reviewId',
 	localField: '_id',
 });
-Review.index({ productId: 1, userId: 1 }, { unique: true });
+Review.index({ productId: 1 });
+Review.index({ userId: 1 });
 
 //middleware
 //get info user who is review

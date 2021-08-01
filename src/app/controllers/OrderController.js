@@ -18,14 +18,16 @@ exports.clearCartUser = catchAsync(async (req, res, next) => {
 	await req.user.save();
 	next();
 });
-exports.createOrder = factory.createOneDocument(Order);
+exports.createOrder = factory.createOneDocument(Order, 'Order');
 
 //---------------------------ADMIN-------------------------------------
 /*	DELETE admin/:id/force  (admin delete force) || 
  	api/users/orders/:id/force (user can delete force if that order has not been accepted, constraint client side )*/
 exports.destroyOrder = factory.forceDeleteOneDocument(Order);
+
 // DELETE admin/:id/soft (user delete)
 exports.deleteOrder = factory.softDeleteOneDocument(Order);
+
 //PATCH admin/orders/restore/:id
 exports.restoreOrder = factory.restoreOneDocument(Order);
 

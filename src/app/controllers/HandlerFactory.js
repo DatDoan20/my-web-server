@@ -1,6 +1,7 @@
 const catchAsync = require('../handler/catchAsync');
 const appError = require('../handler/appError');
 const APIFeature = require('../../utils/apiFeature');
+const Review = require('../models/Review');
 //
 const returnResultOfRequest = (res, statusCode, data = undefined) => {
 	const obj = { status: 'success' };
@@ -39,9 +40,19 @@ exports.restoreOneDocument = (Model) =>
 	});
 
 //-------------------------------------------------CREATE
-exports.createOneDocument = (Model) =>
+exports.createOneDocument = (Model, nameEventEmit = undefined) =>
 	catchAsync(async (req, res, next) => {
-		const doc = await Model.create(req.body);
+		var doc = await Model.create(req.body);
+		if (nameEventEmit) {
+			doc = await doc
+				.populate({
+					path: 'userId',
+					select: 'name avatar',
+				})
+				.execPopulate();
+			const timeString = doc.updatedAt.toLocaleString('vi-vn');
+			req.app.io.to(req.app.socketIdAdmin).emit(`new${nameEventEmit}`, doc, timeString);
+		}
 		returnResultOfRequest(res, 201, doc);
 	});
 

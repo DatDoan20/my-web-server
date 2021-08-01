@@ -5,7 +5,7 @@ import {
 	showAlertConfirmAction,
 	catchAsyncAction,
 } from './handlerActionGeneric.js';
-
+// * HANDLE ReviewDetail.pug
 function showBoxReply(index) {
 	if ($(`#box-reply-${index}`).is(':visible')) {
 		$(`#box-reply-${index}`).hide();
@@ -23,7 +23,7 @@ function sendReply(index) {
 	}
 }
 
-function handleReply(contentReply, reviewId) {
+export function handleReply(contentReply, reviewId) {
 	catchAsyncAction(async function () {
 		const alertWaiting = showAlertWaiting('Comment is being sent');
 		var data = { comment: contentReply };

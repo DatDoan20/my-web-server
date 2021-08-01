@@ -37,10 +37,8 @@ block content
 							img(src='/icon/left-stock.png')
 					td(data-th='UpdatedAt')= product.updatedAt.toLocaleString('vi-vn')
 					td
-						a.btnRestore(href='#' title='Restore' style='text-align:center' data-price=`${product.price}` data-id=`${product._id}`) Restore(In stock)⤴️
+						a.link.btnRestore(href='#' title='Restore' style='text-align:center' data-price=`${product.price}` data-id=`${product._id}`) Restore(In stock)⤴️
 					td
-						a.btnDelete(href='#' title='Delete' style='text-align:center' data-price=`${product.price}` data-id=`${product._id}`) Delete❌
-	script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
-	script(src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js')
-	script(src='//cdn.jsdelivr.net/npm/sweetalert2@11')
+						a.link.btnDelete(href='#' title='Delete' style='text-align:center' data-price=`${product.price}` data-id=`${product._id}`) Delete❌
+block extraScript
 	script(src='/js/handleProductBin.js' type='module')

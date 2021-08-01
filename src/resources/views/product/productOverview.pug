@@ -25,7 +25,8 @@ block content
                 tr
                     td(data-th='Image')
                         img(src=`/img/products/${product._id}/${product.imageCover}` style='width:250px; height:165px; border-radius:5px;')
-                    td(data-th='Name')= product.name
+                    td(data-th='Name') 
+                        a.name-product(href=`/admin/review-detail/${product._id}` target='_blank')= product.name
                     td(data-th='Description')= product.description
                     td(data-th='Price')= `${(product.price/1000).toFixed(3)}đ`
                     td(data-th='Size')= product.size
@@ -43,10 +44,8 @@ block content
                             img(src='/icon/left-stock.png')
                     td(data-th='UpdatedAt')= product.updatedAt.toLocaleString('vi-vn')
                     td
-                        a.btnDelete(href='#' title='Delete' style='text-align:center' data-name=`${product.name}` data-id=`${product._id}`) ❎
+                        a.link.btnDelete(href='#' title='Delete' style='text-align:center' data-name=`${product.name}` data-id=`${product._id}`) ❎
                     td
-                        a#btnEditProduct(href=`/admin/products/${product.slug}` title='Edit' style='text-align:center') 🖊️
-    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
-    script(src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js')
-    script(src='//cdn.jsdelivr.net/npm/sweetalert2@11')
+                        a#btnEditProduct.link(href=`/admin/products/${product.slug}` title='Edit' style='text-align:center') 🖊️
+block extraScript    
     script(src='/js/deleteSoftProduct.js' type='module')

@@ -3,9 +3,10 @@ const express = require('express');
 const morgan = require('morgan');
 require('dotenv').config({ path: `${__dirname}/setup.env` });
 const app = express();
-
 //help secure cookie(send token) check https
 app.enable('trust proxy');
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
 
 const methodOverride = require('method-override');
 const mainRouter = require('./routes/mainRouter.js');
@@ -75,11 +76,12 @@ app.use(
 				"'self'",
 				"'unsafe-eval'",
 				"'unsafe-inline'",
-				' cdnjs.cloudflare.com',
+				'cdnjs.cloudflare.com',
 				'code.jquery.com',
 				'ajax.googleapis.com',
 				'cdn.jsdelivr.net',
 				'kit.fontawesome.com',
+				'cdn.socket.io',
 			],
 			'script-src-attr': ["'self'", "'unsafe-inline'"],
 		},
@@ -104,7 +106,8 @@ app.use(hpp());
 
 // COMPRESSION ALL MIDDLEWARE
 app.use(compression());
-//run routes and handle error for those routes
+
+//RUN ROUTER & HANDLE ERR
 mainRouter(app);
 //error handlers for routers
 app.all('*', (req, res, next) => {
@@ -113,14 +116,20 @@ app.all('*', (req, res, next) => {
 });
 app.use(errController);
 
-//listen port
-const server = app.listen(port, () => {
+//LISTEN PORT
+server.listen(port, () => {
 	console.log(`App running on port: ${port}`);
 });
-// const server = https.createServer(app).listen(port, () => {
-//     console.log(`App listening at https://127.0.0.1:${port}`)
-// })
+//LISTEN SOCKET IO
+app.io = io;
+io.on('connection', (socket) => {
+	console.log('--- new connect with ID: ' + socket.id + ' ---');
+	socket.on('AdminId', (data) => {
+		app.socketIdAdmin = socket.id;
+	});
+});
 
+//error handlers for routers
 //---CATCH-ERROR: can't connect to server
 process.on('unhandledRejection', (err) => {
 	console.log(err.name, err.message);
@@ -129,6 +138,7 @@ process.on('unhandledRejection', (err) => {
 		process.exit(1);
 	});
 });
+
 //SIGTERM  config heroku
 process.on('SIGTERM', () => {
 	console.log('👋SIGTERM RECEIVED. Shutting down gracefully');

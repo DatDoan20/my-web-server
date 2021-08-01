@@ -50,6 +50,18 @@ export const showAlertWarning = async (title, text) => {
 		showConfirmButton: true,
 	});
 };
+export const showAlertRequest = async () => {
+	const { value: text } = await Swal.fire({
+		input: 'textarea',
+		inputLabel: 'Message',
+		inputPlaceholder: 'Type your message here...',
+		inputAttributes: {
+			'aria-label': 'Type your message here',
+		},
+		showCancelButton: true,
+	});
+	return text;
+};
 export const catchAsyncAction = async (fn) => {
 	try {
 		await fn();

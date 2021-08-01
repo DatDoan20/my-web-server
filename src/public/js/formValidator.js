@@ -7,11 +7,11 @@ function Validator(formSelector) {
 	 */
 	var validatorRules = {
 		required: function (value) {
-			return value ? undefined : 'vui long nhap truong nay';
+			return value ? undefined : 'please enter this field';
 		},
 		email: function (value) {
 			var regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-			return regex.test(value) ? undefined : 'vui long nhap email hop le';
+			return regex.test(value) ? undefined : 'please enter a valid email address';
 		},
 		min: function (min) {
 			return function (value) {
@@ -20,7 +20,7 @@ function Validator(formSelector) {
 		},
 		phone: function (value) {
 			var regex = /([\+84|84|0]+(3|5|7|8|9|1[2|6|8|9]))+([0-9]{8})\b/;
-			return regex.test(value) ? undefined : 'vui long nhap số điện thoại hợp lệ';
+			return regex.test(value) ? undefined : 'please enter a valid phone number';
 		},
 	};
 

@@ -5,6 +5,17 @@ import {
 	catchAsyncAction,
 } from './handlerActionGeneric.js';
 
+$('.name-product').hover(
+	function () {
+		$(this).css('text-decoration', 'underline');
+		$(this).css('background-color', 'black');
+	},
+	function () {
+		$(this).css('text-decoration', 'none');
+		$(this).css('background-color', 'transparent');
+	}
+);
+
 var btnDelete = $('.btnDelete');
 btnDelete.click(function (e) {
 	e.preventDefault();
