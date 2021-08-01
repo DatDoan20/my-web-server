@@ -2184,21 +2184,19 @@ footer {
 	bottom: 0;
 	width: 100%;
 }
-#block-notify-comment-review,
+#block-notify-review,
+#block-notify-comment,
 #block-notify-order {
 	margin: 5px;
 }
-.box-notify-order {
+.box-notify-order,
+.box-notify-review-and-comment {
 	padding: 5px;
 	border-radius: 5px;
 }
-.box-notify-comment-review {
-	padding: 5px;
-	border-radius: 5px;
-}
-.box-notify-order:hover {
-	background-color: rgb(50, 50, 50);
-}
-.box-notify-comment-review:hover {
+
+.box-notify-order:hover,
+.box-notify-comment:hover,
+.box-notify-review:hover {
 	background-color: rgb(50, 50, 50);
 }

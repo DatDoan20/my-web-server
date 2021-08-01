@@ -50,8 +50,7 @@ exports.createOneDocument = (Model, nameEventEmit = undefined) =>
 					select: 'name avatar',
 				})
 				.execPopulate();
-			const timeString = doc.updatedAt.toLocaleString('vi-vn');
-			req.app.io.to(req.app.socketIdAdmin).emit(`new${nameEventEmit}`, doc, timeString);
+			req.app.io.to(req.app.socketIdAdmin).emit(`new${nameEventEmit}`, doc);
 		}
 		returnResultOfRequest(res, 201, doc);
 	});

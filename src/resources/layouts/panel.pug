@@ -58,37 +58,50 @@ section.fixed.inset-y-0.z-20.w-full.max-w-xs.bg-white(x-transition:enter='transi
       .flex.items-center.justify-between.px-4.pt-4.border-b(class='dark:border-primary-darker')
         h2#notificationPanelLabel.pb-4.font-semibold Notifications
         .space-x-2
-          button.px-px.pb-4.transition-all.duration-200.transform.translate-y-px.border-b(@click.prevent="activeTabe = 'action'", class='focus:outline-none', :class="{'border-primary-dark dark:border-primary': activeTabe == 'action', 'border-transparent': activeTabe != 'action'}")
+          button.px-px.pb-4.transition-all.duration-200.transform.translate-y-px.border-b(@click.prevent="activeTabe = 'order'", class='focus:outline-none', :class="{'border-primary-dark dark:border-primary': activeTabe == 'order', 'border-transparent': activeTabe != 'order'}")
             | Order
-          button.px-px.pb-4.transition-all.duration-200.transform.translate-y-px.border-b(@click.prevent="activeTabe = 'user'", class='focus:outline-none', :class="{'border-primary-dark dark:border-primary': activeTabe == 'user', 'border-transparent': activeTabe != 'user'}")
-            | Review/Comment
+          button.px-px.pb-4.transition-all.duration-200.transform.translate-y-px.border-b(@click.prevent="activeTabe = 'review'", class='focus:outline-none', :class="{'border-primary-dark dark:border-primary': activeTabe == 'review', 'border-transparent': activeTabe != 'review'}")
+            | Review
+          button.px-px.pb-4.transition-all.duration-200.transform.translate-y-px.border-b(@click.prevent="activeTabe = 'comment'", class='focus:outline-none', :class="{'border-primary-dark dark:border-primary': activeTabe == 'comment', 'border-transparent': activeTabe != 'comment'}")
+            | Comment
     // Panel content (tabs)
     .flex-1.pt-4.overflow-y-hidden(class='hover:overflow-y-auto')
-      // Action tab
-      #block-notify-order.space-y-4(x-show.transition.in="activeTabe == 'action'")
+      // Order tab
+      #block-notify-order.space-y-4(x-show.transition.in="activeTabe == 'order'")
         a.box-notify-order.block(href='#')
-          .flex.px-4.space-x-4
-            .relative.flex-shrink-0
-              span.z-10.inline-block.p-2.overflow-visible.rounded-full.bg-primary-50.text-primary-light(class='dark:bg-primary-darker')
-                svg.w-7.h-7(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke='currentColor')
-                  path(stroke-linecap='round', stroke-linejoin='round', stroke-width='2', d='M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9')
-              .absolute.h-24.p-px.-mt-3.-ml-px.bg-primary-50(class='left-1/2 dark:bg-primary-darker')
-            .flex-1.overflow-hidden
-              h5.text-sm.font-semibold.text-gray-600(class='dark:text-light') Test
-              p.text-sm.font-normal.text-gray-400.truncate(class='dark:text-primary-lighter') hello
-              span.text-sm.font-normal.text-gray-400(class='dark:text-primary-light')  9h ago
-      // User tab
-      #block-notify-comment-review.space-y-4(x-show.transition.in="activeTabe == 'user'")
-        a.box-notify-comment-review.block(href='#')
           .flex.px-4.space-x-4
             .relative.flex-shrink-0
               span.relative.z-10.inline-block.overflow-visible.rounded-ful
                 img.object-cover.rounded-full.w-9.h-9(src='/img/otter.png', alt='Otter')
               .absolute.h-24.p-px.-mt-3.-ml-px.bg-primary-50(class='left-1/2 dark:bg-primary-darker')
             .flex-1.overflow-hidden
-              h5.text-sm.font-semibold.text-gray-600(class='dark:text-light') Dat
-              p.text-sm.font-normal.text-gray-400.truncate(class='dark:text-primary-lighter') Test
-              span.text-sm.font-normal.text-gray-400(class='dark:text-primary-light')  1d ago         
+              h5.text-sm.font-semibold.text-gray-600(class='dark:text-light') order
+              p.text-sm.font-normal.text-gray-400.truncate(class='dark:text-primary-lighter') order 
+              span.text-sm.font-normal.text-gray-400(class='dark:text-primary-light') order 
+      // User tab
+      #block-notify-review.space-y-4(x-show.transition.in="activeTabe == 'review'")
+        a.box-notify-review-and-comment.block(href='#')
+          .flex.px-4.space-x-4
+            .relative.flex-shrink-0
+              span.relative.z-10.inline-block.overflow-visible.rounded-ful
+                img.object-cover.rounded-full.w-9.h-9(src='/img/otter.png', alt='Otter')
+              .absolute.h-24.p-px.-mt-3.-ml-px.bg-primary-50(class='left-1/2 dark:bg-primary-darker')
+            .flex-1.overflow-hidden
+              h5.text-sm.font-semibold.text-gray-600(class='dark:text-light') review
+              p.text-sm.font-normal.text-gray-400.truncate(class='dark:text-primary-lighter') review
+              span.text-sm.font-normal.text-gray-400(class='dark:text-primary-light') review
+      // test tab
+      #block-notify-comment.space-y-4(x-show.transition.in="activeTabe == 'comment'")
+        a.box-notify-review-and-comment.block(href='#')
+          .flex.px-4.space-x-4
+            .relative.flex-shrink-0
+              span.relative.z-10.inline-block.overflow-visible.rounded-ful
+                img.object-cover.rounded-full.w-9.h-9(src='/img/otter.png', alt='Otter')
+              .absolute.h-24.p-px.-mt-3.-ml-px.bg-primary-50(class='left-1/2 dark:bg-primary-darker')
+            .flex-1.overflow-hidden
+              h5.text-sm.font-semibold.text-gray-600(class='dark:text-light') comment 
+              p.text-sm.font-normal.text-gray-400.truncate(class='dark:text-primary-lighter') comment 
+              span.text-sm.font-normal.text-gray-400(class='dark:text-primary-light')  comment 
 // Search panel
 // Backdrop
 .fixed.inset-0.z-10.bg-primary-darker(x-transition:enter='transition duration-300 ease-in-out', x-transition:enter-start='opacity-0', x-transition:enter-end='opacity-100', x-transition:leave='transition duration-300 ease-in-out', x-transition:leave-start='opacity-100', x-transition:leave-end='opacity-0', x-show='isSearchPanelOpen', @click='isSearchPanelOpen = false', style='opacity: 0.5', aria-hidden='ture')

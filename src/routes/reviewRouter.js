@@ -22,8 +22,8 @@ router.post('/:id/comment', commentController.setCommentInfo, commentController.
 
 //delete force
 router.delete('/comment/:id/force', commentController.deleteComment);
-//get comment of review
-router.get('/comments', commentController.getComments);
+//get comment of review  user/reviews/comments
+router.get('/comments/search', commentController.getComments);
 
 //------ADMIN
 router.use(authController.restrictTo('admin'));
