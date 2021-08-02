@@ -129,12 +129,16 @@ exports.getEditProductPage = catchAsync(async (req, res, next) => {
 // -------------------------------ORDER------------------------------
 //GET admin/orders
 exports.getOrderOverviewPage = catchAsync(async (req, res, next) => {
-	const orders = await Order.find().sort({ createdAt: -1 });
+	const orders = await Order.find()
+		.populate({ path: 'userId', select: 'avatar name' })
+		.sort({ createdAt: -1 });
 	res.status(200).render('order/orderOverview', { orders: orders, userAdmin: req.user });
 });
 //GET admin/orders/bin
 exports.getOrderBinOverviewPage = catchAsync(async (req, res, next) => {
-	const orders = await Order.findDeleted().sort({ createdAt: -1 });
+	const orders = await Order.findDeleted()
+		.populate({ path: 'userId', select: 'avatar name' })
+		.sort({ createdAt: -1 });
 	res.status(200).render('order/orderBinOverview', { orders: orders, userAdmin: req.user });
 });
 //GET admin/orders-detail/:id

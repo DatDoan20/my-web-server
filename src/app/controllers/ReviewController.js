@@ -3,10 +3,7 @@ const Review = require('../models/Review');
 const factory = require('./HandlerFactory');
 
 // GET /api/reviews/search?productId=... (productId) get all review by one productId
-exports.getAllReviewWithQuery = factory.getAllDocuments(Review, {
-	path: 'comments',
-	select: '-createdAt',
-});
+exports.getAllReviewWithQuery = factory.getAllDocuments(Review);
 
 // POST /api/reviews/:productId
 exports.setProductIdAndUserId = catchAsync(async (req, res, next) => {

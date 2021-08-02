@@ -40,18 +40,28 @@ exports.restoreOneDocument = (Model) =>
 	});
 
 //-------------------------------------------------CREATE
+const emitSocketToNotifyAdmin = async (nameEventEmit, req, doc) => {
+	if (nameEventEmit === 'Order' || nameEventEmit === 'Review' || nameEventEmit === 'Comment') {
+		var myPopulate;
+		if (nameEventEmit === 'Order') {
+			myPopulate = { path: 'userId', select: 'name avatar' };
+		}
+		if (nameEventEmit === 'Review') {
+			doc = await doc.populate({ path: 'userId', select: 'name avatar' }).execPopulate();
+			myPopulate = { path: 'comments', select: '-createdAt' };
+		}
+		if (nameEventEmit === 'Comment') {
+			myPopulate = { path: 'userId', select: 'name avatar' };
+		}
+		doc = await doc.populate(myPopulate).execPopulate();
+		req.app.io.to(req.app.socketIdAdmin).emit(`new${nameEventEmit}`, doc);
+	}
+};
+//Create
 exports.createOneDocument = (Model, nameEventEmit = undefined) =>
 	catchAsync(async (req, res, next) => {
 		var doc = await Model.create(req.body);
-		if (nameEventEmit) {
-			doc = await doc
-				.populate({
-					path: 'userId',
-					select: 'name avatar',
-				})
-				.execPopulate();
-			req.app.io.to(req.app.socketIdAdmin).emit(`new${nameEventEmit}`, doc);
-		}
+		await emitSocketToNotifyAdmin(nameEventEmit, req, doc);
 		returnResultOfRequest(res, 201, doc);
 	});
 

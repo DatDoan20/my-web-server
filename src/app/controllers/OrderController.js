@@ -10,12 +10,20 @@ exports.setOrderIdOfUser = catchAsync(async (req, res, next) => {
 	}
 	next();
 });
-exports.getAllOrderWithQuery = factory.getAllDocuments(Order);
+exports.getAllOrderOfMe = factory.getAllDocuments(Order);
+exports.getAllOrderWithQuery = factory.getAllDocuments(Order, {
+	path: 'userId',
+	select: 'name avatar',
+});
 
 //POST /api/orders
 exports.clearCartUser = catchAsync(async (req, res, next) => {
 	req.user.cart = [];
 	await req.user.save();
+	next();
+});
+exports.setUserId = catchAsync(async (req, res, next) => {
+	req.body.userId = req.user._id;
 	next();
 });
 exports.createOrder = factory.createOneDocument(Order, 'Order');

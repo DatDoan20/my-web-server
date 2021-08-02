@@ -2196,7 +2196,6 @@ footer {
 }
 
 .box-notify-order:hover,
-.box-notify-comment:hover,
-.box-notify-review:hover {
-	background-color: rgb(50, 50, 50);
+.box-notify-review-and-comment:hover {
+	background-color: rgb(0, 0, 0);
 }

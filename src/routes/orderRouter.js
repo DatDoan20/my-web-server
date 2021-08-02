@@ -5,13 +5,24 @@ const OrderController = require('../app/controllers/OrderController');
 
 //Protect All User
 router.use(authController.protectUsers);
+
 //GET
-router.get('/me', OrderController.setOrderIdOfUser, OrderController.getAllOrderWithQuery);
+//api/users/orders/me
+router.get('/me', OrderController.setOrderIdOfUser, OrderController.getAllOrderOfMe);
+// api/users/orders/search?
+router.get('/search', OrderController.getAllOrderWithQuery);
 
 //POST
-router.post('/', OrderController.clearCartUser, OrderController.createOrder);
+//api/users/orders
+router.post(
+	'/',
+	OrderController.clearCartUser,
+	OrderController.setUserId,
+	OrderController.createOrder
+);
 
 // DELETE-CANCEL my order
+// api/users/orders
 router.delete('/:id/force', OrderController.destroyOrder);
 
 module.exports = router;

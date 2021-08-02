@@ -10,7 +10,7 @@ block content
 		.grid.wide
 			.order-history.row
 				.order-history-img
-					img(src='/img/otter.png' style='width:50px; height:50px;' alt='a')
+					img(src=`/img/users/${order.userId.avatar}` style='width:50px; height:50px; border-radius:50%' alt='avatar' title=`${order.userId.name}`)
 				.order-history-info
 					.history-info-name
 						| Order id: 
@@ -34,8 +34,14 @@ block content
 						span.info-need= `${order.paymentMode}`
 					p.history-info-made Ngày đặt:	
 						span.info-need= `${order.createdAt.toLocaleString('vi-vn')}`
-					p.history-info-made Người đặt: 
+					p.history-info-made Người nhận: 
 						span.info-need= `${order.nameUser}`
+					p.history-info-made Địa chỉ: 
+						span.info-need= `${order.addressDelivery}`
+					p.history-info-made Phone: 
+						span.info-need= `${order.phoneUser}`
+					p.history-info-made Email: 
+						span.info-need= `${order.emailUser}`
 					.history-info-btn
 						.flex-shrink-0.px-2.py-4.space-y-2
 							a.btnAccept.flex.items-center.justify-center.w-full.px-4.py-2.text-sm.text-white.rounded-md.bg-primary(href='#',style='width:80px; height:30px;' data-id=`${order._id}` data-total=`${order.totalPayment}` class='hover:bg-primary-dark focus:outline-none focus:ring focus:ring-primary-dark focus:ring-offset-1 focus:ring-offset-white dark:focus:ring-offset-dark') Accept✔️
