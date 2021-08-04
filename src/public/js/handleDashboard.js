@@ -32,7 +32,11 @@ $('#btn-click-hide-show-menu-d-shop').change(function () {
 	}
 });
 //-----------------------------
-function addHTMLReviewAndCommentElement(idElement, avatar, name, content, time) {
+function addHTMLReviewAndCommentElement(idElement, avatar, name, content, time, readState) {
+	var opacityValue = 1.0;
+	if (readState === true) {
+		opacityValue = 0.3;
+	}
 	$(idElement).prepend(`
 		<a class="box-notify-review-and-comment block" href="" target="_blank">
 			<div class="flex px-4 space-x-4">
@@ -41,7 +45,7 @@ function addHTMLReviewAndCommentElement(idElement, avatar, name, content, time) 
 						<img class="object-cover rounded-full w-9 h-9" src="/img/users/${avatar}" alt="avatar" /></span>
 					<div class="absolute h-24 p-px -mt-3 -ml-px bg-primary-50 left-1/2 dark:bg-primary-darker"></div>
 				</div>
-				<div class="flex-1 overflow-hidden">
+				<div class="flex-1 overflow-hidden" style='opacity:${opacityValue};'>
 					<h5 class="text-sm font-semibold text-gray-600 dark:text-light">${name}</h5>
 					<p class="text-sm font-normal text-gray-400 truncate dark:text-primary-lighter">${content}</p>
 					<span class="text-sm font-normal text-gray-400 dark:text-primary-light" style="font-weight: bold;">${time}</span>
@@ -119,44 +123,49 @@ function addHTMLOrderElement(
 		</a>
 	`);
 }
-//load review
+//load notify review - OK
 $('#block-notify-review').ready(function () {
 	catchAsyncAction(async function () {
-		const res = await axios({
+		const notifyReviewsList = await axios({
 			method: 'GET',
-			url: '/api/users/reviews/search?page=1&limit=10',
+			url: '/api/users/notify-reviews/search?page=1&limit=10',
 		});
-		if (res.data.status === 'success') {
-			for (var i = res.data.data.length - 1; i >= 0; i--) {
-				var review = res.data.data[i];
+		if (notifyReviewsList.data.status === 'success' && notifyReviewsList.data.data.length > 0) {
+			for (var i = notifyReviewsList.data.data.length - 1; i >= 0; i--) {
+				var notifyReview = notifyReviewsList.data.data[i];
 				addHTMLReviewAndCommentElement(
 					'#block-notify-review',
-					review.userId.avatar,
-					`${review.userId.name} - ${review.rating}⭐`,
-					review.review,
-					new Date(review.updatedAt).toLocaleString('vi-vn')
+					notifyReview.reviewId.userId.avatar,
+					`${notifyReview.reviewId.userId.name} - ${notifyReview.reviewId.rating}⭐`,
+					notifyReview.reviewId.review,
+					new Date(notifyReview.updatedAt).toLocaleString('vi-vn'),
+					notifyReview.readSate
 				);
 			}
 			console.log('Load notify reviews success!');
 		}
 	});
 });
-//load comment
+//load comment - OK
 $('#block-notify-comment').ready(function () {
 	catchAsyncAction(async function () {
-		const res = await axios({
+		const notifyCommentsList = await axios({
 			method: 'GET',
-			url: '/api/users/reviews/comments/search?page=1&limit=10',
+			url: '/api/users/notify-comments/me',
 		});
-		if (res.data.status === 'success') {
-			for (var i = res.data.data.length - 1; i >= 0; i--) {
-				var comment = res.data.data[i];
+		if (
+			notifyCommentsList.data.status === 'success' &&
+			notifyCommentsList.data.data.length > 0
+		) {
+			for (var i = notifyCommentsList.data.data.length - 1; i >= 0; i--) {
+				var notifyComment = notifyCommentsList.data.data[i];
 				addHTMLReviewAndCommentElement(
 					'#block-notify-comment',
-					comment.userId.avatar,
-					comment.userId.name,
-					comment.comment,
-					new Date(comment.updatedAt).toLocaleString('vi-vn')
+					notifyComment.commentId.userId.avatar,
+					notifyComment.commentId.userId.name,
+					notifyComment.commentId.comment,
+					new Date(notifyComment.updatedAt).toLocaleString('vi-vn'),
+					notifyComment.receiverIds[0].readState
 				);
 			}
 			console.log('Load notify comments success!');
@@ -192,31 +201,38 @@ $('#block-notify-order').ready(function () {
 		}
 	});
 });
-// SOCKET SHOW NOTIFY
+
+// SOCKET SHOW NEW NOTIFY
 const socket = io();
-//verify
+// Verify
 socket.emit('AdminId', 'I am admin');
-//listen new review
-socket.on('newReview', (review) => {
+
+// Listen new notify review - OK
+socket.on('newReview', (newNotifyReview) => {
 	addHTMLReviewAndCommentElement(
 		'#block-notify-review',
-		review.userId.avatar,
-		`${review.userId.name} - ${review.rating}⭐`,
-		review.review,
-		new Date(review.updatedAt).toLocaleString('vi-vn')
+		newNotifyReview.reviewId.userId.avatar,
+		`${newNotifyReview.reviewId.userId.name} - ${newNotifyReview.reviewId.rating}⭐`,
+		newNotifyReview.reviewId.review,
+		new Date(newNotifyReview.updatedAt).toLocaleString('vi-vn'),
+		newNotifyReview.readSate
 	);
 });
-//listen new comment
-socket.on('newComment', (comment) => {
+
+// Listen new notify comment - OK
+socket.on('newComment', (newNotifyComment) => {
+	console.log(newNotifyComment);
 	addHTMLReviewAndCommentElement(
 		'#block-notify-comment',
-		comment.userId.avatar,
-		comment.userId.name,
-		comment.comment,
-		new Date(comment.updatedAt).toLocaleString('vi-vn')
+		newNotifyComment.commentId.userId.avatar,
+		newNotifyComment.commentId.userId.name,
+		newNotifyComment.commentId.comment,
+		new Date(newNotifyComment.updatedAt).toLocaleString('vi-vn'),
+		newNotifyComment.receiverIds[0].readState
 	);
 });
-//listen new order
+
+//Listen new order
 socket.on('newOrder', (order) => {
 	addHTMLOrderElement(
 		'#block-notify-order',

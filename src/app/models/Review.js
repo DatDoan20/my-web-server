@@ -30,7 +30,7 @@ Review.index({ userId: 1 });
 Review.pre(/^find/, function (next) {
 	this.populate({
 		path: 'userId',
-		select: 'name avatar',
+		select: '_id name avatar',
 	}).populate({
 		path: 'comments',
 		select: '-createdAt',

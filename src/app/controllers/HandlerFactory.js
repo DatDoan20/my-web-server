@@ -1,7 +1,9 @@
 const catchAsync = require('../handler/catchAsync');
 const appError = require('../handler/appError');
 const APIFeature = require('../../utils/apiFeature');
-const Review = require('../models/Review');
+const NotifyReview = require('../models/NotifyReview');
+const NotifyComment = require('../models/NotifyComment');
+
 //
 const returnResultOfRequest = (res, statusCode, data = undefined) => {
 	const obj = { status: 'success' };
@@ -40,28 +42,82 @@ exports.restoreOneDocument = (Model) =>
 	});
 
 //-------------------------------------------------CREATE
-const emitSocketToNotifyAdmin = async (nameEventEmit, req, doc) => {
-	if (nameEventEmit === 'Order' || nameEventEmit === 'Review' || nameEventEmit === 'Comment') {
-		var myPopulate;
-		if (nameEventEmit === 'Order') {
-			myPopulate = { path: 'userId', select: 'name avatar' };
-		}
-		if (nameEventEmit === 'Review') {
-			doc = await doc.populate({ path: 'userId', select: 'name avatar' }).execPopulate();
-			myPopulate = { path: 'comments', select: '-createdAt' };
-		}
-		if (nameEventEmit === 'Comment') {
-			myPopulate = { path: 'userId', select: 'name avatar' };
-		}
-		doc = await doc.populate(myPopulate).execPopulate();
-		req.app.io.to(req.app.socketIdAdmin).emit(`new${nameEventEmit}`, doc);
+// --- Emit Socket Review
+const emitSocketNotifyReview = async (nameEventEmit, req, createdReview) => {
+	//**THIS FUNCTION CREATE 'notifyReview' FOR 'createdReview' */
+	// (1) create body notifyReview
+	var bodyNewNotifyReview = {
+		readSate: false,
+		reviewId: createdReview._id,
+	};
+	// sender is: user
+	if (req.user.role === 'user') {
+		//receiver is: admin
+		bodyNewNotifyReview.receiverId = '60d8830a20ec084240e84ed7'; //admin id
+	} else if (req.user.role === 'admin') {
+		// admin can't review, this is test -> sender and receiver are admin
+		bodyNewNotifyReview.receiverId = '60d8830a20ec084240e84ed7';
 	}
+	// (2) create new notifyReview
+	var newNotifyReview = await NotifyReview.create(bodyNewNotifyReview);
+	// (3) populate to get extra information
+	newNotifyReview = await newNotifyReview.populate({ path: 'reviewId' }).execPopulate();
+	// (4) emit socket to admin
+	req.app.io.to(req.app.socketIdAdmin).emit(`new${nameEventEmit}`, newNotifyReview);
 };
-//Create
+// --- Emit Socket Comment
+const emitSocketNotifyComment = async (nameEventEmit, req, createdComment) => {
+	//**THIS FUNCTION CREATE 'notifyComment' FOR 'createdComment' */
+
+	// (1) 'createdComment' is comment for review 'A', FORM review 'A' GET all comments of review 'A'
+	createdComment = await createdComment
+		.populate({ path: 'reviewId', select: '_id comments userId' })
+		.execPopulate();
+
+	// // (2) push 'userId' of 'who was review' into Array, so Array will contain 'userIdCommented' and 'userIdReviewed'
+	createdComment.reviewId.comments.push({
+		userId: createdComment.reviewId.userId,
+	});
+	// console.log(createdComment.reviewId.comments);
+	// (3) GET comments in array 'comments'
+	var checks = new Set();
+	var receiverIds = [];
+	var idOfUserCommented;
+
+	// Loop to get userId of all comments
+	createdComment.reviewId.comments.forEach((comment) => {
+		idOfUserCommented = comment.userId._id;
+		if (!checks.has(idOfUserCommented)) {
+			receiverIds.push({ receiverId: idOfUserCommented, readState: false });
+			checks.add(idOfUserCommented);
+		}
+	});
+	//console.log(receiverIds);
+	// (4) Ok, create notifyComment
+	var bodyNewNotifyComment = { commentId: createdComment._id, receiverIds: receiverIds };
+	var newNotifyComment = await NotifyComment.create(bodyNewNotifyComment);
+
+	// (5) populate notifyComment to get extra info
+	newNotifyComment = await newNotifyComment.populate({ path: 'commentId' }).execPopulate();
+
+	//(6) emit socket to admin
+	req.app.io.to(req.app.socketIdAdmin).emit(`new${nameEventEmit}`, newNotifyComment);
+};
+// --- Emit Socket Order
+const emitSocketNotifyOrder = async (nameEventEmit, req, createdOrder) => {
+	//**THIS FUNCTION CREATE 'notifyOrder' FOR 'createdOrder' */
+};
+// ---- Create
 exports.createOneDocument = (Model, nameEventEmit = undefined) =>
 	catchAsync(async (req, res, next) => {
 		var doc = await Model.create(req.body);
-		await emitSocketToNotifyAdmin(nameEventEmit, req, doc);
+		if (nameEventEmit === 'Order') {
+			await emitSocketNotifyOrder(nameEventEmit, req, doc);
+		} else if (nameEventEmit === 'Review') {
+			await emitSocketNotifyReview(nameEventEmit, req, doc);
+		} else if (nameEventEmit === 'Comment') {
+			await emitSocketNotifyComment(nameEventEmit, req, doc);
+		}
 		returnResultOfRequest(res, 201, doc);
 	});
 
