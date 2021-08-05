@@ -6,6 +6,7 @@ const reviewRouter = require('./reviewRouter');
 const orderRouter = require('./orderRouter');
 const notifyReviewRouter = require('./notifyReviewRouter');
 const notifyCommentRouter = require('./notifyCommentRouter');
+const notifyOrderRouter = require('./notifyOrderRouter');
 const handleImg = require('../app/controllers/HandlerImage');
 //
 router.post('/sign-up', userController.singUp);
@@ -33,6 +34,8 @@ router.use('/orders', orderRouter);
 
 // api/users/notify-comments (user have permission receive notify comment)
 router.use('/notify-comments', notifyCommentRouter);
+// api/users/notify-orders
+router.use('/notify-orders', notifyOrderRouter);
 
 // RestrictTo admin
 router.use(authController.restrictTo('admin'));

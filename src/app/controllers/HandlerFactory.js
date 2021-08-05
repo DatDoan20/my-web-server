@@ -48,7 +48,7 @@ const emitSocketNotifyReview = async (nameEventEmit, req, createdReview) => {
 	//**THIS FUNCTION CREATE 'notifyReview' FOR 'createdReview' */
 	// (1) create body notifyReview
 	var bodyNewNotifyReview = {
-		readSate: false,
+		readState: false,
 		reviewId: createdReview._id,
 	};
 	// sender is: user
@@ -125,12 +125,24 @@ const emitSocketNotifyComment = async (nameEventEmit, req, createdComment) => {
 // --- Emit Socket Order
 const emitSocketNotifyOrder = async (nameEventEmit, req, createdOrder) => {
 	//**THIS FUNCTION CREATE 'notifyOrder' FOR 'createdOrder' */
+	var receiverIds = [];
+	var receiverItem = { receiverId: '60d8830a20ec084240e84ed7', readState: false };
+	receiverIds.push(receiverItem);
 	var newBodyNotifyOrder = {
 		orderId: createdOrder._id,
-		receiverIds: [{ receiverId: '60d8830a20ec084240e84ed7', readState: false }],
+		receiverIds: receiverIds,
 	};
 	var newNotifyOrder = await NotifyOrder.create(newBodyNotifyOrder);
-	req.app.io.to(req.app.socketIdAdmin).emit(`new${nameEventEmit}`, newNotifyReview);
+	newNotifyOrder = await newNotifyOrder
+		.populate({ path: 'orderId', populate: { path: 'userId' } })
+		.execPopulate();
+	var adminId = newNotifyOrder.receiverIds[0].receiverId;
+	// check if admin is online?
+	if (req.app.socketIds[adminId]) {
+		req.app.io
+			.to(req.app.socketIds[adminId].socketId)
+			.emit(`new${nameEventEmit}`, newNotifyOrder);
+	}
 };
 // ---- Create
 exports.createOneDocument = (Model, nameEventEmit = undefined) =>

@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const NotifyReview = new Schema(
 	{
-		readSate: { type: Boolean, default: false },
+		readState: { type: Boolean, default: false },
 		reviewId: { type: mongoose.Schema.ObjectId, ref: 'Review', require: true },
 		receiverId: { type: mongoose.Schema.ObjectId, ref: 'User', require: true }, // (AdminId)
 	},

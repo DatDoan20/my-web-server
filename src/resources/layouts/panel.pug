@@ -58,10 +58,13 @@ section.fixed.inset-y-0.z-20.w-full.max-w-xs.bg-white(x-transition:enter='transi
       .flex.items-center.justify-between.px-4.pt-4.border-b(class='dark:border-primary-darker')
         h2#notificationPanelLabel.pb-4.font-semibold Notifications
         .space-x-2
-          button.px-px.pb-4.transition-all.duration-200.transform.translate-y-px.border-b(@click.prevent="activeTabe = 'order'", class='focus:outline-none', :class="{'border-primary-dark dark:border-primary': activeTabe == 'order', 'border-transparent': activeTabe != 'order'}")
+          span#number-notify-order-unread(style="background:#b42323; border-radius:50%; padding: 0 8px 0 8px; font-size: 13px; display:none;")
+          button.px-px.pb-4.transition-all.duration-200.transform.translate-y-px.border-b(@click.prevent="activeTabe = 'order'", class='focus:outline-none', :class="{'border-primary-dark dark:border-primary': activeTabe == 'order', 'border-transparent': activeTabe != 'order'}" style='margin-right:10px;')
             | Order
-          button.px-px.pb-4.transition-all.duration-200.transform.translate-y-px.border-b(@click.prevent="activeTabe = 'review'", class='focus:outline-none', :class="{'border-primary-dark dark:border-primary': activeTabe == 'review', 'border-transparent': activeTabe != 'review'}")
+          span#number-notify-review-unread(style="background:#b42323; border-radius:50%; padding: 0 8px 0 8px; font-size: 13px; display:none;")
+          button.px-px.pb-4.transition-all.duration-200.transform.translate-y-px.border-b(@click.prevent="activeTabe = 'review'", class='focus:outline-none', :class="{'border-primary-dark dark:border-primary': activeTabe == 'review', 'border-transparent': activeTabe != 'review'}" style='margin-right:10px;')
             | Review
+          span#number-notify-comment-unread(style="background:#b42323; border-radius:50%; padding: 0 8px 0 8px; font-size: 13px; display:none;")
           button.px-px.pb-4.transition-all.duration-200.transform.translate-y-px.border-b(@click.prevent="activeTabe = 'comment'", class='focus:outline-none', :class="{'border-primary-dark dark:border-primary': activeTabe == 'comment', 'border-transparent': activeTabe != 'comment'}")
             | Comment
     // Panel content (tabs)

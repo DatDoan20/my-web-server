@@ -1,4 +1,6 @@
 import { catchAsyncAction } from './handlerActionGeneric.js';
+//hide red dot (notify unread)
+$('#icon-notify-generic').hide();
 //set css for tag a
 $('.link').hover(
 	function () {
@@ -56,6 +58,7 @@ function addHTMLReviewAndCommentElement(idElement, avatar, name, content, time, 
 }
 function addHTMLOrderElement(
 	idElement,
+	orderId,
 	avatar,
 	name,
 	state,
@@ -66,7 +69,8 @@ function addHTMLOrderElement(
 	addressDelivery,
 	receiverEmail,
 	receiverPhone,
-	time
+	time,
+	readState
 ) {
 	var colorState;
 	if (state === 'waiting') {
@@ -76,15 +80,19 @@ function addHTMLOrderElement(
 	} else if (state === 'canceled') {
 		colorState = '#d50505';
 	}
+	var opacityValue = 1.0;
+	if (readState === true) {
+		opacityValue = 0.3;
+	}
 	$(idElement).prepend(`
-		<a class="box-notify-review-and-comment block" href="" target="_blank">
+		<a class="box-notify-review-and-comment block" href="/admin/orders/${orderId}" target="_blank">
 			<div class="flex px-4 space-x-4">
 				<div class="relative flex-shrink-0">
 					<span class="relative z-10 inline-block overflow-visible rounded-ful">
 						<img class="object-cover rounded-full w-9 h-9" src="/img/users/${avatar}" alt="avatar" /></span>
 					<div class="absolute h-24 p-px -mt-3 -ml-px bg-primary-50 left-1/2 dark:bg-primary-darker"></div>
 				</div>
-				<div class="flex-1 overflow-hidden">
+				<div class="flex-1 overflow-hidden" style='opacity:${opacityValue};'>
 					<h5 class="text-sm font-semibold text-gray-600 dark:text-light" style="margin-top:5px; margin-bottom:5px;">${name}
 						<span style='font-weight: bold; color:#fff; background-color:${colorState}; padding-left:3px; padding-right:3px;
 						border-radius:8px;'>${state}</span>
@@ -131,6 +139,7 @@ $('#block-notify-review').ready(function () {
 			url: '/api/users/notify-reviews/search?page=1&limit=10',
 		});
 		if (notifyReviewsList.data.status === 'success' && notifyReviewsList.data.data.length > 0) {
+			var numberReviewUnRead = 0;
 			for (var i = notifyReviewsList.data.data.length - 1; i >= 0; i--) {
 				var notifyReview = notifyReviewsList.data.data[i];
 				addHTMLReviewAndCommentElement(
@@ -139,8 +148,16 @@ $('#block-notify-review').ready(function () {
 					`${notifyReview.reviewId.userId.name} - ${notifyReview.reviewId.rating}⭐`,
 					notifyReview.reviewId.review,
 					new Date(notifyReview.updatedAt).toLocaleString('vi-vn'),
-					notifyReview.readSate
+					notifyReview.readState
 				);
+				if (notifyReview.readState === false) {
+					numberReviewUnRead++;
+				}
+			}
+			if (numberReviewUnRead > 0) {
+				$('#number-notify-review-unread').text(`${numberReviewUnRead}`);
+				$('#number-notify-review-unread').show();
+				$('#icon-notify-generic').show();
 			}
 			console.log('Load notify reviews success!');
 		}
@@ -157,6 +174,7 @@ $('#block-notify-comment').ready(function () {
 			notifyCommentsList.data.status === 'success' &&
 			notifyCommentsList.data.data.length > 0
 		) {
+			var numberCommentUnRead = 0;
 			for (var i = notifyCommentsList.data.data.length - 1; i >= 0; i--) {
 				var notifyComment = notifyCommentsList.data.data[i];
 				addHTMLReviewAndCommentElement(
@@ -167,6 +185,14 @@ $('#block-notify-comment').ready(function () {
 					new Date(notifyComment.updatedAt).toLocaleString('vi-vn'),
 					notifyComment.receiverIds[0].readState
 				);
+				if (notifyComment.receiverIds[0].readState === false) {
+					numberCommentUnRead++;
+				}
+			}
+			if (numberCommentUnRead > 0) {
+				$('#number-notify-comment-unread').text(`${numberCommentUnRead}`);
+				$('#number-notify-comment-unread').show();
+				$('#icon-notify-generic').show();
 			}
 			console.log('Load notify comments success!');
 		}
@@ -175,27 +201,38 @@ $('#block-notify-comment').ready(function () {
 //load order
 $('#block-notify-order').ready(function () {
 	catchAsyncAction(async function () {
-		const res = await axios({
+		const notifyOrdersList = await axios({
 			method: 'GET',
-			url: '/api/users/orders/search?page=1&limit=10',
+			url: '/api/users/notify-orders/me',
 		});
-		if (res.data.status === 'success') {
-			for (var i = res.data.data.length - 1; i >= 0; i--) {
-				var order = res.data.data[i];
+		if (notifyOrdersList.data.status === 'success' && notifyOrdersList.data.data.length > 0) {
+			var numberOrderUnRead = 0;
+			for (var i = notifyOrdersList.data.data.length - 1; i >= 0; i--) {
+				var notifyOrder = notifyOrdersList.data.data[i];
 				addHTMLOrderElement(
 					'#block-notify-order',
-					order.userId.avatar,
-					order.userId.name,
-					order.state,
-					order.purchasedProducts.length,
-					(order.totalPayment / 1000).toFixed(3),
-					order.paymentMode,
-					order.nameUser,
-					order.addressDelivery,
-					order.emailUser,
-					order.phoneUser,
-					new Date(order.updatedAt).toLocaleString('vi-vn')
+					notifyOrder.orderId._id,
+					notifyOrder.orderId.userId.avatar,
+					notifyOrder.orderId.userId.name,
+					notifyOrder.orderId.state,
+					notifyOrder.orderId.purchasedProducts.length,
+					(notifyOrder.orderId.totalPayment / 1000).toFixed(3),
+					notifyOrder.orderId.paymentMode,
+					notifyOrder.orderId.nameUser,
+					notifyOrder.orderId.addressDelivery,
+					notifyOrder.orderId.emailUser,
+					notifyOrder.orderId.phoneUser,
+					new Date(notifyOrder.updatedAt).toLocaleString('vi-vn'),
+					notifyOrder.receiverIds[0].readState
 				);
+				if (notifyOrder.receiverIds[0].readState === false) {
+					numberOrderUnRead++;
+				}
+			}
+			if (numberOrderUnRead > 0) {
+				$('#number-notify-order-unread').text(`${numberOrderUnRead}`);
+				$('#number-notify-order-unread').show();
+				$('#icon-notify-generic').show();
 			}
 			console.log('Load notify orders success!');
 		}
@@ -217,7 +254,7 @@ socket.on('newReview', (newNotifyReview) => {
 		`${newNotifyReview.reviewId.userId.name} - ${newNotifyReview.reviewId.rating}⭐`,
 		newNotifyReview.reviewId.review,
 		new Date(newNotifyReview.updatedAt).toLocaleString('vi-vn'),
-		newNotifyReview.readSate
+		newNotifyReview.readState
 	);
 });
 
@@ -235,19 +272,21 @@ socket.on('newComment', (newNotifyComment) => {
 });
 
 //Listen new order
-socket.on('newOrder', (order) => {
+socket.on('newOrder', (newNotifyOrder) => {
 	addHTMLOrderElement(
 		'#block-notify-order',
-		order.userId.avatar,
-		order.userId.name,
-		order.state,
-		order.purchasedProducts.length,
-		(order.totalPayment / 1000).toFixed(3),
-		order.paymentMode,
-		order.nameUser,
-		order.addressDelivery,
-		order.emailUser,
-		order.phoneUser,
-		new Date(order.updatedAt).toLocaleString('vi-vn')
+		newNotifyOrder.orderId._id,
+		newNotifyOrder.orderId.userId.avatar,
+		newNotifyOrder.orderId.userId.name,
+		newNotifyOrder.orderId.state,
+		newNotifyOrder.orderId.purchasedProducts.length,
+		(newNotifyOrder.orderId.totalPayment / 1000).toFixed(3),
+		newNotifyOrder.orderId.paymentMode,
+		newNotifyOrder.orderId.nameUser,
+		newNotifyOrder.orderId.addressDelivery,
+		newNotifyOrder.orderId.emailUser,
+		newNotifyOrder.orderId.phoneUser,
+		new Date(newNotifyOrder.updatedAt).toLocaleString('vi-vn'),
+		newNotifyOrder.receiverIds[0].readState
 	);
 });

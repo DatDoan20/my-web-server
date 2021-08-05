@@ -2199,3 +2199,12 @@ footer {
 .box-notify-review-and-comment:hover {
 	background-color: rgb(0, 0, 0);
 }
+#icon-notify-generic::before {
+	position: absolute;
+	top: 20px;
+	content: '';
+	background-color: #ff0000;
+	border-radius: 50%;
+	width: 13px;
+	height: 13px;
+}

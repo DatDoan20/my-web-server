@@ -29,6 +29,7 @@ router.get('/products/:slug', viewController.getEditProductPage);
 
 //--Order
 router.get('/orders', viewController.getOrderOverviewPage);
+router.get('/orders/:id', viewController.getSpecificOrderPage);
 router.get('/orders/bin', viewController.getOrderBinOverviewPage);
 router.get('/orders-detail/:id', viewController.getOrderDetailPage);
 router.get('/orders/send-email/:idOrder/:actionType', orderController.sendEmailInfoOrder);

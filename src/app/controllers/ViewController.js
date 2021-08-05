@@ -134,6 +134,17 @@ exports.getOrderOverviewPage = catchAsync(async (req, res, next) => {
 		.sort({ createdAt: -1 });
 	res.status(200).render('order/orderOverview', { orders: orders, userAdmin: req.user });
 });
+// GET admin/orders/:id
+exports.getSpecificOrderPage = catchAsync(async (req, res, next) => {
+	const order = await Order.findOne({ _id: req.params.id })
+		.populate({ path: 'userId', select: 'avatar name' })
+		.sort({ createdAt: -1 });
+	const orders = [order];
+	/*orderOverview use loop order in array orders,
+	find -> array, findOne -> object, => take order into a array and pass array to orderOverview.pug
+	*/
+	res.status(200).render('order/orderOverview', { orders: orders, userAdmin: req.user });
+});
 //GET admin/orders/bin
 exports.getOrderBinOverviewPage = catchAsync(async (req, res, next) => {
 	const orders = await Order.findDeleted()

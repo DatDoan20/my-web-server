@@ -22,7 +22,7 @@ exports.getNotifyCommentById = catchAsync(async (req, res, next) => {
 	})
 		//get first item/value in array match with query condition
 		.select({ 'receiverIds.$': 1 })
-		.select('updatedAt')
+		.select('updatedAt commentId')
 		.populate({
 			path: 'commentId -__v',
 			select: '-createdAt -reviewId -updatedAt -__v',
