@@ -205,7 +205,9 @@ $('#block-notify-order').ready(function () {
 // SOCKET SHOW NEW NOTIFY
 const socket = io();
 // Verify
-socket.emit('AdminId', 'I am admin');
+var userId = $('#img-avatar-admin').data('id');
+
+socket.emit('ConnectLogin', userId);
 
 // Listen new notify review - OK
 socket.on('newReview', (newNotifyReview) => {
@@ -221,7 +223,7 @@ socket.on('newReview', (newNotifyReview) => {
 
 // Listen new notify comment - OK
 socket.on('newComment', (newNotifyComment) => {
-	console.log(newNotifyComment);
+	// console.log(newNotifyComment);
 	addHTMLReviewAndCommentElement(
 		'#block-notify-comment',
 		newNotifyComment.commentId.userId.avatar,

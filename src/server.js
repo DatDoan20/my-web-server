@@ -122,10 +122,18 @@ server.listen(port, () => {
 });
 //LISTEN SOCKET IO
 app.io = io;
+app.socketIds = [];
 io.on('connection', (socket) => {
-	console.log('--- new connect with ID: ' + socket.id + ' ---');
-	socket.on('AdminId', (data) => {
-		app.socketIdAdmin = socket.id;
+	var userId;
+	socket.on('ConnectLogin', (_id) => {
+		userId = _id;
+		app.socketIds[userId.toString()] = { socketId: socket.id };
+		console.log(
+			'---' + userId + ' -connected with socketId: ' + app.socketIds[userId].socketId
+		);
+	});
+	socket.on('disconnect', () => {
+		delete app.socketIds[userId];
 	});
 });
 

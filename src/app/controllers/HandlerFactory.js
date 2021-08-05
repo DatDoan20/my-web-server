@@ -3,6 +3,7 @@ const appError = require('../handler/appError');
 const APIFeature = require('../../utils/apiFeature');
 const NotifyReview = require('../models/NotifyReview');
 const NotifyComment = require('../models/NotifyComment');
+const NotifyOrder = require('../models/NotifyOrder');
 
 //
 const returnResultOfRequest = (res, statusCode, data = undefined) => {
@@ -58,12 +59,19 @@ const emitSocketNotifyReview = async (nameEventEmit, req, createdReview) => {
 		// admin can't review, this is test -> sender and receiver are admin
 		bodyNewNotifyReview.receiverId = '60d8830a20ec084240e84ed7';
 	}
+
 	// (2) create new notifyReview
 	var newNotifyReview = await NotifyReview.create(bodyNewNotifyReview);
+
 	// (3) populate to get extra information
 	newNotifyReview = await newNotifyReview.populate({ path: 'reviewId' }).execPopulate();
+
 	// (4) emit socket to admin
-	req.app.io.to(req.app.socketIdAdmin).emit(`new${nameEventEmit}`, newNotifyReview);
+	if (req.app.socketIds[newNotifyReview.receiverId]) {
+		req.app.io
+			.to(req.app.socketIds[newNotifyReview.receiverId].socketId)
+			.emit(`new${nameEventEmit}`, newNotifyReview);
+	}
 };
 // --- Emit Socket Comment
 const emitSocketNotifyComment = async (nameEventEmit, req, createdComment) => {
@@ -74,25 +82,27 @@ const emitSocketNotifyComment = async (nameEventEmit, req, createdComment) => {
 		.populate({ path: 'reviewId', select: '_id comments userId' })
 		.execPopulate();
 
-	// // (2) push 'userId' of 'who was review' into Array, so Array will contain 'userIdCommented' and 'userIdReviewed'
+	// (2) push 'userId' of 'who was review' into Array, so Array will contain 'userIdCommented' and 'userIdReviewed'
 	createdComment.reviewId.comments.push({
 		userId: createdComment.reviewId.userId,
 	});
 	// console.log(createdComment.reviewId.comments);
+
 	// (3) GET comments in array 'comments'
 	var checks = new Set();
 	var receiverIds = [];
-	var idOfUserCommented;
+	var idOfUserCommentedOrReviewed;
 
 	// Loop to get userId of all comments
 	createdComment.reviewId.comments.forEach((comment) => {
-		idOfUserCommented = comment.userId._id;
-		if (!checks.has(idOfUserCommented)) {
-			receiverIds.push({ receiverId: idOfUserCommented, readState: false });
-			checks.add(idOfUserCommented);
+		idOfUserCommentedOrReviewed = comment.userId._id.toString();
+		if (!checks.has(idOfUserCommentedOrReviewed)) {
+			receiverIds.push({ receiverId: idOfUserCommentedOrReviewed, readState: false });
+			checks.add(idOfUserCommentedOrReviewed);
 		}
 	});
 	//console.log(receiverIds);
+
 	// (4) Ok, create notifyComment
 	var bodyNewNotifyComment = { commentId: createdComment._id, receiverIds: receiverIds };
 	var newNotifyComment = await NotifyComment.create(bodyNewNotifyComment);
@@ -100,12 +110,27 @@ const emitSocketNotifyComment = async (nameEventEmit, req, createdComment) => {
 	// (5) populate notifyComment to get extra info
 	newNotifyComment = await newNotifyComment.populate({ path: 'commentId' }).execPopulate();
 
-	//(6) emit socket to admin
-	req.app.io.to(req.app.socketIdAdmin).emit(`new${nameEventEmit}`, newNotifyComment);
+	//(6) emit socket notifyComment to user in receiverIds
+	// Loop receiverIds
+	newNotifyComment.receiverIds.forEach((receiverItem) => {
+		//receiver have to connecting with server(Online)
+		if (req.app.socketIds[receiverItem.receiverId]) {
+			//console.log(req.app.socketIds[receiverItem.receiverId]);
+			req.app.io
+				.to(req.app.socketIds[receiverItem.receiverId].socketId)
+				.emit(`new${nameEventEmit}`, newNotifyComment);
+		}
+	});
 };
 // --- Emit Socket Order
 const emitSocketNotifyOrder = async (nameEventEmit, req, createdOrder) => {
 	//**THIS FUNCTION CREATE 'notifyOrder' FOR 'createdOrder' */
+	var newBodyNotifyOrder = {
+		orderId: createdOrder._id,
+		receiverIds: [{ receiverId: '60d8830a20ec084240e84ed7', readState: false }],
+	};
+	var newNotifyOrder = await NotifyOrder.create(newBodyNotifyOrder);
+	req.app.io.to(req.app.socketIdAdmin).emit(`new${nameEventEmit}`, newNotifyReview);
 };
 // ---- Create
 exports.createOneDocument = (Model, nameEventEmit = undefined) =>

@@ -71,7 +71,8 @@ exports.singIn = (roleInput) =>
 		}
 		const token = createToken(user._id);
 		sendToken(token, req, res);
-		returnResultOfRequest(res, 200, user.role, token);
+		var message = { role: user.role, userId: user._id };
+		returnResultOfRequest(res, 200, message, token);
 	});
 //-----------------------------------------------------------------
 //GET api/users/sing-up

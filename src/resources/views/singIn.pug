@@ -27,6 +27,7 @@ html(lang='en')
 	script(src='/js/formValidator.js' type='text/javascript')
 	script(src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js')
 	script(src='//cdn.jsdelivr.net/npm/sweetalert2@11')
+	script(src='/js/test.js', type='module')
 	//script(src='/js/signIn.js' type='module')
 	script.
 		var singInForm = new Validator('#singIn-form')
@@ -48,6 +49,7 @@ html(lang='en')
 					await location.assign('/admin/dashboard')					
 				}
 			}catch(err){
+				console.log(err)
 				Swal.fire({
 						icon: 'error',
 						title: 'Oops...',
