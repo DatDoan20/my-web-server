@@ -25,7 +25,7 @@ block content
 					td= review.productId.name
 					td(data-th='Comments' style="text-align:center;")= review.comments.length
 					td 
-						a.btnReply.link(href='#' data-id=`${review._id}`) Reply↩️
+						a.btnReply.link(href='#' data-id=`${review._id}` data-name=`${review.userId.name}` data-review=`${review.review}` data-rating=`${review.rating}⭐`) Reply↩️
 					td 
 						a.link(href=`/admin/review-detail/${review.productId._id}` target='_blank') Overview↩️
 	//lib

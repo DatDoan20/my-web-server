@@ -1,20 +1,17 @@
 // * HANDLE ReviewDetail.pug
-import {
-	showAlertWaiting,
-	showAlertSuccess,
-	showAlertConfirmAction,
-	catchAsyncAction,
-	showAlertRequest,
-	showAlertFail,
-} from './handlerActionGeneric.js';
+import { showAlertRequest, showAlertFail } from './handlerActionGeneric.js';
 import { handleReply } from './handlerReviewComment.js';
 
 $('.btnReply').click(async function (e) {
 	e.preventDefault();
-	const comment = await showAlertRequest();
+	const name = $(this).data('name');
+	const review = $(this).data('review');
+	const rating = $(this).data('rating');
+
+	const comment = await showAlertRequest(`${name} - ${rating}: ${review}`);
 	if (comment) {
-		handleReply(comment, $(this).data('id'));
+		handleReply(comment, $(this).data('id'), true);
 	} else {
-		showAlertFail('Fail', 'Your comment is empty!');
+		showAlertFail('Cancel', 'Your comment is empty! or you was cancel');
 	}
 });

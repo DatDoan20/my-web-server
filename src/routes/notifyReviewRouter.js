@@ -11,4 +11,6 @@ router.get('/search', notifyReviewController.getAllNotifyReviewWithQuery);
 // DELETE api/users/notify-reviews/:id (notifyReviewId)
 router.delete('/:id/force', notifyReviewController.destroyNotifyReview);
 
+// PATCH api/users/notify-reviews/:id (id notify review)
+router.patch('/:id', notifyReviewController.checkReadNotifyReview);
 module.exports = router;

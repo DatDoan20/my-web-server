@@ -24,8 +24,8 @@ exports.getNotifyCommentById = catchAsync(async (req, res, next) => {
 		.select({ 'receiverIds.$': 1 })
 		.select('updatedAt commentId')
 		.populate({
-			path: 'commentId -__v',
-			select: '-createdAt -reviewId -updatedAt -__v',
+			path: 'commentId',
+			select: '-createdAt -updatedAt -__v',
 		})
 		.sort('-createdAt');
 	res.status(200).json({ status: 'success', data: notifyComments });

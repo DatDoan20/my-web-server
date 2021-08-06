@@ -96,12 +96,15 @@ const emitSocketNotifyComment = async (nameEventEmit, req, createdComment) => {
 	// Loop to get userId of all comments
 	createdComment.reviewId.comments.forEach((comment) => {
 		idOfUserCommentedOrReviewed = comment.userId._id.toString();
-		if (!checks.has(idOfUserCommentedOrReviewed)) {
+		if (
+			!checks.has(idOfUserCommentedOrReviewed) &&
+			idOfUserCommentedOrReviewed !== req.user._id.toString()
+		) {
 			receiverIds.push({ receiverId: idOfUserCommentedOrReviewed, readState: false });
 			checks.add(idOfUserCommentedOrReviewed);
 		}
 	});
-	//console.log(receiverIds);
+	console.log(receiverIds);
 
 	// (4) Ok, create notifyComment
 	var bodyNewNotifyComment = { commentId: createdComment._id, receiverIds: receiverIds };
@@ -125,19 +128,25 @@ const emitSocketNotifyComment = async (nameEventEmit, req, createdComment) => {
 // --- Emit Socket Order
 const emitSocketNotifyOrder = async (nameEventEmit, req, createdOrder) => {
 	//**THIS FUNCTION CREATE 'notifyOrder' FOR 'createdOrder' */
+	// (1) array receiverIds
 	var receiverIds = [];
 	var receiverItem = { receiverId: '60d8830a20ec084240e84ed7', readState: false };
 	receiverIds.push(receiverItem);
+
+	// (2) body notify order
 	var newBodyNotifyOrder = {
 		orderId: createdOrder._id,
 		receiverIds: receiverIds,
 	};
+
+	// (3) create
 	var newNotifyOrder = await NotifyOrder.create(newBodyNotifyOrder);
 	newNotifyOrder = await newNotifyOrder
 		.populate({ path: 'orderId', populate: { path: 'userId' } })
 		.execPopulate();
+
+	// (4) check if admin is online? to emit
 	var adminId = newNotifyOrder.receiverIds[0].receiverId;
-	// check if admin is online?
 	if (req.app.socketIds[adminId]) {
 		req.app.io
 			.to(req.app.socketIds[adminId].socketId)

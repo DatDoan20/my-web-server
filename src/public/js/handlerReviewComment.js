@@ -5,7 +5,7 @@ import {
 	showAlertConfirmAction,
 	catchAsyncAction,
 } from './handlerActionGeneric.js';
-// * HANDLE ReviewDetail.pug
+// * HANDLE ReviewDetail.pug, and reuse/export some function in here for other page
 function showBoxReply(index) {
 	if ($(`#box-reply-${index}`).is(':visible')) {
 		$(`#box-reply-${index}`).hide();
@@ -19,12 +19,12 @@ function sendReply(index) {
 		showAlertFail('Content is empty!', 'Please enter your content');
 	} else {
 		const reviewId = document.querySelector(`.btn-reply-${index}`).getAttribute('review-id');
-		handleReply(contentReply.value, reviewId);
+		handleReply(contentReply.value, reviewId, true);
 	}
 }
 
-export function handleReply(contentReply, reviewId) {
-	catchAsyncAction(async function () {
+export function handleReply(contentReply, reviewId, reload) {
+	return catchAsyncAction(async function () {
 		const alertWaiting = showAlertWaiting('Comment is being sent');
 		var data = { comment: contentReply };
 		var resultReply = await axios({
@@ -35,8 +35,13 @@ export function handleReply(contentReply, reviewId) {
 		alertWaiting.close();
 
 		if (resultReply.data.status === 'success') {
-			await showAlertSuccess('Success', 'Comment was sent');
-			location.reload();
+			if (reload === true) {
+				// reload :true -> no need to update readState of comment/review
+				await showAlertSuccess('Success', 'Comment was sent');
+				location.reload();
+			} else {
+				return true;
+			}
 		}
 	});
 }
