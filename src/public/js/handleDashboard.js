@@ -3,9 +3,9 @@ import {
 	showAlertRequest,
 	showAlertFail,
 	showAlertWaiting,
-	showAlertSuccess,
 } from './handlerActionGeneric.js';
 import { handleReply } from './handlerReviewComment.js';
+import { addHTMLReviewAndCommentElement, addHTMLOrderElement } from './dynamicCodeHTML.js';
 
 // ----------------------------- EVENT
 // Hide red dot (notify unread)
@@ -47,113 +47,39 @@ $('#btn-click-hide-show-menu-d-shop').change(function () {
 });
 
 //------------------------- LOAD NOTIFY
-function addHTMLReviewAndCommentElement(
-	idElement,
-	reviewId,
-	notifyId,
-	avatar,
-	name,
-	content,
-	time,
-	readState
-) {
-	var opacityValue = 1.0;
-	if (readState === true) {
-		opacityValue = 0.3;
+function loadCountNotifyUnRead(elementShowNumber, numberNotifyUnRead) {
+	$(elementShowNumber).text(`${numberNotifyUnRead}`);
+	if (numberNotifyUnRead > 0) {
+		$(elementShowNumber).show();
+		$('#icon-notify-generic').show();
+	} else {
+		$(elementShowNumber).hide();
+		$('#icon-notify-generic').hide();
 	}
-	var strAttribute = `data-content="${content}" data-name="${name}" data-notify-id="${notifyId}" data-read-state="${readState}"`;
-	$(idElement).prepend(`
-		<a class="box-notify-review-and-comment block" href="#" target="_blank" data-review-id="${reviewId}" ${strAttribute}>
-			<div class="flex px-4 space-x-4 sub-box">
-				<div class="relative flex-shrink-0">
-					<span class="relative z-10 inline-block overflow-visible rounded-ful">
-						<img class="object-cover rounded-full w-9 h-9" src="/img/users/${avatar}" alt="avatar" /></span>
-					<div class="absolute h-24 p-px -mt-3 -ml-px bg-primary-50 left-1/2 dark:bg-primary-darker"></div>
-				</div>
-				<div class="flex-1 overflow-hidden notify-id-${notifyId}" style='opacity:${opacityValue};'>
-					<h5 class="text-sm font-semibold text-gray-600 dark:text-light">${name}</h5>
-					<p class="text-sm font-normal text-gray-400 truncate dark:text-primary-lighter">${content}</p>
-					<span class="text-sm font-normal text-gray-400 dark:text-primary-light" style="font-weight: bold;">${time}</span>
-				</div>
-			</div>
-		</a>
-	`);
 }
-function addHTMLOrderElement(
-	idElement,
-	orderId,
-	notifyId,
-	avatar,
-	name,
-	state,
-	numberOfProducts,
-	totalPayment,
-	paymentMode,
-	receiverName,
-	addressDelivery,
-	receiverEmail,
-	receiverPhone,
-	time,
-	readState
-) {
-	var colorState;
-	if (state === 'waiting') {
-		colorState = '#d6c90f';
-	} else if (state === 'accepted') {
-		colorState = '#0faf14';
-	} else if (state === 'canceled') {
-		colorState = '#d50505';
+
+function updateCountWhenReceiveNotify(elementShowNumber) {
+	var numberUnRead = $(elementShowNumber).text();
+	numberUnRead = parseInt(numberUnRead) + 1;
+
+	$(elementShowNumber).text(numberUnRead);
+	$(elementShowNumber).show();
+	$('#icon-notify-generic').show();
+}
+
+function updateCountWhenClickReplyNotify(element, notifyId, elementShowNumber) {
+	//update css
+	var subElement = element.children('.sub-box').children(`.notify-id-${notifyId}`);
+	subElement.css('opacity', '0.3');
+	element.attr('data-read-state', true);
+
+	//update count
+	var numberNotifyUnRead = $(elementShowNumber).text();
+	numberNotifyUnRead = parseInt(numberNotifyUnRead);
+	if (numberNotifyUnRead > 0) {
+		numberNotifyUnRead--;
+		loadCountNotifyUnRead(elementShowNumber, numberNotifyUnRead);
 	}
-	var opacityValue = 1.0;
-	if (readState === true) {
-		opacityValue = 0.3;
-	}
-	$(idElement).prepend(`
-		<a class="box-notify-order block" href="/admin/orders/${orderId}" target="_blank" data-notify-id="${notifyId}" data-read-state="${readState}">
-			<div class="flex px-4 space-x-4 sub-box">
-				<div class="relative flex-shrink-0">
-					<span class="relative z-10 inline-block overflow-visible rounded-ful">
-						<img class="object-cover rounded-full w-9 h-9" src="/img/users/${avatar}" alt="avatar" /></span>
-					<div class="absolute h-24 p-px -mt-3 -ml-px bg-primary-50 left-1/2 dark:bg-primary-darker"></div>
-				</div>
-				<div class="flex-1 overflow-hidden notify-id-${notifyId}" style='opacity:${opacityValue};'>
-					<h5 class="text-sm font-semibold text-gray-600 dark:text-light" style="margin-top:5px; margin-bottom:5px;">${name}
-						<span style='font-weight: bold; color:#fff; background-color:${colorState}; padding-left:3px; padding-right:3px;
-						border-radius:8px;'>${state}</span>
-					</h5>
-					<p class="text-sm font-normal text-gray-400 truncate dark:text-primary-lighter">Số lượng sản phẩm: 
-						<span class="text-sm font-normal text-gray-400 dark:text-primary-light" style="font-weight: bold;">${numberOfProducts}</span>
-					</p>
-
-					<p class="text-sm font-normal text-gray-400 truncate dark:text-primary-lighter">Tổng giá đơn hàng: 
-						<span class="text-sm font-normal text-gray-400 dark:text-primary-light" style="font-weight: bold;">${totalPayment}đ</span>
-					</p>
-
-					<p class="text-sm font-normal text-gray-400 truncate dark:text-primary-lighter">Phương thức thanh toán: 
-						<span class="text-sm font-normal text-gray-400 dark:text-primary-light" style="font-weight: bold;">${paymentMode}</span>
-					</p>
-
-					<p class="text-sm font-normal text-gray-400 truncate dark:text-primary-lighter">Người nhận: 
-						<span class="text-sm font-normal text-gray-400 dark:text-primary-light" style="font-weight: bold;">${receiverName}</span>
-					</p>
-					
-					<p class="text-sm font-normal text-gray-400 truncate dark:text-primary-lighter">Địa chỉ: 
-						<span class="text-sm font-normal text-gray-400 dark:text-primary-light" style="font-weight: bold;">${addressDelivery}</span>
-					</p>
-					
-					<p class="text-sm font-normal text-gray-400 truncate dark:text-primary-lighter">Email: 
-						<span class="text-sm font-normal text-gray-400 dark:text-primary-light" style="font-weight: bold;">${receiverEmail}</span>
-					</p>
-					
-					<p class="text-sm font-normal text-gray-400 truncate dark:text-primary-lighter">Số điện thoại:
-						<span class="text-sm font-normal text-gray-400 dark:text-primary-light" style="font-weight: bold;">${receiverPhone}</span>
-					</p>
-					
-					<span class="text-sm font-normal text-gray-400 dark:text-primary-light" style="font-weight: bold;">${time}</span>
-				</div>
-			</div>
-		</a>
-	`);
 }
 // Load notify review - OK
 $('#block-notify-review').ready(function () {
@@ -181,14 +107,7 @@ $('#block-notify-review').ready(function () {
 				}
 			}
 		}
-		$('#number-notify-review-unread').text(`${numberReviewUnRead}`);
-		if (numberReviewUnRead > 0) {
-			$('#number-notify-review-unread').show();
-			$('#icon-notify-generic').show();
-		} else {
-			$('#number-notify-review-unread').hide();
-			$('#icon-notify-generic').hide();
-		}
+		loadCountNotifyUnRead('#number-notify-review-unread', numberReviewUnRead);
 		console.log('Load notify reviews success!');
 	});
 });
@@ -222,14 +141,7 @@ $('#block-notify-comment').ready(function () {
 				}
 			}
 		}
-		$('#number-notify-comment-unread').text(`${numberCommentUnRead}`);
-		if (numberCommentUnRead > 0) {
-			$('#number-notify-comment-unread').show();
-			$('#icon-notify-generic').show();
-		} else {
-			$('#number-notify-comment-unread').hide();
-			$('#icon-notify-generic').hide();
-		}
+		loadCountNotifyUnRead('#number-notify-comment-unread', numberCommentUnRead);
 		console.log('Load notify comments success!');
 	});
 });
@@ -267,19 +179,13 @@ $('#block-notify-order').ready(function () {
 				}
 			}
 		}
-		$('#number-notify-order-unread').text(`${numberOrderUnRead}`);
-		if (numberOrderUnRead > 0) {
-			$('#number-notify-order-unread').show();
-			$('#icon-notify-generic').show();
-		} else {
-			$('#number-notify-order-unread').hide();
-			$('#icon-notify-generic').hide();
-		}
+		loadCountNotifyUnRead('#number-notify-order-unread', numberOrderUnRead);
 		console.log('Load notify orders success!');
 	});
 });
 
 // ----------------------- SOCKET SHOW NEW NOTIFY WHEN SERVER EMIT
+// Connect
 const socket = io();
 // Verify
 var userId = $('#img-avatar-admin').data('id');
@@ -297,12 +203,7 @@ socket.on('newReview', (newNotifyReview) => {
 		new Date(newNotifyReview.updatedAt).toLocaleString('vi-vn'),
 		newNotifyReview.readState
 	);
-	var numberUnRead = $('#number-notify-review-unread').text();
-	numberUnRead = parseInt(numberUnRead) + 1;
-
-	$('#number-notify-review-unread').text(numberUnRead);
-	$('#number-notify-review-unread').show();
-	$('#icon-notify-generic').show();
+	updateCountWhenReceiveNotify('#number-notify-review-unread');
 });
 
 // Listen new notify comment - OK
@@ -318,14 +219,10 @@ socket.on('newComment', (newNotifyComment) => {
 		new Date(newNotifyComment.updatedAt).toLocaleString('vi-vn'),
 		newNotifyComment.receiverIds[0].readState
 	);
-	var numberUnRead = $('#number-notify-comment-unread').text();
-	numberUnRead = parseInt(numberUnRead) + 1;
-	$('#number-notify-comment-unread').text(numberUnRead);
-	$('#number-notify-comment-unread').show();
-	$('#icon-notify-generic').show();
+	updateCountWhenReceiveNotify('#number-notify-comment-unread');
 });
 
-// Listen new order
+// Listen new order - OK
 socket.on('newOrder', (newNotifyOrder) => {
 	addHTMLOrderElement(
 		'#block-notify-order',
@@ -344,9 +241,10 @@ socket.on('newOrder', (newNotifyOrder) => {
 		new Date(newNotifyOrder.updatedAt).toLocaleString('vi-vn'),
 		newNotifyOrder.receiverIds[0].readState
 	);
+	updateCountWhenReceiveNotify('#number-notify-order-unread');
 });
 
-// --------------- SET EVENT NOTIFY AFTER LOADED
+// ------------------- SET EVENT NOTIFY AFTER LOADED
 // Event click notify review
 $('#block-notify-review').on('click', '.box-notify-review-and-comment', async function (e) {
 	await handleReplyReviewOrComment(e, $(this), 'Review');
@@ -358,7 +256,7 @@ $('#block-notify-comment').on('click', '.box-notify-review-and-comment', async f
 // Event click notify order
 $('#block-notify-order').on('click', '.box-notify-order', async function (e) {
 	if ($(this).data('read-state') === false) {
-		await handleCheckOrderNotify($(this));
+		await updateStateNotifyOrder($(this));
 	}
 });
 
@@ -371,7 +269,7 @@ async function handleReplyReviewOrComment(e, element, notifyClicked) {
 	const textReply = await showAlertRequest(`${name}: ${content}`);
 	if (textReply) {
 		const alertWaiting = showAlertWaiting('Comment is being sent');
-		// reply comment or reply review -> use generic idReview
+		// * reply comment or reply review -> use generic idReview
 		var result = await handleReply(textReply, element.data('review-id'), false);
 		// * true: success
 		if (result === true) {
@@ -386,11 +284,12 @@ async function handleReplyReviewOrComment(e, element, notifyClicked) {
 		showAlertFail('Cancel', 'Your comment is empty! or you was cancel');
 	}
 }
+
 async function updateStateNotifyReview(element) {
-	console.log('update state notification');
 	//update current review notify  true
 	catchAsyncAction(async function () {
 		const notifyReviewId = element.data('notify-id');
+
 		const alertWaiting = showAlertWaiting('Updating..');
 		const result = await axios({
 			method: 'PATCH',
@@ -399,31 +298,21 @@ async function updateStateNotifyReview(element) {
 		alertWaiting.close();
 
 		if (result.data.status === 'success') {
-			console.log('check notify review read success');
-			var elementReadReview = element
-				.children('.sub-box')
-				.children(`.notify-id-${notifyReviewId}`);
-			elementReadReview.css('opacity', '0.3');
-			element.attr('data-read-state', true);
-
-			var numberUnRead = $('#number-notify-review-unread').text();
-			numberUnRead = parseInt(numberUnRead);
-			if (numberUnRead > 0) {
-				numberUnRead--;
-				$('#number-notify-review-unread').text(numberUnRead);
-				if (numberUnRead > 0) {
-					$('#number-notify-review-unread').show();
-				} else {
-					$('#number-notify-review-unread').hide();
-				}
-			}
+			console.log('update state notification');
+			updateCountWhenClickReplyNotify(
+				element,
+				notifyReviewId,
+				'#number-notify-review-unread'
+			);
 		}
 	});
 }
+
 async function updateStateNotifyComment(element) {
 	//update current comment notify  true
 	catchAsyncAction(async function () {
 		const notifyCommentId = element.data('notify-id');
+
 		const alertWaiting = showAlertWaiting('Updating..');
 		const result = await axios({
 			method: 'PATCH',
@@ -433,28 +322,16 @@ async function updateStateNotifyComment(element) {
 
 		if (result.data.status === 'success') {
 			console.log('check notify comment read success');
-			var elementReadComment = element
-				.children('.sub-box')
-				.children(`.notify-id-${notifyCommentId}`);
-			elementReadComment.css('opacity', '0.3');
-			element.attr('data-read-state', true);
-
-			var numberUnRead = $('#number-notify-comment-unread').text();
-			numberUnRead = parseInt(numberUnRead);
-			if (numberUnRead > 0) {
-				numberUnRead--;
-				$('#number-notify-comment-unread').text(numberUnRead);
-				if (numberUnRead > 0) {
-					$('#number-notify-comment-unread').show();
-				} else {
-					$('#number-notify-comment-unread').hide();
-				}
-			}
+			updateCountWhenClickReplyNotify(
+				element,
+				notifyCommentId,
+				'#number-notify-comment-unread'
+			);
 		}
 	});
 }
 
-async function handleCheckOrderNotify(elementOrder) {
+async function updateStateNotifyOrder(elementOrder) {
 	catchAsyncAction(async function () {
 		const notifyOrderId = elementOrder.data('notify-id');
 		const result = await axios({
@@ -463,11 +340,11 @@ async function handleCheckOrderNotify(elementOrder) {
 		});
 		if (result.data.status === 'success') {
 			console.log('check notify order read success');
-			var elementReadOrder = elementOrder
-				.children('.sub-box')
-				.children(`.notify-id-${notifyOrderId}`);
-			elementReadOrder.css('opacity', '0.3');
-			elementOrder.attr('data-read-state', true);
+			updateCountWhenClickReplyNotify(
+				elementOrder,
+				notifyOrderId,
+				'#number-notify-order-unread'
+			);
 		}
 	});
 }
