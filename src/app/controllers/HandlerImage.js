@@ -94,7 +94,6 @@ exports.resizeImage = catchAsync(async (req, res, next) => {
 		console.log('file upload avatar not exists');
 		return next();
 	}
-	//req.file.filename = `user-${req.user._id}-${Date.now()}.png`;
 	req.file.filename = `user-${req.user._id}.png`;
 	await sharp(req.file.buffer)
 		.resize(128, 128)

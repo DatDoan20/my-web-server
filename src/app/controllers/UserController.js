@@ -71,7 +71,7 @@ exports.singIn = (roleInput) =>
 		}
 		const token = createToken(user._id);
 		sendToken(token, req, res);
-		var message = { role: user.role, userId: user._id };
+		var message = `${user.role}-${user._id}`;
 		returnResultOfRequest(res, 200, message, token);
 	});
 //-----------------------------------------------------------------
