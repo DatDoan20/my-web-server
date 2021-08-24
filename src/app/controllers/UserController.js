@@ -42,13 +42,12 @@ exports.singUp = catchAsync(async (req, res, next) => {
 	const newUser = await User.create(req.body);
 
 	//return res for client
-	const token = createToken(newUser._id);
-	sendToken(token, req, res);
+	// const token = createToken(newUser._id);
+	// sendToken(token, req, res);
 	returnResultOfRequest(
 		res,
 		201,
-		`SingUp successfully with "Phone: ${newUser.phone}" and "Name: ${newUser.name}"`,
-		token
+		`SingUp successfully with "Phone: ${newUser.phone}" and "Name: ${newUser.name}"`
 	);
 });
 //----------------------------------------------------------------
