@@ -35,15 +35,11 @@ const sendToken = (token, req, res) => {
 //----------------------------------------------------------------
 //POST api/users/sing-up
 exports.singUp = catchAsync(async (req, res, next) => {
-	if (!validator.isEmail(req.body.email) || !validator.isMobilePhone(req.body.phone, 'vi-VN')) {
-		return next(new appError('Please provide valid email address or phone!', 400));
+	if (!validator.isMobilePhone(req.body.phone, 'vi-VN')) {
+		return next(new appError('Please provide valid phone!', 400));
 	}
 
 	const newUser = await User.create(req.body);
-
-	//send email welcome
-	//http://127.0.0.1:3000/admin/sing-in
-	await new Email(newUser, `${req.protocal}://${req.get('host')}/admin/sign-in`).sendWelcome();
 
 	//return res for client
 	const token = createToken(newUser._id);
@@ -51,7 +47,7 @@ exports.singUp = catchAsync(async (req, res, next) => {
 	returnResultOfRequest(
 		res,
 		201,
-		`SingUp successfully with "Email: ${newUser.email}" and "Phone: ${newUser.phone}" and "Name: ${newUser.name}"`,
+		`SingUp successfully with "Phone: ${newUser.phone}" and "Name: ${newUser.name}"`,
 		token
 	);
 });
@@ -167,12 +163,24 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 	user.name = req.body.name;
 	user.birthYear = req.body.birthYear;
 	user.sex = req.body.sex;
-	user.email = req.body.email;
 	if (req.file) {
 		user.avatar = req.file.filename;
 	}
 	await user.save();
 	returnResultOfRequest(res, 200, 'Update information successfully');
+});
+exports.updateEmail = catchAsync(async (req, res, next) => {
+	if (!validator.isEmail(req.body.email)) {
+		return next(new appError('Please provide valid email address !', 400));
+	}
+	const user = await User.findById(req.user._id);
+	user.email = req.body.email;
+	await user.save();
+
+	//send email welcome
+	//http://127.0.0.1:3000/admin/sing-in
+	await new Email(newUser, `${req.protocal}://${req.get('host')}/admin/sign-in`).sendWelcome();
+	returnResultOfRequest(res, 200, 'Update email successfully');
 });
 //----------------------------------------------------------------
 //PATCH api/users/add-to-cart

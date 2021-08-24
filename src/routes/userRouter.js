@@ -23,6 +23,7 @@ router.use(authController.protectUsers);
 router.get('/me', userController.getMe, userController.getUser);
 router.get('/:id', userController.getUser);
 router.patch('/update-password', userController.updatePassword);
+router.patch('/update-email', userController.updateEmail);
 router.patch('/update-me', handleImg.uploadImage, handleImg.resizeImage, userController.updateMe);
 router.patch('/add-to-cart', userController.addToCart);
 router.patch('/add-to-fav', userController.addToFav);
