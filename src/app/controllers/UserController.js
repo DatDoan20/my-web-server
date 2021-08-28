@@ -12,7 +12,8 @@ const createToken = (_id) => {
 		expiresIn: process.env.JWT_EXPIRES_IN,
 	});
 };
-const returnResultOfRequest = (res, statusCode, message, data = 'No token returned') => {
+// not want return data -> set undefined -> json will not includes data field
+const returnResultOfRequest = (res, statusCode, message, data = undefined) => {
 	res.status(statusCode).json({
 		status: 'success',
 		message: message,

@@ -42,5 +42,5 @@ exports.checkReadNotifyComment = catchAsync(async (req, res, next) => {
 			$set: { 'receiverIds.$.readState': true },
 		}
 	);
-	res.status(200).json({ status: 'success', data: notifyCommentRead });
+	res.status(200).json({ status: 'success', message: 'Update successfully' });
 });

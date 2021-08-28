@@ -18,5 +18,5 @@ exports.checkReadNotifyReview = catchAsync(async (req, res, next) => {
 			readState: true,
 		}
 	);
-	res.status(200).json({ status: 'success', data: notifyReviewRead });
+	res.status(200).json({ status: 'success', message: 'Update successfully' });
 });
