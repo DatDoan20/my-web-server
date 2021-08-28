@@ -174,6 +174,7 @@ exports.updateEmail = catchAsync(async (req, res, next) => {
 	}
 	const user = await User.findById(req.user._id);
 	user.email = req.body.email;
+	user.stateVerifyEmail = true;
 	await user.save();
 
 	//send email welcome

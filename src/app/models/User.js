@@ -7,7 +7,8 @@ const crypto = require('crypto');
 const User = new Schema(
 	{
 		phone: { type: String, unique: true, required: true },
-		email: { type: String, unique: true, lowercase: true, default: '' },
+		email: { type: String, unique: true, lowercase: true, required: true },
+		stateVerifyEmail: { type: Boolean, default: false },
 		name: { type: String, maxLength: 50, required: true },
 		password: { type: String, minLength: 8, required: true },
 		avatar: { type: String, default: 'default.png' },
