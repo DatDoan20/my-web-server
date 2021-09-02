@@ -60,19 +60,25 @@ body
 									input#pattern.form-control(type='text' placeholder='Enter pattern', value=`${product.pattern}` name='pattern')
 							.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
 								.form-group
-									label(for='type') Type(áo/quần/...)
-									input#type.form-control(type='text' placeholder='Enter type', value=`${product.type}` name='type')
+									label(for='type') Type(Loại sản phẩm)
+									//input#type.form-control(type='text' placeholder='Enter type', value=`${product.type}` name='type')
+									br
+									select#type(name='type')
 							.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
 								.form-group
-									label(for='category') Category(Name/Nữ)
-									input#category.form-control(type='text' placeholder='Enter category', value=`${product.category}` name='category')
+									label(for='category') Category(Nam/Nữ)
+									//input#category.form-control(type='text' placeholder='Enter category', value=`${product.category}` name='category')
+									br
+									select#category(name='category')
+										option(value='nam') Nam
+										option(value='nu') Nữ
 							.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
 								.form-group
 									label(for='size') Size (L - XKg - Xcm, ...)
 									textarea#size.form-control(type='size' placeholder='Enter size', name='size' , cols="30", rows="1")= `${product.size}`
 							.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
 								.form-group
-									label(for='color') Color (Trắng, vàng, ...)
+									label(for='color') Color (Tên màu - mã hex, ...)
 									textarea#color.form-control(type='color' placeholder='Enter color', name='color' , cols="30", rows="1")= `${product.color}`									
 							.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
 								.form-group
@@ -91,12 +97,12 @@ body
 							.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
 								.form-group
 									label(for='imageCover') 
-										u Choose Image Cover for Product:
+										u Choose Image Cover for Product(Ảnh đại diện sản phẩm):
 									input#imageCover(type='file' accept='image/*' name='imageCover' )
 							.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
 								.form-group
 									label(for='images') 
-										u Choose Images For Product:
+										u Choose Images For Product(Ảnh thông tin sản phẩm):
 									input#images(type='file' accept='image/*' name='images' multiple)
 							.col-xl-12.col-lg-12.col-md-12.col-sm-12.col-12
 								.text-right

@@ -5,13 +5,25 @@ import {
 	catchAsyncAction,
 } from './handlerActionGeneric.js';
 
+import { typeNu, typeNam } from './dynamicCodeHTML.js';
+//event click option category and load corresponding option type
+$('#category').on('change', function () {
+	$('#type').html('');
+	if ($(this).val() === 'nam') {
+		$('#type').append(typeNam);
+	} else {
+		$('#type').append(typeNu);
+	}
+});
+
 const infoFormProduct = document.querySelector('.form-info-product');
 //set Event
 infoFormProduct.addEventListener('submit', async (e) => {
 	e.preventDefault();
 	const color = document.getElementById('color').value.replace(/\s+/g, ' ').trim();
 	const size = document.getElementById('size').value.replace(/\s+/g, ' ').trim();
-	var formData = new FormData();
+	const category = $('#category').val();
+	const type = $('#type').val();
 	formData.append('name', document.getElementById('name').value.trim());
 	formData.append('description', document.getElementById('description').value.trim());
 	formData.append('price', document.getElementById('price').value.trim());
@@ -19,8 +31,8 @@ infoFormProduct.addEventListener('submit', async (e) => {
 	formData.append('material', document.getElementById('material').value.trim());
 	formData.append('pattern', document.getElementById('pattern').value.trim());
 	formData.append('discount', document.getElementById('discount').value.trim());
-	formData.append('type', document.getElementById('type').value.trim());
-	formData.append('category', document.getElementById('category').value.trim());
+	formData.append('type', type);
+	formData.append('category', category);
 	formData.append('color', color);
 	formData.append('size', size);
 

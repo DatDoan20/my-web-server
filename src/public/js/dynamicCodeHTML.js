@@ -106,3 +106,71 @@ export function addHTMLOrderElement(
 		</a>
 	`);
 }
+export function typeNam() {
+	const typeNam = `
+	<optgroup label="Áo">
+		<option value="ao-thun-tay-dai">Áo thun tay dài</option>
+		<option value="ao-thun-tay-ngan">Áo thun tay ngắn</option>
+		<option value="ao-so-mi-tay-dai">Áo sơ mi tay dài</option>
+		<option value="ao-so-mi-tay-ngan">Áo sơ mi tay ngắn</option>
+	</optgroup>
+	<optgroup label="Quần dài">
+		<option value="quan-thun-dai">Quần thun dài</option>
+		<option value="quan-tay-dai">Quần tây dài</option>
+		<option value="quan-kaki-dai">Quần kaki dài</option>
+		<option value="quan-jean-dai">Quần jean dài</option>
+	</optgroup>
+	<optgroup label="Quần short">
+		<option value="quan-thun-ngan">Quần thun short</option>
+		<option value="quan-tay-ngan">Quần tây short</option>
+		<option value="quan-kaki-ngan">Quần kaki short</option>
+		<option value="quan-jean-ngan">Quần jean short</option>
+	</optgroup>
+	<optgroup label="Khác">
+		<option value="do-bo">Đồ bộ</option>
+		<option value="do-the-thao">Đồ thể thao</option>
+		<option value="ao-khoac">Áo khoác</option>
+	</optgroup>
+	<optgroup label="Phụ kiện">
+		<option value="non">Nón</option>
+		<option value="khan-choang-co">Khăn choàng cổ</option>
+	</optgroup>
+	`;
+	return typeNam;
+}
+export function typeNu() {
+	const typeNu = `
+	<optgroup label="Đầm/Váy">
+		<option value="vay-suong">Váy suông </option>
+		<option value="chan-vay">Chân váy</option>
+	</optgroup>
+	<optgroup label="Áo">
+		<option value="ao-thun-tay-dai">Áo thun tay dài</option>
+		<option value="ao-thun-tay-ngan">Áo thun tay ngắn</option>
+		<option value="ao-so-mi-tay-dai">Áo sơ mi tay dài</option>
+		<option value="ao-so-mi-tay-ngan">Áo sơ mi tay ngắn</option>
+	</optgroup>
+	<optgroup label="Quần dài">
+		<option value="quan-thun-dai">Quần thun dài</option>
+		<option value="quan-tay-dai">Quần tây dài</option>
+		<option value="quan-kaki-dai">Quần kaki dài</option>
+		<option value="quan-jean-dai">Quần jean dài</option>
+	</optgroup>
+	<optgroup label="Quần short">
+		<option value="quan-thun-ngan">Quần thun short</option>
+		<option value="quan-tay-ngan">Quần tây short</option>
+		<option value="quan-kaki-ngan">Quần kaki short</option>
+		<option value="quan-jean-ngan">Quần jean short</option>
+	</optgroup>
+	<optgroup label="Khác">
+		<option value="do-bo">Đồ bộ</option>
+		<option value="do-the-thao">Đồ thể thao</option>
+		<option value="ao-khoac">Áo khoác</option>
+	</optgroup>
+	<optgroup label="Phụ kiện">
+		<option value="non">Nón</option>
+		<option value="khan-choang-co">Khăn choàng cổ</option>
+	</optgroup>
+	`;
+	return typeNu;
+}
