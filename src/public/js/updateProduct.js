@@ -5,31 +5,35 @@ import {
 	catchAsyncAction,
 } from './handlerActionGeneric.js';
 
-import { typeNu, typeNam } from './dynamicCodeHTML.js';
-//event click option category and load corresponding option type
-$('#category').on('change', function () {
-	$('#type').html('');
-	if ($(this).val() === 'nam') {
-		$('#type').append(typeNam);
-	} else {
-		$('#type').append(typeNu);
-	}
-});
+import {
+	EventCategoryAndType,
+	checkCurrentCategoryAndType,
+} from './handleCategoryAndTypeProduct.js';
+import { capitalize } from './handleString.js';
 
-const infoFormProduct = document.querySelector('.form-info-product');
+//handle category and type list
+EventCategoryAndType();
+checkCurrentCategoryAndType();
+
+// form
+const infoFormProduct = document.querySelector('.form-info-product-update');
 //set Event
 infoFormProduct.addEventListener('submit', async (e) => {
 	e.preventDefault();
-	const color = document.getElementById('color').value.replace(/\s+/g, ' ').trim();
-	const size = document.getElementById('size').value.replace(/\s+/g, ' ').trim();
+	const color = document.getElementById('color').value.replace(/\s+/g, '').trim();
+	const size = document.getElementById('size').value.replace(/\s+/g, '').trim();
 	const category = $('#category').val();
 	const type = $('#type').val();
-	formData.append('name', document.getElementById('name').value.trim());
-	formData.append('description', document.getElementById('description').value.trim());
+	const name = capitalize(document.getElementById('name').value.trim());
+	const description = capitalize(document.getElementById('description').value.trim());
+	const material = capitalize(document.getElementById('material').value.trim());
+	const pattern = capitalize(document.getElementById('pattern').value.trim());
+	formData.append('name', name);
+	formData.append('description', description);
 	formData.append('price', document.getElementById('price').value.trim());
 	formData.append('brand', document.getElementById('brand').value.trim());
-	formData.append('material', document.getElementById('material').value.trim());
-	formData.append('pattern', document.getElementById('pattern').value.trim());
+	formData.append('material', material);
+	formData.append('pattern', pattern);
 	formData.append('discount', document.getElementById('discount').value.trim());
 	formData.append('type', type);
 	formData.append('category', category);

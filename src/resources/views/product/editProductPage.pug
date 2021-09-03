@@ -31,7 +31,7 @@ body
 			.col-xl-8.col-lg-9.col-md-12.col-sm-12.col-12        
 				.card.h-100
 					.card-body
-						form.form-info-product.row.gutters(action="#", method='GET')
+						form.form-info-product-update.row.gutters(action="#", method='GET' enctype='multipart/form-data')
 							.col-xl-12.col-lg-12.col-md-12.col-sm-12.col-12
 								h6.mb-3.text-primary Product info
 							.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
@@ -63,13 +63,13 @@ body
 									label(for='type') Type(Loại sản phẩm)
 									//input#type.form-control(type='text' placeholder='Enter type', value=`${product.type}` name='type')
 									br
-									select#type(name='type')
+									select#type(name='type' data-type=`${product.type}`)
 							.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
 								.form-group
 									label(for='category') Category(Nam/Nữ)
 									//input#category.form-control(type='text' placeholder='Enter category', value=`${product.category}` name='category')
 									br
-									select#category(name='category')
+									select#category(name='category' data-category=`${product.category}`)
 										option(value='nam') Nam
 										option(value='nu') Nữ
 							.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12

@@ -57,11 +57,11 @@ exports.resizeImages = catchAsync(async (req, res, next) => {
 
 	// 1) imageCover file
 	if (req.files.imageCover) {
-		req.body.imageCover = `product-${req.params.id}-cover.png`;
+		req.body.imageCover = `product-${req.params.id}-cover.jpg`;
 
 		await sharp(req.files.imageCover[0].buffer)
 			.resize(600, 800)
-			.toFormat('png')
+			.toFormat('jpg')
 			.png({ quality: 90 })
 			.toFile(`src/public/img/products/${req.params.id}/${req.body.imageCover}`);
 	}
@@ -73,11 +73,11 @@ exports.resizeImages = catchAsync(async (req, res, next) => {
 		req.body.images = [];
 		await Promise.all(
 			req.files.images.map(async (singleFile, index) => {
-				const imageName = `product-${req.params.id}-${index + 1}.png`;
+				const imageName = `product-${req.params.id}-${index + 1}.jpg`;
 
 				await sharp(singleFile.buffer)
 					.resize(600, 800)
-					.toFormat('png')
+					.toFormat('jpg')
 					.png({ quality: 90 })
 					.toFile(`src/public/img/products/${req.params.id}/${imageName}`);
 
