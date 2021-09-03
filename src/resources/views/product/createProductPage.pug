@@ -26,7 +26,7 @@ body
 								h6.mb-3.text-primary Product info
 							.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
 								.form-group
-									label(for='name') Name
+									label(for='name') Name(tên và tất cả thông tin cần thiết)
 									textarea#name.form-control(name="name", cols="32", rows="1" placeholder='Enter name 225 character' required)
 							.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
 								.form-group
@@ -59,7 +59,7 @@ body
 									label(for='category') Category(Nam/Nữ)
 									//input#category.form-control(type='text' placeholder='Enter category', name='category')
 									br
-									select#category(name='category')
+									select#category(name='category' data-category='nam')
 										option(value='nam') Nam
 										option(value='nu') Nữ
 							.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12

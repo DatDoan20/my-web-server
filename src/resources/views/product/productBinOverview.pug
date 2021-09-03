@@ -5,17 +5,14 @@ block content
 		h1.h1-tb-generic= `Products👚 Bin 🗑️ ${products.length}`
 		table.rwd-table
 			tr
-				th(style='width:13%') Image
-				th(style='width:13%') Name
-				th(style='width:30%') Description
-				th(style='width:5%') Price
-				th(style='width:5%') Size
-				th(style='width:5%') Color
-				th(style='width:15%') Brand-Material-Pattern
-				th(style='width:2%') %
-				th(style='width:2%') Rating
-				th(style='width:5%') State
-				th(style='width:5%') Updated At
+				 th(style='width:15%') Image
+				th(style='width:15%') Name...
+				th(style='width:32%') Description...
+				th(style='width:23%') Brand-Material-Pattern-Color-Size-Discount-Prize
+				th(style='width:2%') Color
+				th(style='width:5%') Rating
+				th(style='width:2%') State
+				th(style='width:2%') Updated At
 					br 
 					p (day/month/year)
 			each product in products
@@ -23,12 +20,16 @@ block content
 					td(data-th='Image')
 						img(src=`/img/products/${product._id}/${product.imageCover}` style='width:300px; height:200px;')
 					td(data-th='Name')= product.name
-					td(data-th='Description')= product.description
-					td(data-th='Price')= `${(product.price/1000).toFixed(3)}đ`
-					td(data-th='Size')= product.size
+					td(data-th='Description')
+						div(style='height:250px; overflow:hidden;')= product.description
+					td(data-th='Info')
+						p=`*Brand: ${product.brand}`
+						p=`*Material: ${product.material}`
+						p=`*Pattern: ${product.pattern}`
+						p= `*Size: ${product.size}`
+						p= `*Discount: ${product.discount+'%'}`
+						p= `*Price: ${(product.price/1000).toFixed(3)}đ`
 					td(data-th='Color')= product.color
-					td(data-th='Info')= `${product.brand} - ${product.material} - ${product.pattern}`
-					td(data-th='Discount' style='text-align:center')= product.discount
 					td(data-th='Rating')= `${product.ratingsAverage}⭐/${product.ratingsQuantity}✔️`
 					td(data-th='State')
 						if(product.outOfStock)

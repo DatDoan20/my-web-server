@@ -5,14 +5,18 @@ import {
 	showAlertWarning,
 } from './handlerActionGeneric.js';
 import { capitalize } from './handleString.js';
-import { EventCategoryAndType } from './handleCategoryAndTypeProduct.js';
+import {
+	EventCategoryAndType,
+	checkCurrentCategoryAndType,
+} from './handleCategoryAndTypeProduct.js';
 
 //handle category and type list
+checkCurrentCategoryAndType();
 EventCategoryAndType();
 
 const infoFormProduct = document.querySelector('.form-info-product-add');
 
-//set Event, POST use URLSearchParams/ PATCH use FormData to upload image
+//set Event, POST use URLSEARCHPARAMS/ PATCH use FORMDATA to upload image
 infoFormProduct.addEventListener('submit', async (e) => {
 	e.preventDefault();
 	const color = document.getElementById('color').value.replace(/\s+/g, '').trim();

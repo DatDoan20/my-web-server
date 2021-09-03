@@ -17,7 +17,7 @@ checkCurrentCategoryAndType();
 
 // form
 const infoFormProduct = document.querySelector('.form-info-product-update');
-//set Event
+//set Event, POST use URLSEARCHPARAMS/ PATCH use FORMDATA to upload image
 infoFormProduct.addEventListener('submit', async (e) => {
 	e.preventDefault();
 	const color = document.getElementById('color').value.replace(/\s+/g, '').trim();
@@ -28,6 +28,7 @@ infoFormProduct.addEventListener('submit', async (e) => {
 	const description = capitalize(document.getElementById('description').value.trim());
 	const material = capitalize(document.getElementById('material').value.trim());
 	const pattern = capitalize(document.getElementById('pattern').value.trim());
+	var formData = new FormData();
 	formData.append('name', name);
 	formData.append('description', description);
 	formData.append('price', document.getElementById('price').value.trim());
