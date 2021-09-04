@@ -1,6 +1,7 @@
 const catchAsync = require('../handler/catchAsync');
 const NotifyReview = require('../models/NotifyReview');
 const factory = require('./HandlerFactory');
+const Response = require('../../utils/response');
 
 // GET api/users/notify-reviews
 exports.getAllNotifyReviewWithQuery = factory.getAllDocuments(NotifyReview, { path: 'reviewId' });
@@ -18,5 +19,6 @@ exports.checkReadNotifyReview = catchAsync(async (req, res, next) => {
 			readState: true,
 		}
 	);
-	res.status(200).json({ status: 'success', message: 'Update successfully' });
+	Response.basicRequestResult(res, 200, 'Update successfully');
+	// res.status(200).json({ status: 'success', message: 'Update successfully' });
 });

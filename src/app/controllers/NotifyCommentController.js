@@ -1,6 +1,7 @@
 const catchAsync = require('../handler/catchAsync');
 const NotifyComment = require('../models/NotifyComment');
 const factory = require('./HandlerFactory');
+const Response = require('../../utils/response');
 
 // GET api/users/notify-comments
 exports.getAllNotifyCommentWithQuery = factory.getAllDocuments(NotifyComment, {
@@ -28,7 +29,8 @@ exports.getNotifyCommentById = catchAsync(async (req, res, next) => {
 			select: '-createdAt -updatedAt -__v',
 		})
 		.sort('-createdAt');
-	res.status(200).json({ status: 'success', data: notifyComments });
+	Response.simpleRequestResult(res, 200, notifyComments);
+	// res.status(200).json({ status: 'success', data: notifyComments });
 });
 
 // PATCH api/users/notify-comments/:id (id notify comment)
@@ -42,5 +44,6 @@ exports.checkReadNotifyComment = catchAsync(async (req, res, next) => {
 			$set: { 'receiverIds.$.readState': true },
 		}
 	);
-	res.status(200).json({ status: 'success', message: 'Update successfully' });
+	Response.basicRequestResult(res, 200, 'Update successfully');
+	// res.status(200).json({ status: 'success', message: 'Update successfully' });
 });

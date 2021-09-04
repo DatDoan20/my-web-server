@@ -4,15 +4,11 @@ const APIFeature = require('../../utils/apiFeature');
 const NotifyReview = require('../models/NotifyReview');
 const NotifyComment = require('../models/NotifyComment');
 const NotifyOrder = require('../models/NotifyOrder');
+const Response = require('../../utils/response');
 
 //
 const returnResultOfRequest = (res, statusCode, data = undefined) => {
-	const obj = { status: 'success' };
-	if (data) {
-		obj.results = data.length;
-		obj.data = data;
-	}
-	res.status(statusCode).json({ ...obj });
+	return Response.simpleRequestResult(res, statusCode, data);
 };
 // FACTORY FOR CRUD
 //-------------------------------------------------DELETE

@@ -1,6 +1,7 @@
 const catchAsync = require('../handler/catchAsync');
 const NotifyOrder = require('../models/NotifyOrder');
 const factory = require('./HandlerFactory');
+const Response = require('../../utils/response');
 
 // GET api/users/notify-orders
 exports.getAllNotifyOrderWithQuery = factory.getAllDocuments(NotifyOrder, {
@@ -29,7 +30,8 @@ exports.getNotifyOrderById = catchAsync(async (req, res, next) => {
 			populate: { path: 'userId', select: 'name avatar' },
 		})
 		.sort('-updatedAt');
-	res.status(200).json({ status: 'success', data: notifyOrders });
+	Response.simpleRequestResult(res, 200, notifyOrders);
+	// res.status(200).json({ status: 'success', data: notifyOrders });
 });
 
 // PATCH api/users/notify-orders/:id (id notify order)
@@ -43,5 +45,6 @@ exports.checkReadNotifyOrder = catchAsync(async (req, res, next) => {
 			$set: { 'receiverIds.$.readState': true },
 		}
 	);
-	res.status(200).json({ status: 'success', message: 'Update successfully' });
+	Response.basicRequestResult(res, 200, 'Update successfully');
+	// res.status(200).json({ status: 'success', message: 'Update successfully' });
 });

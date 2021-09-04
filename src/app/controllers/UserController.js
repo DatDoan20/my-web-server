@@ -4,6 +4,7 @@ const appError = require('../handler/appError');
 const validator = require('validator');
 const jwt = require('jsonwebtoken');
 const Email = require('../../utils/email');
+const Response = require('../../utils/response');
 const crypto = require('crypto');
 const factory = require('./HandlerFactory');
 //----------------------------------------------------------------
@@ -14,12 +15,16 @@ const createToken = (_id) => {
 };
 // not want return data -> set undefined -> json will not includes data field
 const returnResultOfRequest = (res, statusCode, message, data = undefined) => {
-	res.status(statusCode).json({
-		status: 'success',
-		message: message,
-		data: data,
-	});
+	return Response.basicRequestResult(res, statusCode, message, data);
 };
+// const returnResultOfRequest = (res, statusCode, message, data = undefined) => {
+// 	res.status(statusCode).json({
+// 		status: 'success',
+// 		message: message,
+// 		data: data,
+// 	});
+// };
+
 const sendToken = (token, req, res) => {
 	const cookieOptions = {
 		expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
@@ -180,7 +185,7 @@ exports.updateEmail = catchAsync(async (req, res, next) => {
 
 	//send email welcome
 	//http://127.0.0.1:3000/admin/sing-in
-	await new Email(newUser, `${req.protocal}://${req.get('host')}/admin/sign-in`).sendWelcome();
+	await new Email(user, `${req.protocal}://${req.get('host')}/admin/sign-in`).sendWelcome();
 	returnResultOfRequest(res, 200, 'Update email successfully');
 });
 //----------------------------------------------------------------

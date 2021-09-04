@@ -24,6 +24,7 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+const { options } = require('./routes/reviewRouter.js');
 
 //--CATCH-ERROR: uncaughtException have to happening in beginning
 process.on('uncaughtException', (err) => {
@@ -91,7 +92,11 @@ app.use(
 const limiter = rateLimit({
 	windowMs: 60 * 60 * 1000, // 1h
 	max: 100, // limit each IP to 100 request in 1h
-	message: 'Too many requests from this IP, please try again in an hour',
+	message: {
+		//return json, this only return: status and message
+		status: 'error',
+		message: 'Too many requests from this IP, please try again in an hour',
+	},
 });
 app.use('/api', limiter);
 

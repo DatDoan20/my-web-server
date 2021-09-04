@@ -2,6 +2,7 @@ const catchAsync = require('../handler/catchAsync');
 const Order = require('../models/Order');
 const factory = require('./HandlerFactory');
 const Email = require('../../utils/email');
+const Response = require('../../utils/response');
 
 // GET /api/orders/me (query to get all order of current user)
 exports.setOrderIdOfUser = catchAsync(async (req, res, next) => {
@@ -73,8 +74,10 @@ exports.sendEmailInfoOrder = catchAsync(async (req, res, next) => {
 		);
 	}
 	if (resultSendEmail) {
-		res.status(200).json({ status: 'success', message: 'email was sent' });
+		Response.basicRequestResult(res, 200, 'email was sent');
+		// res.status(200).json({ status: 'success', message: 'email was sent' });
 	} else {
-		res.status(500).json({ status: 'error', message: 'send email failed' });
+		Response.basicRequestResultErr(res, 200, 'send email failed');
+		// res.status(500).json({ status: 'error', message: 'send email failed' });
 	}
 });
