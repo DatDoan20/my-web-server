@@ -20,8 +20,8 @@ const infoFormProduct = document.querySelector('.form-info-product-update');
 //set Event, POST use URLSEARCHPARAMS/ PATCH use FORMDATA to upload image
 infoFormProduct.addEventListener('submit', async (e) => {
 	e.preventDefault();
-	const color = document.getElementById('color').value.replace(/\s+/g, '').trim();
-	const size = document.getElementById('size').value.replace(/\s+/g, '').trim();
+	const color = document.getElementById('color').value.replace(/\s+/g, ' ').trim();
+	const size = document.getElementById('size').value.replace(/\s+/g, ' ').trim();
 	const category = $('#category').val();
 	const type = $('#type').val();
 	const name = capitalize(document.getElementById('name').value.trim());

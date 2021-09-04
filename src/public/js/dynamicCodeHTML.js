@@ -108,32 +108,37 @@ export function addHTMLOrderElement(
 }
 export function typeNam() {
 	const typeNam = `
-	<optgroup label="Áo">
+	<optgroup label="Áo tay dài">
 		<option value="ao-thun-tay-dai">Áo thun tay dài</option>
-		<option value="ao-thun-tay-ngan">Áo thun tay ngắn</option>
 		<option value="ao-so-mi-tay-dai">Áo sơ mi tay dài</option>
+		<option value="ao-chat-lieu-khac-dai">Áo chất liệu khác tay dài</option>
+	</optgroup>
+	<optgroup label="Áo tay ngắn">
+		<option value="ao-thun-tay-ngan">Áo thun tay ngắn</option>
 		<option value="ao-so-mi-tay-ngan">Áo sơ mi tay ngắn</option>
+		<option value="ao-chat-lieu-khac-ngan">Áo chất liệu khác tay ngắn</option>
 	</optgroup>
 	<optgroup label="Quần dài">
 		<option value="quan-thun-dai">Quần thun dài</option>
 		<option value="quan-tay-dai">Quần tây dài</option>
 		<option value="quan-kaki-dai">Quần kaki dài</option>
 		<option value="quan-jean-dai">Quần jean dài</option>
+		<option value="quan-chat-lieu-khac-dai">Quần chất liệu khác dài</option>
 	</optgroup>
 	<optgroup label="Quần short">
 		<option value="quan-thun-ngan">Quần thun short</option>
 		<option value="quan-tay-ngan">Quần tây short</option>
 		<option value="quan-kaki-ngan">Quần kaki short</option>
 		<option value="quan-jean-ngan">Quần jean short</option>
+		<option value="quan-chat-lieu-khac-ngan">Quần chất liệu khác ngắn</option>
 	</optgroup>
-	<optgroup label="Khác">
+	<optgroup label="Mặt hàng Khác">
 		<option value="do-bo">Đồ bộ</option>
 		<option value="do-the-thao">Đồ thể thao</option>
 		<option value="ao-khoac">Áo khoác</option>
 	</optgroup>
-	<optgroup label="Phụ kiện">
-		<option value="non">Nón</option>
-		<option value="khan-choang-co">Khăn choàng cổ</option>
+		<optgroup label="Mặt hàng Khác">
+		<option value="do-the-thao">Đồ thể thao</option>
 	</optgroup>
 	`;
 	return typeNam;
@@ -144,33 +149,50 @@ export function typeNu() {
 		<option value="vay-suong">Váy suông </option>
 		<option value="chan-vay">Chân váy</option>
 	</optgroup>
-	<optgroup label="Áo">
+	<optgroup label="Áo tay dài">
 		<option value="ao-thun-tay-dai">Áo thun tay dài</option>
-		<option value="ao-thun-tay-ngan">Áo thun tay ngắn</option>
 		<option value="ao-so-mi-tay-dai">Áo sơ mi tay dài</option>
+		<option value="ao-chat-lieu-khac-dai">Áo chất liệu khác tay dài</option>
+	</optgroup>
+	<optgroup label="Áo tay ngắn">
+		<option value="ao-thun-tay-ngan">Áo thun tay ngắn</option>
 		<option value="ao-so-mi-tay-ngan">Áo sơ mi tay ngắn</option>
+		<option value="ao-chat-lieu-khac-ngan">Áo chất liệu khác tay ngắn</option>
 	</optgroup>
 	<optgroup label="Quần dài">
 		<option value="quan-thun-dai">Quần thun dài</option>
 		<option value="quan-tay-dai">Quần tây dài</option>
 		<option value="quan-kaki-dai">Quần kaki dài</option>
 		<option value="quan-jean-dai">Quần jean dài</option>
+		<option value="quan-chat-lieu-khac-dai">Quần chất liệu khác dài</option>
 	</optgroup>
 	<optgroup label="Quần short">
 		<option value="quan-thun-ngan">Quần thun short</option>
 		<option value="quan-tay-ngan">Quần tây short</option>
 		<option value="quan-kaki-ngan">Quần kaki short</option>
 		<option value="quan-jean-ngan">Quần jean short</option>
+		<option value="quan-chat-lieu-khac-ngan">Quần chất liệu khác ngắn</option>
 	</optgroup>
-	<optgroup label="Khác">
+	<optgroup label="Mặt hàng Khác">
 		<option value="do-bo">Đồ bộ</option>
 		<option value="do-the-thao">Đồ thể thao</option>
 		<option value="ao-khoac">Áo khoác</option>
+	</optgroup>
+		<optgroup label="Mặt hàng Khác">
+		<option value="do-the-thao">Đồ thể thao</option>
+	</optgroup>
+	`;
+	return typeNu;
+}
+export function typeNamNu() {
+	const typeNamNu = `
+	<optgroup label="Mặt hàng Khác">
+		<option value="do-the-thao">Đồ thể thao</option>
 	</optgroup>
 	<optgroup label="Phụ kiện">
 		<option value="non">Nón</option>
 		<option value="khan-choang-co">Khăn choàng cổ</option>
 	</optgroup>
 	`;
-	return typeNu;
+	return typeNamNu;
 }

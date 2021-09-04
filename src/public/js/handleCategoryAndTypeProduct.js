@@ -1,4 +1,4 @@
-import { typeNu, typeNam } from './dynamicCodeHTML.js';
+import { typeNu, typeNam, typeNamNu } from './dynamicCodeHTML.js';
 
 export function checkCurrentCategoryAndType() {
 	const crrValueCategory = $('#category').data('category');
@@ -12,8 +12,10 @@ function loadListType(idType, crrValueCategory) {
 	$(idType).html('');
 	if (crrValueCategory === 'nam') {
 		$(idType).append(typeNam);
-	} else {
+	} else if (crrValueCategory === 'nu') {
 		$(idType).append(typeNu);
+	} else {
+		$(idType).append(typeNamNu);
 	}
 }
 export function EventCategoryAndType() {
@@ -21,8 +23,10 @@ export function EventCategoryAndType() {
 		$('#type').html('');
 		if ($(this).val() === 'nam') {
 			$('#type').append(typeNam);
-		} else {
+		} else if ($(this).val() === 'nu') {
 			$('#type').append(typeNu);
+		} else {
+			$('#type').append(typeNamNu);
 		}
 	});
 }
