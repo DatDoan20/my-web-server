@@ -33,3 +33,15 @@ function limitRouter(app) {
 	app.use('/api/products/:id', limiter(ONE_HOURS, LIMIT_200));
 }
 module.exports = limitRouter;
+
+// Limit request same IP - have to run before "mainRouter(app)"
+// const limiter = rateLimit({
+// 	windowMs: 60 * 60 * 1000, // 1h
+// 	max: 100, // limit each IP to 100 request in 1h
+// 	message: {
+// 		//return json, this only return: status and message
+// 		status: 'error',
+// 		message: 'Too many requests from this IP, please try again in an hour',
+// 	},
+// });
+// app.use('/api', limiter);
