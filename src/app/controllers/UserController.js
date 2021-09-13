@@ -191,7 +191,7 @@ exports.updateEmail = catchAsync(async (req, res, next) => {
 //----------------------------------------------------------------
 //PATCH api/users/add-to-cart
 exports.addToCart = catchAsync(async (req, res, next) => {
-	const user = req.user;
+	let user = req.user;
 	const cartItem = req.body;
 	user.cart.push(cartItem);
 	await user.save();
