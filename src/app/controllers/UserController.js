@@ -192,7 +192,8 @@ exports.updateEmail = catchAsync(async (req, res, next) => {
 //PATCH api/users/add-to-cart
 exports.addToCart = catchAsync(async (req, res, next) => {
 	const user = req.user;
-	user.cart = user.cart.concat(req.body.cart);
+	const cartItem = req.body;
+	user.cart.push(cartItem);
 	await user.save();
 	returnResultOfRequest(res, 200, 'Add product to cart of user successfully', user);
 });
