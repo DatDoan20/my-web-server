@@ -140,7 +140,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 // GET api/users/me or api/users/:id
 exports.getUser = factory.getOneDocument(User, {
 	path: 'cart.infoProduct',
-	select: 'name discount images price _id',
+	select: 'name discount imageCover  _id',
 });
 exports.getMe = (req, res, next) => {
 	req.params.id = req.user.id;
@@ -195,6 +195,10 @@ exports.addToCart = catchAsync(async (req, res, next) => {
 	const cartItem = req.body;
 	user.cart.push(cartItem);
 	await user.save();
+	user = await user
+		.populate({ path: 'cart.infoProduct', select: 'name discount imageCover  _id' })
+		.execPopulate();
+
 	returnResultOfRequest(res, 200, 'Add product to cart of user successfully', user);
 });
 //----------------------------------------------------------------
