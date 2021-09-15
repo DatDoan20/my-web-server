@@ -26,6 +26,7 @@ router.patch('/update-password', userController.updatePassword);
 router.patch('/update-email', userController.updateEmail);
 router.patch('/update-me', handleImg.uploadImage, handleImg.resizeImage, userController.updateMe);
 router.patch('/add-to-cart', userController.addToCart);
+router.patch('/delete-product-in-cart', userController.deleteProductInCart);
 router.patch('/add-to-fav', userController.addToFav);
 
 // api/users/review

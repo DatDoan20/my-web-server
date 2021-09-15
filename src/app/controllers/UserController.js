@@ -201,6 +201,23 @@ exports.addToCart = catchAsync(async (req, res, next) => {
 
 	returnResultOfRequest(res, 200, 'Add product to cart of user successfully', user);
 });
+//PATCH api/users/delete-product-in-cart
+exports.deleteProductInCart = catchAsync(async (req, res, next) => {
+	let user = req.user;
+	const productId = req.body;
+	// console.log(user.cart.findIndex((cartItem) => cartItem.infoProduct == productId.id));
+	// use == is not care datatype so request is string and datatype in DB is ObjectID
+	user.cart.splice(
+		user.cart.findIndex((cartItem) => cartItem.infoProduct == productId.id),
+		1
+	);
+	await user.save();
+	user = await user
+		.populate({ path: 'cart.infoProduct', select: 'name discount imageCover  _id' })
+		.execPopulate();
+
+	returnResultOfRequest(res, 200, 'remove product in cart of user successfully', user);
+});
 //----------------------------------------------------------------
 //PATCH api/users/add-to-fav
 exports.addToFav = catchAsync(async (req, res, next) => {
