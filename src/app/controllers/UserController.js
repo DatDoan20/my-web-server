@@ -174,6 +174,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 	await user.save();
 	returnResultOfRequest(res, 200, 'Update information successfully');
 });
+//PATCH api/users/update-email
 exports.updateEmail = catchAsync(async (req, res, next) => {
 	if (!validator.isEmail(req.body.email)) {
 		return next(new appError('Please provide valid email address !', 400));
@@ -181,10 +182,11 @@ exports.updateEmail = catchAsync(async (req, res, next) => {
 	const user = await User.findById(req.user._id);
 	user.email = req.body.email;
 	user.stateVerifyEmail = true;
+	// console.log(req.body);
 	await user.save();
 
 	//send email welcome
-	//http://127.0.0.1:3000/admin/sing-in
+	// http://127.0.0.1:3000/admin/sing-in
 	await new Email(user, `${req.protocal}://${req.get('host')}/admin/sign-in`).sendWelcome();
 	returnResultOfRequest(res, 200, 'Update email successfully');
 });
