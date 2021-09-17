@@ -188,7 +188,7 @@ exports.updateEmail = catchAsync(async (req, res, next) => {
 	//send email welcome
 	// http://127.0.0.1:3000/admin/sing-in
 	await new Email(user, `${req.protocal}://${req.get('host')}/admin/sign-in`).sendWelcome();
-	returnResultOfRequest(res, 200, 'Update email successfully');
+	returnResultOfRequest(res, 200, 'Update email successfully', user.email);
 });
 //----------------------------------------------------------------
 //PATCH api/users/add-to-cart
