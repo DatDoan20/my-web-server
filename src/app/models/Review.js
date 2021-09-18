@@ -33,7 +33,7 @@ Review.pre(/^find/, function (next) {
 		select: '_id name avatar',
 	}).populate({
 		path: 'comments',
-		select: '-createdAt -updatedAt',
+		select: '-createdAt',
 	});
 	next();
 });

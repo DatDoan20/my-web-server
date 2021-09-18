@@ -8,8 +8,14 @@ exports.getAllNotifyCommentWithQuery = factory.getAllDocuments(NotifyComment, {
 	path: 'commentId',
 });
 
-// DELETE api/users/notify-comments/:id/force (notifyReviewId)
-exports.destroyNotifyComment = factory.forceDeleteOneDocument(NotifyComment);
+// DELETE api/users/notify-comments/:id/force (commentId)
+exports.destroyNotifyComment = catchAsync(async (req, res, next) => {
+	const doc = await NotifyComment.deleteOne({ commentId: req.params.id });
+	if (!doc) {
+		return next(new appError('No document found with that ID', 404));
+	}
+	Response.basicRequestResult(res, 200, 'Delete notify comment successfully');
+});
 
 // GET api/users/notify-comments/me (user / admin)
 exports.setIdToGetNotifyComment = catchAsync(async (req, res, next) => {

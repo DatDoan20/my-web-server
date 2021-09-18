@@ -102,6 +102,9 @@ const emitSocketNotifyComment = async (nameEventEmit, req, createdComment) => {
 	});
 	console.log(receiverIds);
 
+	//add receiver is admin to admin receive this comment
+	receiverIds.push({ receiverId: '60d8830a20ec084240e84ed7', readState: false });
+
 	// (4) Ok, create notifyComment
 	var bodyNewNotifyComment = { commentId: createdComment._id, receiverIds: receiverIds };
 	var newNotifyComment = await NotifyComment.create(bodyNewNotifyComment);

@@ -18,7 +18,7 @@ router.get(
 //PATCH api/users/notify-comments/:id
 router.patch('/:id', notifyCommentController.checkReadNotifyComment);
 
-// DELETE api/users/notify-comments/:id (notifyCommentId)
+// DELETE api/users/notify-comments/:id/force (commentId)
 router.delete('/:id/force', notifyCommentController.destroyNotifyComment);
 
 module.exports = router;

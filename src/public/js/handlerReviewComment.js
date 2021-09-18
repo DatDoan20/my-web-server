@@ -51,15 +51,21 @@ function handleDeleteComment(commentId) {
 			if (result.isConfirmed) {
 				catchAsyncAction(async function () {
 					const alertWaiting = showAlertWaiting('Comment is deleted');
-					var resultReply = await axios({
+					var resultDeleteComment = await axios({
 						method: 'DELETE',
 						url: `http://127.0.0.1:3000/api/users/reviews/comment/${commentId}/force`,
 					});
-					alertWaiting.close();
 
-					if (resultReply.data.status === 'success') {
-						await showAlertSuccess('Success', 'Comment was deleted');
-						location.reload();
+					if (resultDeleteComment.data.status === 'success') {
+						var resultDeleteNotifyComment = await axios({
+							method: 'DELETE',
+							url: `http://127.0.0.1:3000/api/users/notify-comments/${commentId}/force`,
+						});
+						alertWaiting.close();
+						if (resultDeleteNotifyComment.data.status === 'success') {
+							await showAlertSuccess('Success', 'Comment was deleted');
+							location.reload();
+						}
 					}
 				});
 			}

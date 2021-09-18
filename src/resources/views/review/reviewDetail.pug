@@ -135,8 +135,8 @@ body
 													.mess__comment-content
 														.comment__content-header
 															span.comment__content-name= commentItem.userId.name
-															| 
-															span.comment__content-time= `- ${commentItem.updatedAt.toLocaleString('vi-vn')}`
+															|
+															span.comment__content-time= `-${commentItem.updatedAt.toLocaleString('vi-vn')}`
 														span.comment__content-text= commentItem.comment
 														br
 														img(src='/img/shop/reply.png' style='width:21px; height:21px;' class=`btn-reply-${index}` review-id=`${review._id}`)
