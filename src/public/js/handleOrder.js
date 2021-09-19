@@ -75,21 +75,29 @@ btnCancel.click(function (e) {
 	).then(async (result) => {
 		if (result.isConfirmed) {
 			var alertWaiting = showAlertWaiting('Changing state order...');
-			//update state -> canceled -> delete soft
+			//update state canceled -> delete soft notify order -> -> delete soft order -> send email
 			var resultCancel = await axios({
 				method: 'PATCH',
 				url: `/admin/orders/cancel/${$(this).data('id')}`,
 			});
-			alertWaiting.close();
 			if (resultCancel.data.status === 'success') {
-				actionOrder(
-					'DELETE',
-					'Order is being Cancel(delete)',
-					'Canceled Order successfully!🗑️',
-					`/admin/${$(this).data('id')}/soft`,
-					'cancel',
-					$(this).data('id')
-				);
+				// delete soft notify order
+				var resultDeleteSoftNotifyOrder = await axios({
+					method: 'DELETE',
+					url: `/api/users/notify-orders/${$(this).data('id')}/soft`,
+				});
+				alertWaiting.close();
+				//delete soft order + send email
+				if (resultDeleteSoftNotifyOrder.data.status === 'success') {
+					actionOrder(
+						'DELETE',
+						'Order is being Cancel(delete)',
+						'Canceled Order successfully!🗑️',
+						`/admin/${$(this).data('id')}/soft`,
+						'cancel',
+						$(this).data('id')
+					);
+				}
 			}
 		}
 	});

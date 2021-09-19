@@ -18,6 +18,12 @@ router.get(
 //PATCH api/users/notify-orders/:id
 router.patch('/:id', notifyOrderController.checkReadNotifyOrder);
 
+// DELETE api/users/notify-orders/:id/soft (orderId)
+router.delete('/:id/soft', notifyOrderController.deleteNotifyOrder);
+
+//PATCH (restore notify order ) api/users/notify-orders/restore/:id
+router.patch('/restore/:id', notifyOrderController.restoreNotifyOrder);
+
 // DELETE api/users/notify-orders/:id (notifyCommentId)
 router.delete('/:id/force', notifyOrderController.destroyNotifyOrder);
 

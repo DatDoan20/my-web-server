@@ -5,20 +5,25 @@ import {
 	catchAsyncAction,
 } from './handlerActionGeneric.js';
 
-function action(actionMethod, titleWaiting, titleResult, url, data) {
+function action(actionMethod, titleWaiting, titleResult, url, orderId) {
 	catchAsyncAction(async function () {
 		const alertWaiting = showAlertWaiting(titleWaiting);
 		//restore(delete: true)
 		var resultRestore = await axios({
 			method: actionMethod,
 			url: url,
-			data: data,
 		});
 
 		if (resultRestore.data.status === 'success') {
+			var resultRestoreNotifyOrder = await axios({
+				method: 'PATCH',
+				url: `/api/users/notify-orders/restore/${orderId}`,
+			});
 			alertWaiting.close();
-			await showAlertSuccess(`${titleResult}`, 'Page will automatically reloaded');
-			location.reload();
+			if (resultRestoreNotifyOrder.data.status === 'success') {
+				await showAlertSuccess(`${titleResult}`, 'Page will automatically reloaded');
+				location.reload();
+			}
 		}
 	});
 }
@@ -30,12 +35,13 @@ btnRestore.click(function (e) {
 		'Are you sure? (this action will restore this order)'
 	).then((result) => {
 		if (result.isConfirmed) {
-			var idOrder = $(this).data('id');
+			var orderId = $(this).data('id');
 			action(
 				'PATCH',
 				'Order is being processed(restore)',
 				'Restore Order successfully!',
-				`/admin/orders/restore/${idOrder}`
+				`/admin/orders/restore/${orderId}`,
+				orderId
 			);
 		}
 	});

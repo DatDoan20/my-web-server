@@ -8,8 +8,25 @@ exports.getAllNotifyOrderWithQuery = factory.getAllDocuments(NotifyOrder, {
 	path: 'orderId',
 });
 
-// DELETE api/users/notify-orders/:id/force (notifyReviewId)
+// DELETE api/users/notify-orders/:id/force (notifyOrderId)
 exports.destroyNotifyOrder = factory.forceDeleteOneDocument(NotifyOrder);
+
+// DELETE api/users/notify-orders/:id/soft (orderId)
+exports.deleteNotifyOrder = catchAsync(async (req, res, next) => {
+	const doc = await NotifyOrder.delete({ orderId: req.params.id });
+	if (!doc) {
+		return next(new appError('No document found with that ID', 404));
+	}
+	Response.basicRequestResult(res, 200, 'Delete notify order successfully');
+});
+// PATCH api/users/notify-orders/restore/:id
+exports.restoreNotifyOrder = catchAsync(async (req, res, next) => {
+	const doc = await NotifyOrder.restore({ orderId: req.params.id });
+	if (!doc) {
+		return next(new appError('No document found with that ID', 404));
+	}
+	Response.basicRequestResult(res, 200, 'Restore notify order successfully');
+});
 
 // GET api/users/notify-orders/me (user / admin)
 exports.setIdToGetNotifyOrder = catchAsync(async (req, res, next) => {
