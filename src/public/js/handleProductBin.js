@@ -38,8 +38,8 @@ var btnRestore = $('.btnRestore');
 btnRestore.click(function (e) {
 	e.preventDefault();
 	showAlertConfirmAction(
-		`Order - ${$(this).data('id')} - TotalPayment: ${$(this).data('price')}`,
-		`Are you sure? (this action will restore this order)`
+		`${$(this).data('name')},`,
+		`Are you sure? (this action will restore this product)`
 	).then((result) => {
 		if (result.isConfirmed) {
 			handleRestore($(this).data('id'));
@@ -51,8 +51,8 @@ var btnDelete = $('.btnDelete');
 btnDelete.click(function (e) {
 	e.preventDefault();
 	showAlertConfirmAction(
-		`Order - ${$(this).data('id')} - TotalPayment: ${$(this).data('price')}`,
-		`Are you sure? (this action will delete this order)`
+		`${$(this).data('name')},`,
+		`Are you sure? (this action will delete this product)`
 	).then((result) => {
 		if (result.isConfirmed) {
 			handleDestroy($(this).data('id'));

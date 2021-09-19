@@ -38,8 +38,8 @@ block content
 							img(src='/icon/left-stock.png')
 					td(data-th='UpdatedAt')= product.updatedAt.toLocaleString('vi-vn')
 					td
-						a.link.btnRestore(href='#' title='Restore' style='text-align:center' data-price=`${product.price}` data-id=`${product._id}`) Restore(In stock)⤴️
+						a.link.btnRestore(href='#' title='Restore' style='text-align:center' data-price=`${product.price}` data-name=`${product.name}` data-id=`${product._id}`) Restore(In stock)⤴️
 					td
-						a.link.btnDelete(href='#' title='Delete' style='text-align:center' data-price=`${product.price}` data-id=`${product._id}`) Delete❌
+						a.link.btnDelete(href='#' title='Delete' style='text-align:center' data-price=`${product.price}` data-name=`${product.name}` data-id=`${product._id}`) Delete❌
 block extraScript
 	script(src='/js/handleProductBin.js' type='module')
