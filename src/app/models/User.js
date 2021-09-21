@@ -24,7 +24,7 @@ const User = new Schema(
 				{
 					infoProduct: { type: mongoose.Schema.ObjectId, ref: 'Product' },
 					quantity: { type: Number, required: true },
-					finalPrice: { type: Number },
+					price: { type: Number },
 					size: { type: String, required: true },
 					color: { type: String, required: true },
 				},

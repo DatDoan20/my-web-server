@@ -7,7 +7,6 @@ const Order = new Schema(
 		state: { type: String, default: 'waiting' },
 		costDelivery: { type: Number, default: 0 },
 		totalPrice: { type: Number, required: true },
-		specialOffer: { type: Number, required: true },
 		totalPayment: { type: Number, required: true },
 		paymentMode: { type: String, enum: ['COD', 'Banking'], default: 'COD' },
 
