@@ -2,6 +2,8 @@ const catchAsync = require('../handler/catchAsync');
 const Order = require('../models/Order');
 const factory = require('./HandlerFactory');
 const Email = require('../../utils/email');
+const NotifyOrder = require('../models/NotifyOrder');
+
 const Response = require('../../utils/response');
 
 // GET /api/orders/me (query to get all order of current user)
@@ -32,7 +34,16 @@ exports.createOrder = factory.createOneDocument(Order, 'Order');
 //---------------------------ADMIN-------------------------------------
 /*	DELETE admin/:id/force  (admin delete force) || 
  	api/users/orders/:id/force (user can delete force if that order has not been accepted, constraint client side )*/
-exports.destroyOrder = factory.forceDeleteOneDocument(Order);
+exports.destroyOrder = catchAsync(async (req, res, next) => {
+	// delete force order
+	const order = await Order.deleteOne({ _id: req.params.id });
+	if (!order) {
+		return next(new appError('No document found with that ID', 404));
+	}
+	// delete force notifyOrder
+	const notifyOrder = await NotifyOrder.deleteOne({ orderId: req.params.id });
+	Response.basicRequestResult(res, 200, 'Delete successfully');
+});
 
 // DELETE admin/:id/soft (user delete)
 exports.deleteOrder = factory.softDeleteOneDocument(Order);
