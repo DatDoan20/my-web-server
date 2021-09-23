@@ -5,10 +5,10 @@ const APIFeature = require('../../utils/apiFeature');
 const factory = require('./HandlerFactory');
 
 // GET /api/products/search?
-exports.getAllProductWithQuery = factory.getAllDocuments(Product, { path: 'reviews' });
+exports.getAllProductWithQuery = factory.getAllDocuments(Product);
 
 // GET / api/products/:id  get one product
-exports.getOneProduct = factory.getOneDocument(Product, { path: 'reviews' });
+exports.getOneProduct = factory.getOneDocument(Product);
 
 // POST /api/products (admin)
 exports.createProduct = factory.createOneDocument(Product);
