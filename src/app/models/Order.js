@@ -15,6 +15,7 @@ const Order = new Schema(
 		emailUser: { type: String, required: true },
 		phoneUser: { type: String, required: true },
 		addressDelivery: { type: String, required: true },
+		note: { type: String, required: true },
 
 		purchasedProducts: [
 			new Schema(
@@ -28,6 +29,7 @@ const Order = new Schema(
 					color: { type: String, required: true },
 					discount: { type: Number, required: true },
 					finalPrice: { type: Number, required: true },
+					stateRating: { type: Boolean, required: true, default: false },
 				},
 				{ _id: false }
 			),

@@ -11,7 +11,12 @@ router.use(authController.protectUsers);
 router.get('/search', reviewController.getAllReviewWithQuery);
 
 //POST
-router.post('/:productId', reviewController.setProductIdAndUserId, reviewController.createReview);
+router.post(
+	'/:productId/:orderId',
+	reviewController.setProductIdAndUserId,
+	reviewController.updateProductInOrder,
+	reviewController.createReview
+);
 
 //PATCH
 router.patch('/:id', reviewController.updateReview);
