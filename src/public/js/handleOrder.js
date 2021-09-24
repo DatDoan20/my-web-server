@@ -14,8 +14,8 @@ function actionOrder(actionMethod, titleWaiting, titleResult, url, actionType, i
 			method: actionMethod,
 			url: url,
 		});
+		alertWaiting.close();
 		if (resultUpdate.data.status === 'success') {
-			alertWaiting.close();
 			alertWaiting = showAlertWaiting(`${titleResult}, sending email...`);
 
 			if (actionType === 'cancel' || actionType === 'accept') {
@@ -23,7 +23,7 @@ function actionOrder(actionMethod, titleWaiting, titleResult, url, actionType, i
 				//but update(Delete) will not return _id to get
 				var resultSendEmail = await axios({
 					method: 'GET',
-					url: `http://127.0.0.1:3000/admin/orders/send-email/${idOrder}/${actionType}`,
+					url: `/admin/orders/send-email/${idOrder}/${actionType}`,
 				});
 				alertWaiting.close();
 				if (resultSendEmail.data.status === 'success') {
@@ -99,6 +99,37 @@ btnCancel.click(function (e) {
 					);
 				}
 			}
+		}
+	});
+});
+
+var btnReceive = $('.btnReceive');
+btnReceive.click(function (e) {
+	e.preventDefault();
+	if ($(`#state-order-${$(this).data('id')}`).attr('state') === 'received') {
+		showAlertWarning('Can not do it', 'Customer has successfully received');
+		return;
+	}
+	showAlertConfirmAction(
+		`Order - ${$(this).data('id')} - TotalPayment: ${$(this).data('total')}`,
+		'Are you sure? (this action will check customer has received)'
+	).then(async (result) => {
+		if (result.isConfirmed) {
+			var alertWaiting = showAlertWaiting('Order is being handled');
+			var resultUpdateReceived = await axios({
+				method: 'PATCH',
+				url: `/admin/orders/receive/${$(this).data('id')}`,
+			});
+			alertWaiting.close();
+			if (resultUpdateReceived.data.status === 'success') {
+				await showAlertSuccess(`Handle success`, 'Page will automatically reloaded');
+			} else {
+				await showAlertFail(
+					`Check customer has received fail`,
+					'Something wrong happened, please try again!'
+				);
+			}
+			location.reload();
 		}
 	});
 });

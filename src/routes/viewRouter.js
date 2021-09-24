@@ -54,5 +54,10 @@ router.patch(
 	orderController.setStateOrder('canceled'),
 	orderController.updateStateOrder
 );
+router.patch(
+	'/orders/receive/:id',
+	orderController.setStateOrder('received'),
+	orderController.updateStateOrder
+);
 
 module.exports = router;
