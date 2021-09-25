@@ -7,15 +7,11 @@ const OrderController = require('../app/controllers/OrderController');
 router.use(authController.protectUsers);
 
 //GET
+// api/users/orders/me/:state
+router.get('/me/:state', OrderController.getAllOrderWithState);
+
 // api/users/orders/me
 router.get('/me', OrderController.setOrderIdOfUser, OrderController.getAllOrderOfMe);
-// api/users/orders/me/:state
-router.get(
-	'/me/:state',
-	OrderController.setOrderIdOfUser,
-	OrderController.setStateOrder,
-	OrderController.getAllOrderOfMe
-);
 // api/users/orders/search?
 router.get('/search', OrderController.getAllOrderWithQuery);
 

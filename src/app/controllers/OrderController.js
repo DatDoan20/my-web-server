@@ -14,10 +14,14 @@ exports.setOrderIdOfUser = catchAsync(async (req, res, next) => {
 	next();
 });
 exports.getAllOrderOfMe = factory.getAllDocuments(Order);
-// GET  /api/orders/me/:state
-exports.setStateOrder = catchAsync(async (req, res, next) => {
-	req.query.state = req.params.state;
-	next();
+
+// api/users/orders/me/:state
+exports.getAllOrderWithState = catchAsync(async (req, res, next) => {
+	const doc = await Order.find({ userId: req.user._id, state: req.params.state });
+	if (!doc) {
+		return next(new Error('No document found with that ID and state', 404));
+	}
+	Response.simpleRequestResult(res, 200, doc);
 });
 
 exports.getAllOrderWithQuery = factory.getAllDocuments(Order, {
