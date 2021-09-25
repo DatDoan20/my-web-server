@@ -7,13 +7,20 @@ const OrderController = require('../app/controllers/OrderController');
 router.use(authController.protectUsers);
 
 //GET
-//api/users/orders/me
+// api/users/orders/me
 router.get('/me', OrderController.setOrderIdOfUser, OrderController.getAllOrderOfMe);
+// api/users/orders/me/:state
+router.get(
+	'/me/:state',
+	OrderController.setOrderIdOfUser,
+	OrderController.setStateOrder,
+	OrderController.getAllOrderOfMe
+);
 // api/users/orders/search?
 router.get('/search', OrderController.getAllOrderWithQuery);
 
 //POST
-//api/users/orders
+// api/users/orders
 router.post(
 	'/',
 	OrderController.clearCartUser,

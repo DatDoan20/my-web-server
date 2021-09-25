@@ -14,6 +14,12 @@ exports.setOrderIdOfUser = catchAsync(async (req, res, next) => {
 	next();
 });
 exports.getAllOrderOfMe = factory.getAllDocuments(Order);
+// GET  /api/orders/me/:state
+exports.setStateOrder = catchAsync(async (req, res, next) => {
+	req.query.state = req.params.state;
+	next();
+});
+
 exports.getAllOrderWithQuery = factory.getAllDocuments(Order, {
 	path: 'userId',
 	select: 'name avatar',
