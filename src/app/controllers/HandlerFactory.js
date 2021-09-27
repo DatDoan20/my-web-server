@@ -113,6 +113,7 @@ const emitSocketNotifyComment = async (nameEventEmit, req, createdComment) => {
 	newNotifyComment = await newNotifyComment.populate({ path: 'commentId' }).execPopulate();
 
 	//(6) emit socket notifyComment to user in receiverIds
+	console.log(newNotifyComment);
 	// Loop receiverIds
 	newNotifyComment.receiverIds.forEach((receiverItem) => {
 		//receiver have to connecting with server(Online)
