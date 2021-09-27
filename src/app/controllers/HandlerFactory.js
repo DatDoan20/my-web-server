@@ -92,12 +92,11 @@ const emitSocketNotifyComment = async (nameEventEmit, req, createdComment) => {
 	// Loop to get userId of all comments
 	createdComment.reviewId.comments.forEach((comment) => {
 		idOfUserCommentedOrReviewed = comment.userId._id.toString();
-		if (
-			!checks.has(idOfUserCommentedOrReviewed) &&
-			idOfUserCommentedOrReviewed !== req.user._id.toString()
-		) {
-			receiverIds.push({ receiverId: idOfUserCommentedOrReviewed, readState: false });
-			checks.add(idOfUserCommentedOrReviewed);
+		if (!checks.has(idOfUserCommentedOrReviewed)) {
+			if (idOfUserCommentedOrReviewed !== req.user._id.toString()) {
+				receiverIds.push({ receiverId: idOfUserCommentedOrReviewed, readState: false });
+				checks.add(idOfUserCommentedOrReviewed);
+			}
 		}
 	});
 	console.log(receiverIds);
@@ -113,7 +112,7 @@ const emitSocketNotifyComment = async (nameEventEmit, req, createdComment) => {
 	newNotifyComment = await newNotifyComment.populate({ path: 'commentId' }).execPopulate();
 
 	//(6) emit socket notifyComment to user in receiverIds
-	console.log(newNotifyComment);
+	// console.log(newNotifyComment);
 	// Loop receiverIds
 	newNotifyComment.receiverIds.forEach((receiverItem) => {
 		//receiver have to connecting with server(Online)
