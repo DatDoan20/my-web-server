@@ -72,21 +72,23 @@ exports.updateStateOrder = catchAsync(async (req, res, next) => {
 	if (!doc) {
 		return next(new appError('No document found with that ID', 404));
 	}
+	await emitStateNotifyOrder(req, doc);
+	Response.basicRequestResult(res, 200, 'Update state order successfully');
+});
+const emitStateNotifyOrder = async (req, doc) => {
 	//Custom info notifyOrder and send it to user but not send fully "doc"(order)
 	const notifyOrder = {
 		state: doc.state,
 		totalPayment: doc.totalPayment,
 		//id of who called API request(admin - Sender)
-		receiverName: req.user.name,
-		receiverAvatar: req.user.avatar,
+		senderName: req.user.name,
+		senderAvatar: req.user.avatar,
 	};
 	//userId of order is: Receiver
 	if (req.app.socketIds[doc.userId]) {
-		await req.app.io.to(req.app.socketIds[doc.userId].socketId).emit(`stateOrder`, notifyOrder);
+		req.app.io.to(req.app.socketIds[doc.userId].socketId).emit(`stateOrder`, notifyOrder);
 	}
-	Response.basicRequestResult(res, 200, 'Update state order successfully');
-});
-
+};
 //GET	admin/orders/send-email/:idOrder/:actionType
 exports.sendEmailInfoOrder = catchAsync(async (req, res, next) => {
 	var resultSendEmail;
