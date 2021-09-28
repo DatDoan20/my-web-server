@@ -18,7 +18,7 @@ export function addHTMLReviewAndCommentElement(
 			<div class="flex px-4 space-x-4 sub-box">
 				<div class="relative flex-shrink-0">
 					<span class="relative z-10 inline-block overflow-visible rounded-ful">
-						<img class="object-cover rounded-full w-9 h-9" src="/img/users/${avatar}" alt="avatar" /></span>
+						<img class="object-cover rounded-full w-9 h-9" src="/img/users/${avatar}" alt="avatar" style ='border:1px solid #555;'/></span>
 					<div class="absolute h-24 p-px -mt-3 -ml-px bg-primary-50 left-1/2 dark:bg-primary-darker"></div>
 				</div>
 				<div class="flex-1 overflow-hidden notify-id-${notifyId}" style='opacity:${opacityValue};'>
@@ -54,6 +54,8 @@ export function addHTMLOrderElement(
 		colorState = '#0faf14';
 	} else if (state === 'canceled') {
 		colorState = '#d50505';
+	} else if (state === 'received') {
+		colorState = '#555555';
 	}
 	var opacityValue = 1.0;
 	if (readState === true) {
@@ -64,7 +66,7 @@ export function addHTMLOrderElement(
 			<div class="flex px-4 space-x-4 sub-box">
 				<div class="relative flex-shrink-0">
 					<span class="relative z-10 inline-block overflow-visible rounded-ful">
-						<img class="object-cover rounded-full w-9 h-9" src="/img/users/${avatar}" alt="avatar" /></span>
+						<img class="object-cover rounded-full w-9 h-9" src="/img/users/${avatar}" alt="avatar" style ='border:1px solid #555;'/></span>
 					<div class="absolute h-24 p-px -mt-3 -ml-px bg-primary-50 left-1/2 dark:bg-primary-darker"></div>
 				</div>
 				<div class="flex-1 overflow-hidden notify-id-${notifyId}" style='opacity:${opacityValue};'>
