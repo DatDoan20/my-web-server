@@ -32,6 +32,7 @@ router.get('/orders', viewController.getOrderOverviewPage);
 router.get('/orders/bin', viewController.getOrderBinOverviewPage);
 router.get('/orders/:id', viewController.getSpecificOrderPage);
 router.get('/orders-detail/:id', viewController.getOrderDetailPage);
+//Send Email State Order
 router.get('/orders/send-email/:idOrder/:actionType', orderController.sendEmailInfoOrder);
 //Delete
 router.delete('/:id/force', orderController.destroyOrder);
