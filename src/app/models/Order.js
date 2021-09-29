@@ -15,7 +15,7 @@ const Order = new Schema(
 		emailUser: { type: String, required: true },
 		phoneUser: { type: String, required: true },
 		addressDelivery: { type: String, required: true },
-		note: { type: String, required: true },
+		note: { type: String, default: '' },
 
 		purchasedProducts: [
 			new Schema(
