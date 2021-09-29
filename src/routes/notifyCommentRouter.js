@@ -8,11 +8,17 @@ router.use(authController.protectUsers);
 // GET api/users/notify-comments/search?
 router.get('/search', notifyCommentController.getAllNotifyCommentWithQuery);
 
-//GET api/users/notify-comments/:me
+//GET api/users/notify-comments/me
 router.get(
 	'/me',
 	notifyCommentController.setIdToGetNotifyComment,
 	notifyCommentController.getNotifyCommentById
+);
+//GET api/users/notify-comments/me/search?
+router.get(
+	'/me/:page/:limit',
+	notifyCommentController.setIdToGetNotifyComment,
+	notifyCommentController.getNotifyCommentByIdSearch
 );
 
 //PATCH api/users/notify-comments/:id

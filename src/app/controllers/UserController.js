@@ -195,6 +195,14 @@ exports.updateEmail = catchAsync(async (req, res, next) => {
 exports.addToCart = catchAsync(async (req, res, next) => {
 	let user = req.user;
 	const cartItem = req.body;
+
+	//find if product is exist in cart? - "haven't check yet"
+	const id = user.cart.findIndex((cartItem) => cartItem.infoProduct == cartItem.infoProduct);
+	if (id !== -1) {
+		returnResultOfRequest(res, 200, 'Product was added to cart of user', user);
+	}
+
+	//product is not exist in cart
 	user.cart.push(cartItem);
 	await user.save();
 	user = await user

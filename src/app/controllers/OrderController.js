@@ -118,7 +118,7 @@ exports.sendEmailInfoOrder = catchAsync(async (req, res, next) => {
 		Response.basicRequestResult(res, 200, 'email was sent');
 		// res.status(200).json({ status: 'success', message: 'email was sent' });
 	} else {
-		Response.basicRequestResultErr(res, 200, 'send email failed');
+		Response.basicRequestResultErr(res, 500, 'send email failed');
 		// res.status(500).json({ status: 'error', message: 'send email failed' });
 	}
 });

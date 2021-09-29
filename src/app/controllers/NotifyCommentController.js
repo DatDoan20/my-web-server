@@ -2,7 +2,7 @@ const catchAsync = require('../handler/catchAsync');
 const NotifyComment = require('../models/NotifyComment');
 const factory = require('./HandlerFactory');
 const Response = require('../../utils/response');
-
+const APIFeature = require('../../utils/apiFeature');
 // GET api/users/notify-comments
 exports.getAllNotifyCommentWithQuery = factory.getAllDocuments(NotifyComment, {
 	path: 'commentId',
@@ -37,6 +37,29 @@ exports.getNotifyCommentById = catchAsync(async (req, res, next) => {
 		.sort('-createdAt');
 	Response.simpleRequestResult(res, 200, notifyComments);
 	// res.status(200).json({ status: 'success', data: notifyComments });
+});
+
+// GET api/users/notify-comments/me/:page/:limit (search for paging and limit)
+exports.getNotifyCommentByIdSearch = catchAsync(async (req, res, next) => {
+	const page = req.params.page * 1 || 1;
+	const limit = req.params.limit * 1 || 20;
+	const skip = (page - 1) * limit;
+
+	let notifyComments = await NotifyComment.find({
+		// $elemMatch: get match with first query condition
+		receiverIds: { $elemMatch: { receiverId: req.params.id } },
+	})
+		//get first item/value in array match with query condition
+		.select({ 'receiverIds.$': 1 })
+		.select('updatedAt commentId')
+		.populate({
+			path: 'commentId',
+			select: '-createdAt -updatedAt -__v',
+		})
+		.sort('-createdAt')
+		.skip(skip)
+		.limit(limit);
+	Response.simpleRequestResult(res, 200, notifyComments);
 });
 
 // PATCH api/users/notify-comments/:id (id notify comment)
