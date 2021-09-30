@@ -14,7 +14,12 @@ router.get(
 	notifyOrderController.setIdToGetNotifyOrder,
 	notifyOrderController.getNotifyOrderById
 );
-
+// GET api/users/notify-orders/me/limit/:limit/page/:page (user / admin)
+router.get(
+	'/me/limit/:limit/page/:page',
+	notifyOrderController.setIdToGetNotifyOrder,
+	notifyOrderController.getNotifyOrderByIdSearch
+);
 //PATCH api/users/notify-orders/:id
 router.patch('/:id', notifyOrderController.checkReadNotifyOrder);
 

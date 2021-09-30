@@ -48,7 +48,27 @@ exports.getNotifyOrderById = catchAsync(async (req, res, next) => {
 		})
 		.sort('-updatedAt');
 	Response.simpleRequestResult(res, 200, notifyOrders);
-	// res.status(200).json({ status: 'success', data: notifyOrders });
+});
+// GET api/users/notify-orders/me/limit/:limit/page/:page (user / admin)
+exports.getNotifyOrderByIdSearch = catchAsync(async (req, res, next) => {
+	const page = req.params.page * 1 || 1;
+	const limit = req.params.limit * 1 || 20;
+	const skip = (page - 1) * limit;
+	var notifyOrders = await NotifyOrder.find({
+		// $elemMatch: get match with first query condition
+		receiverIds: { $elemMatch: { receiverId: req.params.id } },
+	})
+		//get first item/value in array match with query condition
+		.select({ 'receiverIds.$': 1 })
+		.select('updatedAt orderId')
+		.populate({
+			path: 'orderId',
+			select: 'totalPayment state',
+		})
+		.sort('-updatedAt')
+		.skip(skip)
+		.limit(limit);
+	Response.simpleRequestResult(res, 200, notifyOrders);
 });
 
 // PATCH api/users/notify-orders/:id (id notify order)

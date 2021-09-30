@@ -3,7 +3,6 @@ const Order = require('../models/Order');
 const factory = require('./HandlerFactory');
 const Email = require('../../utils/email');
 const NotifyOrder = require('../models/NotifyOrder');
-
 const Response = require('../../utils/response');
 
 // GET /api/orders/me (query to get all order of current user)
@@ -72,6 +71,19 @@ exports.updateStateOrder = catchAsync(async (req, res, next) => {
 	if (!doc) {
 		return next(new appError('No document found with that ID', 404));
 	}
+
+	// default notifyOrder created with receiver is Admin, we need
+	//create notify for user to load notify client side
+	const body = {
+		orderId: doc._id,
+		receiverIds: [
+			{
+				receiverId: doc.userId,
+				readState: false,
+			},
+		],
+	};
+	await NotifyOrder.create(body);
 	await emitStateNotifyOrder(req, doc);
 	Response.basicRequestResult(res, 200, 'Update state order successfully');
 });
