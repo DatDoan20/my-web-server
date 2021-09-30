@@ -14,9 +14,9 @@ router.get(
 	notifyCommentController.setIdToGetNotifyComment,
 	notifyCommentController.getNotifyCommentById
 );
-//GET api/users/notify-comments/me/search?
+//GET api/users/notify-comments/me/limit/:limit/page/:page
 router.get(
-	'/me/page/:page/limit/:limit',
+	'/me/limit/:limit/page/:page',
 	notifyCommentController.setIdToGetNotifyComment,
 	notifyCommentController.getNotifyCommentByIdSearch
 );
