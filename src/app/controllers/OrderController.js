@@ -92,9 +92,6 @@ const emitStateNotifyOrder = async (req, doc) => {
 	const notifyOrder = {
 		state: doc.state,
 		totalPayment: doc.totalPayment,
-		//id of who called API request(admin - Sender)
-		senderName: req.user.name,
-		senderAvatar: req.user.avatar,
 	};
 	//userId of order is: Receiver
 	if (req.app.socketIds[doc.userId]) {
