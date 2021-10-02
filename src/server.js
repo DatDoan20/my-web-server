@@ -45,13 +45,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 //-----------------MIDDLEWARE
 // Implement CORS
 // Access-Control-Allow-Origin * in header: GET, POST
-app.use(cors());
+// app.use(cors());
 //Specific otherDomain use api
 //app.use(cors({
 // 	origin: 'hppts://www.ortherdomain.com'
 // }));
 // DELETE, PATCH
-app.options('*', cors());
+// app.options('*', cors());
 //Only use DELETE, PATCH with below api
 //app.options('/api/users/:id', cors());
 

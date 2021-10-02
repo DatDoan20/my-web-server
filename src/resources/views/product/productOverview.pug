@@ -39,8 +39,8 @@ block content
 						each item in product.color.split(',')
 							- const items = item.split('-')
 							div(style='overflow: hidden; margin-top: 0.5em;')
-								p(style=`height: 25px;width: 25px;background-color: #${items[1]};border-radius: 50%;display: inline-block; float: left;`)
-								p(style='float: right;')= items[0]
+								p(style=`height: 25px;width: 25px;background-color: #${items[1].trim()};border-radius: 50%;display: inline-block; float: left;`)
+								p(style='float: right;')= items[0].trim()
 					td(data-th='Rating' style='text-align:center;')= `${product.ratingsAverage}⭐/${product.ratingsQuantity}✔️`
 					td(data-th='State')
 						if(product.outOfStock)

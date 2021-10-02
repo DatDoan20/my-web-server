@@ -163,7 +163,7 @@ exports.createOneDocument = (Model, nameEventEmit = undefined) =>
 		} else if (nameEventEmit === 'Comment') {
 			await emitSocketNotifyComment(nameEventEmit, req, doc);
 		}
-		returnResultOfRequest(res, 201);
+		returnResultOfRequest(res, 201, doc);
 	});
 
 //-------------------------------------------------UPDATE
