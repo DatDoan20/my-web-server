@@ -4,7 +4,7 @@ const factory = require('./HandlerFactory');
 const Email = require('../../utils/email');
 const NotifyOrder = require('../models/NotifyOrder');
 const Response = require('../../utils/response');
-
+const appError = require('../handler/appError');
 // GET /api/orders/me (query to get all order of current user)
 exports.setOrderIdOfUser = catchAsync(async (req, res, next) => {
 	if (!req.query.userId) {
@@ -127,7 +127,7 @@ exports.sendEmailInfoOrder = catchAsync(async (req, res, next) => {
 		Response.basicRequestResult(res, 200, 'email was sent');
 		// res.status(200).json({ status: 'success', message: 'email was sent' });
 	} else {
-		Response.basicRequestResultErr(res, 500, 'send email failed');
+		return next(new appError('send email failed', 500));
 		// res.status(500).json({ status: 'error', message: 'send email failed' });
 	}
 });
