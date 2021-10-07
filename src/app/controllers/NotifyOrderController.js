@@ -28,7 +28,7 @@ exports.restoreNotifyOrder = catchAsync(async (req, res, next) => {
 	Response.basicRequestResult(res, 200, 'Restore notify order successfully');
 });
 
-// GET api/users/notify-orders/me (user / admin)
+// GET api/users/notify-orders/me (admin)
 exports.setIdToGetNotifyOrder = catchAsync(async (req, res, next) => {
 	req.params.id = req.user._id;
 	next();
@@ -49,7 +49,7 @@ exports.getNotifyOrderById = catchAsync(async (req, res, next) => {
 		.sort('-updatedAt');
 	Response.simpleRequestResult(res, 200, notifyOrders);
 });
-// GET api/users/notify-orders/me/limit/:limit/page/:page (user / admin)
+// GET api/users/notify-orders/me/limit/:limit/page/:page (user)
 exports.getNotifyOrderByIdSearch = catchAsync(async (req, res, next) => {
 	const page = req.params.page * 1 || 1;
 	const limit = req.params.limit * 1 || 20;
@@ -60,11 +60,7 @@ exports.getNotifyOrderByIdSearch = catchAsync(async (req, res, next) => {
 	})
 		//get first item/value in array match with query condition
 		.select({ 'receiverIds.$': 1 })
-		.select('updatedAt orderId')
-		.populate({
-			path: 'orderId',
-			select: 'totalPayment state',
-		})
+		.select('updatedAt state totalPayment')
 		.sort('-updatedAt')
 		.skip(skip)
 		.limit(limit);

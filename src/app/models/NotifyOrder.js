@@ -4,7 +4,13 @@ var mongooseDelete = require('mongoose-delete');
 
 const NotifyOrder = new Schema(
 	{
+		//orderId to ref Order to get info show admin side, user not populate orderId here
 		orderId: { type: mongoose.Schema.ObjectId, ref: 'Order', required: true },
+
+		//state here to show client side when order was changed state,
+		state: { type: String },
+		totalPayment: { type: Number },
+
 		receiverIds: [
 			new Schema(
 				{

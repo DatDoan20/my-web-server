@@ -72,10 +72,11 @@ exports.updateStateOrder = catchAsync(async (req, res, next) => {
 		return next(new appError('No document found with that ID', 404));
 	}
 
-	// default notifyOrder created with receiver is Admin, we need
-	//create notify for user to load notify client side
+	//notifyOrder send to user when admin update
 	const body = {
 		orderId: doc._id,
+		totalPayment: doc.totalPayment,
+		state: doc.state,
 		receiverIds: [
 			{
 				receiverId: doc.userId,
@@ -83,19 +84,15 @@ exports.updateStateOrder = catchAsync(async (req, res, next) => {
 			},
 		],
 	};
-	await NotifyOrder.create(body);
-	await emitStateNotifyOrder(req, doc);
+	const notifyOrder = await NotifyOrder.create(body);
+	await emitStateNotifyOrder(req, notifyOrder);
 	Response.basicRequestResult(res, 200, 'Update state order successfully');
 });
-const emitStateNotifyOrder = async (req, doc) => {
-	//Custom info notifyOrder and send it to user but not send fully "doc"(order)
-	const notifyOrder = {
-		state: doc.state,
-		totalPayment: doc.totalPayment,
-	};
+const emitStateNotifyOrder = async (req, notifyOrder) => {
 	//userId of order is: Receiver
-	if (req.app.socketIds[doc.userId]) {
-		req.app.io.to(req.app.socketIds[doc.userId].socketId).emit(`stateOrder`, notifyOrder);
+	const userId = notifyOrder.receiverIds[0].receiverId;
+	if (req.app.socketIds[userId]) {
+		req.app.io.to(req.app.socketIds[userId].socketId).emit(`stateOrder`, notifyOrder);
 	}
 };
 //GET	admin/orders/send-email/:idOrder/:actionType

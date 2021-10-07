@@ -132,7 +132,7 @@ const emitSocketNotifyOrder = async (nameEventEmit, req, createdOrder) => {
 	var receiverItem = { receiverId: '60d8830a20ec084240e84ed7', readState: false };
 	receiverIds.push(receiverItem);
 
-	// (2) body notify order
+	// (2) body notify order, receiver is admin, not need filed state and totalPayment
 	var newBodyNotifyOrder = {
 		orderId: createdOrder._id,
 		receiverIds: receiverIds,
@@ -158,12 +158,20 @@ exports.createOneDocument = (Model, nameEventEmit = undefined) =>
 		var doc = await Model.create(req.body);
 		if (nameEventEmit === 'Order') {
 			await emitSocketNotifyOrder(nameEventEmit, req, doc);
+			var docCustom = {
+				addressDelivery: doc.addressDelivery,
+				totalPayment: doc.totalPayment,
+			};
+			returnResultOfRequest(res, 201, docCustom);
 		} else if (nameEventEmit === 'Review') {
 			await emitSocketNotifyReview(nameEventEmit, req, doc);
+			returnResultOfRequest(res, 201, doc);
 		} else if (nameEventEmit === 'Comment') {
 			await emitSocketNotifyComment(nameEventEmit, req, doc);
+			returnResultOfRequest(res, 201, doc);
+		} else {
+			returnResultOfRequest(res, 201, doc);
 		}
-		returnResultOfRequest(res, 201, doc);
 	});
 
 //-------------------------------------------------UPDATE
