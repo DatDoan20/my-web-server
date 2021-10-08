@@ -9,19 +9,25 @@ router.use(authController.protectUsers);
 router.get('/search', notifyOrderController.getAllNotifyOrderWithQuery);
 
 //GET api/users/notify-orders/me
-router.get(
-	'/me',
-	notifyOrderController.setIdToGetNotifyOrder,
-	notifyOrderController.getNotifyOrderById
-);
+router.get('/me', notifyOrderController.setIdUserToParam, notifyOrderController.getNotifyOrderById);
 // GET api/users/notify-orders/me/limit/:limit/page/:page (user / admin)
 router.get(
 	'/me/limit/:limit/page/:page',
-	notifyOrderController.setIdToGetNotifyOrder,
+	notifyOrderController.setIdUserToParam,
 	notifyOrderController.getNotifyOrderByIdSearch
 );
 //PATCH api/users/notify-orders/:id
 router.patch('/:id', notifyOrderController.checkReadNotifyOrder);
+
+//PATCH api/users/notify-orders/me/all
+router.patch(
+	'/me/all',
+	notifyOrderController.setIdUserToParam,
+	notifyOrderController.checkReadAllNotifyOrder
+);
+
+// DELETE api/users/notify-orders/me/all/force
+router.delete('/me/all/force', notifyOrderController.deleteAllNotifyOrder);
 
 // DELETE api/users/notify-orders/:id/soft (orderId)
 router.delete('/:id/soft', notifyOrderController.deleteNotifyOrder);
