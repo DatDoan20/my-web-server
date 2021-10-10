@@ -99,10 +99,10 @@ const emitSocketNotifyComment = async (nameEventEmit, req, createdComment) => {
 			}
 		}
 	});
-	console.log(receiverIds);
+	// console.log(receiverIds);
 
 	//add receiver is admin to admin receive this comment
-	receiverIds.push({ receiverId: '60d8830a20ec084240e84ed7', readState: false });
+	// receiverIds.push({ receiverId: '60d8830a20ec084240e84ed7', readState: false });
 
 	// (4) Ok, create notifyComment
 	var bodyNewNotifyComment = { commentId: createdComment._id, receiverIds: receiverIds };
@@ -117,7 +117,7 @@ const emitSocketNotifyComment = async (nameEventEmit, req, createdComment) => {
 	newNotifyComment.receiverIds.forEach((receiverItem) => {
 		//receiver have to connecting with server(Online)
 		if (req.app.socketIds[receiverItem.receiverId]) {
-			//console.log(req.app.socketIds[receiverItem.receiverId]);
+			// console.log(req.app.socketIds[receiverItem.receiverId]);
 			req.app.io
 				.to(req.app.socketIds[receiverItem.receiverId].socketId)
 				.emit(`new${nameEventEmit}`, newNotifyComment);
@@ -165,10 +165,10 @@ exports.createOneDocument = (Model, nameEventEmit = undefined) =>
 			returnResultOfRequest(res, 201, docCustom);
 		} else if (nameEventEmit === 'Review') {
 			await emitSocketNotifyReview(nameEventEmit, req, doc);
-			returnResultOfRequest(res, 201, doc);
+			returnResultOfRequest(res, 201);
 		} else if (nameEventEmit === 'Comment') {
 			await emitSocketNotifyComment(nameEventEmit, req, doc);
-			returnResultOfRequest(res, 201, doc);
+			returnResultOfRequest(res, 201);
 		} else {
 			returnResultOfRequest(res, 201, doc);
 		}

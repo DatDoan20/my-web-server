@@ -16,26 +16,23 @@ router.get(
 	notifyOrderController.setIdUserToParam,
 	notifyOrderController.getNotifyOrderByIdSearch
 );
-//PATCH api/users/notify-orders/:id
-router.patch('/:id', notifyOrderController.checkReadNotifyOrder);
 
-//PATCH api/users/notify-orders/me/all
-router.patch(
-	'/me/all',
-	notifyOrderController.setIdUserToParam,
-	notifyOrderController.checkReadAllNotifyOrder
-);
+//PATCH api/users/notify-orders/:id/read/me
+router.patch('/:id/read/me', notifyOrderController.checkReadNotifyOrder);
+
+//PATCH api/users/notify-orders/me/read/all
+router.patch('/me/read/all', notifyOrderController.checkReadAllNotifyOrder);
 
 // DELETE api/users/notify-orders/me/all/force
-router.delete('/me/all/force', notifyOrderController.deleteAllNotifyOrder);
+router.delete('/me/all/force', notifyOrderController.destroyAllNotifyOrder);
 
 // DELETE api/users/notify-orders/:id/soft (orderId)
 router.delete('/:id/soft', notifyOrderController.deleteNotifyOrder);
 
-//PATCH (restore notify order ) api/users/notify-orders/restore/:id
-router.patch('/restore/:id', notifyOrderController.restoreNotifyOrder);
-
 // DELETE api/users/notify-orders/:id (notifyCommentId)
 router.delete('/:id/force', notifyOrderController.destroyNotifyOrder);
+
+//PATCH (restore notify order ) api/users/notify-orders/restore/:id
+router.patch('/restore/:id', notifyOrderController.restoreNotifyOrder);
 
 module.exports = router;

@@ -53,13 +53,13 @@ function handleDeleteComment(commentId) {
 					const alertWaiting = showAlertWaiting('Comment is deleted');
 					var resultDeleteComment = await axios({
 						method: 'DELETE',
-						url: `http://127.0.0.1:3000/api/users/reviews/comment/${commentId}/force`,
+						url: `/api/users/reviews/comment/${commentId}/force`,
 					});
 
 					if (resultDeleteComment.data.status === 'success') {
 						var resultDeleteNotifyComment = await axios({
 							method: 'DELETE',
-							url: `http://127.0.0.1:3000/api/users/notify-comments/${commentId}/force`,
+							url: `/api/users/notify-comments/${commentId}/force`,
 						});
 						alertWaiting.close();
 						if (resultDeleteNotifyComment.data.status === 'success') {

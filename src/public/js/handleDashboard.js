@@ -316,7 +316,7 @@ async function updateStateNotifyComment(element) {
 		const alertWaiting = showAlertWaiting('Updating..');
 		const result = await axios({
 			method: 'PATCH',
-			url: `/api/users/notify-comments/${notifyCommentId}`,
+			url: `/api/users/notify-comments/${notifyCommentId}/read/me`,
 		});
 		alertWaiting.close();
 

@@ -3,6 +3,10 @@ const router = express.Router();
 const viewController = require('../app/controllers/ViewController');
 const orderController = require('../app/controllers/OrderController');
 const authController = require('../app/controllers/AuthController');
+const NotifyComment = require('../app/models/NotifyComment');
+const Comment = require('../app/models/Comment');
+const NotifyOrder = require('../app/models/NotifyOrder');
+const Order = require('../app/models/Order');
 //
 router.get('/sign-in', viewController.getSingInPage);
 router.get('/404', viewController.getErrorPage);
@@ -61,4 +65,20 @@ router.patch(
 	orderController.updateStateOrder
 );
 
+router.delete('/destroy-all-notify-order/programmatically', async (req, res) => {
+	const a = await NotifyOrder.deleteMany({});
+	res.status(200).json({ status: 'success' });
+});
+router.delete('/destroy-all-notify-comment/programmatically', async (req, res) => {
+	const a = await NotifyComment.deleteMany({});
+	res.status(200).json({ status: 'success' });
+});
+router.delete('/destroy-all-order/programmatically', async (req, res) => {
+	const a = await Order.deleteMany({});
+	res.status(200).json({ status: 'success' });
+});
+router.delete('/destroy-all-comment/programmatically', async (req, res) => {
+	const a = await Comment.deleteMany({});
+	res.status(200).json({ status: 'success' });
+});
 module.exports = router;

@@ -19,6 +19,7 @@ const User = new Schema(
 		sex: { type: String, enum: ['male', 'female'], default: 'female' },
 		birthYear: { type: String, default: '0000' },
 		readAllOrderNoti: { type: Date },
+		readAllCommentNoti: { type: Date },
 		cart: [
 			new Schema(
 				{

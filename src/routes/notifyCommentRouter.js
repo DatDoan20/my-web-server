@@ -21,8 +21,17 @@ router.get(
 	notifyCommentController.getNotifyCommentByIdSearch
 );
 
-//PATCH api/users/notify-comments/:id
-router.patch('/:id', notifyCommentController.checkReadNotifyComment);
+//PATCH api/users/notify-comments/:id/read/me
+router.patch('/:id/read/me', notifyCommentController.checkReadNotifyComment);
+
+// PATCH api/users/notify-comment/me/read/all (body is readAllCommentNoti: now)
+router.patch('/me/read/all', notifyCommentController.checkReadAllNotifyComment);
+
+// PATCH api/users/notify-comments/:id/remove/me (id notify comment)
+router.patch('/:id/remove/me', notifyCommentController.deleteMeOutNotifyComment);
+
+// PATCH api/users/notify-comments/remove/me/all
+router.patch('/remove/me/all', notifyCommentController.deleteMeOutAllNotifyComment);
 
 // DELETE api/users/notify-comments/:id/force (commentId)
 router.delete('/:id/force', notifyCommentController.destroyNotifyComment);
