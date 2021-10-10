@@ -29,7 +29,7 @@ router.delete('/me/all/force', notifyOrderController.destroyAllNotifyOrder);
 // DELETE api/users/notify-orders/:id/soft (orderId)
 router.delete('/:id/soft', notifyOrderController.deleteNotifyOrder);
 
-// DELETE api/users/notify-orders/:id (notifyCommentId)
+// DELETE api/users/notify-orders/:id/force (notifyCommentId)
 router.delete('/:id/force', notifyOrderController.destroyNotifyOrder);
 
 //PATCH (restore notify order ) api/users/notify-orders/restore/:id

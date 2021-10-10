@@ -120,9 +120,9 @@ exports.checkReadNotifyComment = catchAsync(async (req, res, next) => {
 	// res.status(200).json({ status: 'success', message: 'Update successfully' });
 });
 
-// PATCH api/users/notify-comment/me/read/all (body is readAllCommentNoti: now)
+// PATCH api/users/notify-comments/me/read/all (body is readAllCommentNoti: now)
 exports.checkReadAllNotifyComment = catchAsync(async (req, res, next) => {
-	const doc = await User.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true });
+	const doc = await User.findOneAndUpdate({ _id: req.user._id }, req.body, { new: true });
 	if (!doc) {
 		return next(new appError('No document found with that ID', 404));
 	}

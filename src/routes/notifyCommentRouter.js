@@ -24,7 +24,7 @@ router.get(
 //PATCH api/users/notify-comments/:id/read/me
 router.patch('/:id/read/me', notifyCommentController.checkReadNotifyComment);
 
-// PATCH api/users/notify-comment/me/read/all (body is readAllCommentNoti: now)
+// PATCH api/users/notify-comments/me/read/all (body is readAllCommentNoti: now)
 router.patch('/me/read/all', notifyCommentController.checkReadAllNotifyComment);
 
 // PATCH api/users/notify-comments/:id/remove/me (id notify comment)

@@ -18,8 +18,8 @@ const User = new Schema(
 		passwordResetExpires: { type: Date },
 		sex: { type: String, enum: ['male', 'female'], default: 'female' },
 		birthYear: { type: String, default: '0000' },
-		readAllOrderNoti: { type: Date },
-		readAllCommentNoti: { type: Date },
+		readAllOrderNoti: { type: Date, default: new Date() },
+		readAllCommentNoti: { type: Date, default: new Date() },
 		cart: [
 			new Schema(
 				{
