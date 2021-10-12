@@ -165,6 +165,9 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 //change info consists of: name, email, birthYear, sex
 exports.updateMe = catchAsync(async (req, res, next) => {
 	const user = await User.findById(req.user._id);
+	// console.log(req.body);
+	// console.log(req.file);
+	// return;
 	user.name = req.body.name;
 	user.birthYear = req.body.birthYear;
 	user.sex = req.body.sex;
@@ -172,7 +175,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 		user.avatar = req.file.filename;
 	}
 	await user.save();
-	returnResultOfRequest(res, 200, 'Update information successfully');
+	returnResultOfRequest(res, 200, 'Update information successfully', user);
 });
 //PATCH api/users/update-email
 exports.updateEmail = catchAsync(async (req, res, next) => {

@@ -7,6 +7,7 @@ const app = express();
 app.enable('trust proxy');
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
+const multer = require('multer');
 
 const methodOverride = require('method-override');
 const mainRouter = require('./routes/mainRouter.js');
@@ -45,13 +46,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 //-----------------MIDDLEWARE
 // Implement CORS
 // Access-Control-Allow-Origin * in header: GET, POST
-// app.use(cors());
+app.use(cors());
 //Specific otherDomain use api
 //app.use(cors({
 // 	origin: 'hppts://www.ortherdomain.com'
 // }));
 // DELETE, PATCH
-// app.options('*', cors());
+app.options('*', cors());
 //Only use DELETE, PATCH with below api
 //app.options('/api/users/:id', cors());
 
