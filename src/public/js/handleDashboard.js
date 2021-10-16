@@ -336,7 +336,7 @@ async function updateStateNotifyOrder(elementOrder) {
 		const notifyOrderId = elementOrder.data('notify-id');
 		const result = await axios({
 			method: 'PATCH',
-			url: `/api/users/notify-orders/${notifyOrderId}`,
+			url: `/api/users/notify-orders/${notifyOrderId}/read/me`,
 		});
 		if (result.data.status === 'success') {
 			console.log('check notify order read success');

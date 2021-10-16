@@ -64,7 +64,7 @@ handleDuplicateFieldsDB = (err) => {
 	value = value.replace(/{|}|"/g, '');
 
 	if (value.split(':')[0] === 'phone') {
-		value = 'Số điện thoại ' + value.substring(value.indexOf(':'), value.length - 1);
+		value = 'Thất bại: Số điện thoại ' + value.substring(value.indexOf(':'), value.length - 1);
 	}
 	const message = `${value} đã được sử dụng, vui lòng kiểm tra lại`;
 	return new appError(message, 400);

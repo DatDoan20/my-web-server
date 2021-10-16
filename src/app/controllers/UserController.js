@@ -175,7 +175,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 		user.avatar = req.file.filename;
 	}
 	await user.save();
-	returnResultOfRequest(res, 200, 'Update information successfully', user);
+	returnResultOfRequest(res, 200, 'Update information successfully');
 });
 //PATCH api/users/update-email
 exports.updateEmail = catchAsync(async (req, res, next) => {

@@ -13,7 +13,7 @@ const limiter = (time, limitRequest) => {
 		message: {
 			//return json, this only return: status and message
 			status: 'error',
-			message: 'Too many requests from this IP, please try again in an hour',
+			message: 'LIMIT: Too many requests from this IP, please try again in an hour',
 		},
 	});
 };
