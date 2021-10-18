@@ -1,29 +1,43 @@
-async function showAlert(icon, title, text) {
-	await Swal.fire({
-		position: 'center',
-		icon: icon,
-		title: title,
-		text: text,
-		showConfirmButton: false,
-		timer: 1500,
-	});
-}
-const infoFormProduct = document.querySelector('.form-info-product');
-//set Event
+import {
+	showAlertWaiting,
+	showAlertSuccess,
+	showAlertConfirmAction,
+	catchAsyncAction,
+} from './handlerActionGeneric.js';
+
+import {
+	EventCategoryAndType,
+	checkCurrentCategoryAndType,
+} from './handleCategoryAndTypeProduct.js';
+import { capitalize } from './handleString.js';
+
+//handle category and type list
+EventCategoryAndType();
+checkCurrentCategoryAndType();
+
+// form
+const infoFormProduct = document.querySelector('.form-info-product-update');
+//set Event, POST use URLSEARCHPARAMS/ PATCH use FORMDATA to upload image
 infoFormProduct.addEventListener('submit', async (e) => {
 	e.preventDefault();
 	const color = document.getElementById('color').value.replace(/\s+/g, ' ').trim();
 	const size = document.getElementById('size').value.replace(/\s+/g, ' ').trim();
+	const category = $('#category').val();
+	const type = $('#type').val();
+	const name = capitalize(document.getElementById('name').value.trim());
+	const description = capitalize(document.getElementById('description').value.trim());
+	const material = capitalize(document.getElementById('material').value.trim());
+	const pattern = capitalize(document.getElementById('pattern').value.trim());
 	var formData = new FormData();
-	formData.append('name', document.getElementById('name').value.trim());
-	formData.append('description', document.getElementById('description').value.trim());
+	formData.append('name', name);
+	formData.append('description', description);
 	formData.append('price', document.getElementById('price').value.trim());
 	formData.append('brand', document.getElementById('brand').value.trim());
-	formData.append('material', document.getElementById('material').value.trim());
-	formData.append('pattern', document.getElementById('pattern').value.trim());
+	formData.append('material', material);
+	formData.append('pattern', pattern);
 	formData.append('discount', document.getElementById('discount').value.trim());
-	formData.append('type', document.getElementById('type').value.trim());
-	formData.append('category', document.getElementById('category').value.trim());
+	formData.append('type', type);
+	formData.append('category', category);
 	formData.append('color', color);
 	formData.append('size', size);
 
@@ -47,15 +61,8 @@ infoFormProduct.addEventListener('submit', async (e) => {
 	}
 	//Ok update here
 	var resultUpdate;
-	try {
-		const alertWaiting = Swal.fire({
-			title: 'Product is being updated..., Please wait a moment, Do not dismiss!',
-			icon: 'warning',
-			showConfirmButton: false,
-			allowOutsideClick: false,
-			allowEscapeKey: false,
-			closeOnClickOutside: false,
-		});
+	catchAsyncAction(async function () {
+		const alertWaiting = showAlertWaiting('Product is being updated');
 		resultUpdate = await axios({
 			method: 'PATCH',
 			url: `http://127.0.0.1:3000/api/products/${$('#submit').data('id')}`,
@@ -63,11 +70,8 @@ infoFormProduct.addEventListener('submit', async (e) => {
 		});
 		if (resultUpdate.data.status === 'success') {
 			alertWaiting.close();
-			await showAlert('success', 'Update successfully!', 'Page will automatically reloaded');
+			await showAlertSuccess('Update successfully!', 'Page will automatically reloaded');
 			location.reload();
 		}
-	} catch (err) {
-		await showAlert('error', 'Oops...!', 'Something went wrong!, please try again later.');
-		location.reload();
-	}
+	});
 });

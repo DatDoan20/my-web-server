@@ -3,7 +3,7 @@ const router = express.Router();
 const productController = require('../app/controllers/ProductController');
 const authController = require('../app/controllers/AuthController');
 const reviewController = require('../app/controllers/ReviewController');
-const handlerImage = require('../app/controllers/HandlerImage');
+const handleImg = require('../app/controllers/HandlerImage');
 // Protect all routes after this middleware
 router.use(authController.protectUsers);
 
@@ -22,8 +22,8 @@ router.post('/', productController.createProduct);
 // update product api/products/:id
 router.patch(
 	'/:id',
-	handlerImage.uploadImages,
-	handlerImage.resizeImages,
+	handleImg.uploadImages,
+	handleImg.resizeImages,
 	productController.updateProduct
 );
 
@@ -33,6 +33,8 @@ router.delete(
 	productController.setOutOfStockProduct(true),
 	productController.updateProduct
 );
+//delete force product + delete all file img of that product
+router.delete('/:id/force', handleImg.deleteFileImg, productController.destroyProduct);
 //
 router.patch(
 	'/restore/:id',

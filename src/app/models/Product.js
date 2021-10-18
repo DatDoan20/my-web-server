@@ -6,7 +6,7 @@ var mongooseDelete = require('mongoose-delete');
 const Product = new Schema(
 	{
 		name: { type: String, maxLength: 255, unique: true, required: true },
-		description: { type: String, maxLength: 600, required: true },
+		description: { type: String, maxLength: 1000, required: true },
 		images: { type: [String] },
 		imageCover: { type: String },
 		slug: { type: String, slug: 'name', unique: true },

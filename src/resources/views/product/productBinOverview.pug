@@ -3,21 +3,16 @@ extends ../dashboard
 block content   
 	.body-tb-generic
 		h1.h1-tb-generic= `Products👚 Bin 🗑️ ${products.length}`
-		.flex-shrink-0.px-2.py-4.space-y-2
-			a.flex.items-center.justify-center.w-full.px-4.py-2.text-sm.text-white.rounded-md.bg-primary(href='/admin/products/create', target='_blank' style='width:80px; height:30px;' class='hover:bg-primary-dark focus:outline-none focus:ring focus:ring-primary-dark focus:ring-offset-1 focus:ring-offset-white dark:focus:ring-offset-dark') Thêm
 		table.rwd-table
 			tr
-				th(style='width:13%') Image
-				th(style='width:13%') Name
-				th(style='width:30%') Description
-				th(style='width:5%') Price
-				th(style='width:5%') Size
-				th(style='width:5%') Color
-				th(style='width:15%') Brand-Material-Pattern
-				th(style='width:2%') %
-				th(style='width:2%') Rating
-				th(style='width:5%') State
-				th(style='width:5%') Updated At
+				th(style='width:15%') Image
+				th(style='width:15%') Name...
+				th(style='width:32%') Description...
+				th(style='width:23%') Brand-Material-Pattern-Color-Size-Discount-Prize
+				th(style='width:2%') Color
+				th(style='width:5%') Rating
+				th(style='width:2%') State
+				th(style='width:2%') Updated At
 					br 
 					p (day/month/year)
 			each product in products
@@ -25,12 +20,16 @@ block content
 					td(data-th='Image')
 						img(src=`/img/products/${product._id}/${product.imageCover}` style='width:300px; height:200px;')
 					td(data-th='Name')= product.name
-					td(data-th='Description')= product.description
-					td(data-th='Price')= `${(product.price/1000).toFixed(3)}đ`
-					td(data-th='Size')= product.size
+					td(data-th='Description')
+						div(style='height:250px; overflow:hidden;')= product.description
+					td(data-th='Info')
+						p=`*Brand: ${product.brand}`
+						p=`*Material: ${product.material}`
+						p=`*Pattern: ${product.pattern}`
+						p= `*Size: ${product.size}`
+						p= `*Discount: ${product.discount+'%'}`
+						p= `*Price: ${(product.price/1000).toFixed(3)}đ`
 					td(data-th='Color')= product.color
-					td(data-th='Info')= `${product.brand} - ${product.material} - ${product.pattern}`
-					td(data-th='Discount' style='text-align:center')= product.discount
 					td(data-th='Rating')= `${product.ratingsAverage}⭐/${product.ratingsQuantity}✔️`
 					td(data-th='State')
 						if(product.outOfStock)
@@ -39,8 +38,8 @@ block content
 							img(src='/icon/left-stock.png')
 					td(data-th='UpdatedAt')= product.updatedAt.toLocaleString('vi-vn')
 					td
-						a.btnRestore(href='#' title='Restore' style='text-align:center' data-price=`${product.price}` data-id=`${product._id}`) Restore(In stock)⤴️
-	script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
-	script(src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js')
-	script(src='//cdn.jsdelivr.net/npm/sweetalert2@11')
-	script(src='/js/restoreProduct.js')
+						a.link.btnRestore(href='#' title='Restore' style='text-align:center' data-price=`${product.price}` data-name=`${product.name}` data-id=`${product._id}`) Restore(In stock)⤴️
+					td
+						a.link.btnDelete(href='#' title='Delete' style='text-align:center' data-price=`${product.price}` data-name=`${product.name}` data-id=`${product._id}`) Delete❌
+block extraScript
+	script(src='/js/handleProductBin.js' type='module')

@@ -10,9 +10,6 @@ router.use(authController.protectUsers);
 //GET users/reviews/search?productId=...
 router.get('/search', reviewController.getAllReviewWithQuery);
 
-//POST
-router.post('/:productId', reviewController.setProductIdAndUserId, reviewController.createReview);
-
 //PATCH
 router.patch('/:id', reviewController.updateReview);
 
@@ -22,10 +19,19 @@ router.post('/:id/comment', commentController.setCommentInfo, commentController.
 
 //delete force
 router.delete('/comment/:id/force', commentController.deleteComment);
-//get comment of review
-router.get('/comments', commentController.getComments);
+//get comment of review  user/reviews/comments
+router.get('/comments/search', commentController.getComments);
 
-//------ADMIN
+//----REVIEW
+//POST ( avoid api jump to post comment -> put API post order here here)
+router.post(
+	'/:productId/:orderId',
+	reviewController.setProductIdAndUserId,
+	reviewController.updateProductInOrder,
+	reviewController.createReview
+);
+
+//-----------------------ADMIN
 router.use(authController.restrictTo('admin'));
 //DELETE :id (reviewId)
 router.delete('/:id', reviewController.destroyReview);

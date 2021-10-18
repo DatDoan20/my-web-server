@@ -4,6 +4,7 @@ const appError = require('../handler/appError');
 const validator = require('validator');
 const jwt = require('jsonwebtoken');
 const Email = require('../../utils/email');
+const Response = require('../../utils/response');
 const crypto = require('crypto');
 const factory = require('./HandlerFactory');
 //----------------------------------------------------------------
@@ -12,46 +13,47 @@ const createToken = (_id) => {
 		expiresIn: process.env.JWT_EXPIRES_IN,
 	});
 };
-const returnResultOfRequest = (res, statusCode, message, data = 'No token returned') => {
-	res.status(statusCode).json({
-		status: 'success',
-		message: message,
-		data: data,
-	});
+// not want return data -> set undefined -> json will not includes data field
+const returnResultOfRequest = (res, statusCode, message, data = undefined) => {
+	return Response.basicRequestResult(res, statusCode, message, data);
 };
-const sendToken = (token, res) => {
+// const returnResultOfRequest = (res, statusCode, message, data = undefined) => {
+// 	res.status(statusCode).json({
+// 		status: 'success',
+// 		message: message,
+// 		data: data,
+// 	});
+// };
+
+const sendToken = (token, req, res) => {
 	const cookieOptions = {
 		expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
 		//not allow any browser to access, modify cookie
 		httpOnly: true,
 	};
-	if (process.env.NODE_ENV === 'production') {
-		// the cookie will only be sent on an encrypted connection. only work in https(production)
-		cookieOptions.secure = true;
-	}
+	// if (req.secure || req.headers('x-forwarded-proto') === 'https') {
+	// 	// the cookie will only be sent on an encrypted connection. only work in https(production)
+	// 	// dont forget set : app.enable('trust proxy'); in server.js
+	// 	cookieOptions.secure = true;
+	// }
 	res.cookie('jwt', token, cookieOptions);
 };
 //----------------------------------------------------------------
 //POST api/users/sing-up
 exports.singUp = catchAsync(async (req, res, next) => {
-	if (!validator.isEmail(req.body.email) || !validator.isMobilePhone(req.body.phone, 'vi-VN')) {
-		return next(new appError('Please provide valid email address or phone!', 400));
+	if (!validator.isMobilePhone(req.body.phone, 'vi-VN')) {
+		return next(new appError('Please provide valid phone!', 400));
 	}
 
 	const newUser = await User.create(req.body);
 
-	//send email welcome
-	//http://127.0.0.1:3000/admin/sing-in
-	await new Email(newUser, `${req.protocal}://${req.get('host')}/admin/sing-in`).sendWelcome();
-
 	//return res for client
-	const token = createToken(newUser._id);
-	sendToken(token, res);
+	// const token = createToken(newUser._id);
+	// sendToken(token, req, res);
 	returnResultOfRequest(
 		res,
 		201,
-		`SingUp successfully with "Email: ${newUser.email}" and "Phone: ${newUser.phone}" and "Name: ${newUser.name}"`,
-		token
+		`SingUp successfully with "Phone: ${newUser.phone}" and "Name: ${newUser.name}"`
 	);
 });
 //----------------------------------------------------------------
@@ -69,8 +71,9 @@ exports.singIn = (roleInput) =>
 			return next(new appError('Incorrect phone or password!'));
 		}
 		const token = createToken(user._id);
-		sendToken(token, res);
-		returnResultOfRequest(res, 200, user.role, token);
+		sendToken(token, req, res);
+		var message = `${user.role}-${user._id}`;
+		returnResultOfRequest(res, 200, message, token);
 	});
 //-----------------------------------------------------------------
 //GET api/users/sing-up
@@ -137,7 +140,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 // GET api/users/me or api/users/:id
 exports.getUser = factory.getOneDocument(User, {
 	path: 'cart.infoProduct',
-	select: 'name discount images price _id',
+	select: 'name discount imageCover  _id',
 });
 exports.getMe = (req, res, next) => {
 	req.params.id = req.user.id;
@@ -162,23 +165,71 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 //change info consists of: name, email, birthYear, sex
 exports.updateMe = catchAsync(async (req, res, next) => {
 	const user = await User.findById(req.user._id);
+	// console.log(req.body);
+	// console.log(req.file);
+	// return;
 	user.name = req.body.name;
 	user.birthYear = req.body.birthYear;
 	user.sex = req.body.sex;
-	user.email = req.body.email;
 	if (req.file) {
 		user.avatar = req.file.filename;
 	}
 	await user.save();
 	returnResultOfRequest(res, 200, 'Update information successfully');
 });
+//PATCH api/users/update-email
+exports.updateEmail = catchAsync(async (req, res, next) => {
+	if (!validator.isEmail(req.body.email)) {
+		return next(new appError('Please provide valid email address !', 400));
+	}
+	const user = await User.findById(req.user._id);
+	user.email = req.body.email;
+	user.stateVerifyEmail = true;
+	// console.log(req.body);
+	await user.save();
+
+	//send email welcome
+	// http://127.0.0.1:3000/admin/sing-in
+	await new Email(user, `${req.protocal}://${req.get('host')}/admin/sign-in`).sendWelcome();
+	returnResultOfRequest(res, 200, 'Update email successfully', user.email);
+});
 //----------------------------------------------------------------
 //PATCH api/users/add-to-cart
 exports.addToCart = catchAsync(async (req, res, next) => {
-	const user = req.user;
-	user.cart = user.cart.concat(req.body.cart);
+	let user = req.user;
+	const cartItem = req.body;
+
+	//find if product is exist in cart? - "haven't check yet"
+	const id = user.cart.findIndex((cartItem) => cartItem.infoProduct == cartItem.infoProduct);
+	if (id !== -1) {
+		returnResultOfRequest(res, 200, 'Product was added to cart of user', user);
+	}
+
+	//product is not exist in cart
+	user.cart.push(cartItem);
 	await user.save();
+	user = await user
+		.populate({ path: 'cart.infoProduct', select: 'name discount imageCover  _id' })
+		.execPopulate();
+
 	returnResultOfRequest(res, 200, 'Add product to cart of user successfully', user);
+});
+//PATCH api/users/delete-product-in-cart
+exports.deleteProductInCart = catchAsync(async (req, res, next) => {
+	let user = req.user;
+	const productId = req.body;
+	// console.log(user.cart.findIndex((cartItem) => cartItem.infoProduct == productId.id));
+	// use == is not care datatype so request is string and datatype in DB is ObjectID
+	user.cart.splice(
+		user.cart.findIndex((cartItem) => cartItem.infoProduct == productId.id),
+		1
+	);
+	await user.save();
+	user = await user
+		.populate({ path: 'cart.infoProduct', select: 'name discount imageCover  _id' })
+		.execPopulate();
+
+	returnResultOfRequest(res, 200, 'remove product in cart of user successfully', user);
 });
 //----------------------------------------------------------------
 //PATCH api/users/add-to-fav

@@ -7,7 +7,6 @@ const Order = new Schema(
 		state: { type: String, default: 'waiting' },
 		costDelivery: { type: Number, default: 0 },
 		totalPrice: { type: Number, required: true },
-		specialOffer: { type: Number, required: true },
 		totalPayment: { type: Number, required: true },
 		paymentMode: { type: String, enum: ['COD', 'Banking'], default: 'COD' },
 
@@ -16,12 +15,13 @@ const Order = new Schema(
 		emailUser: { type: String, required: true },
 		phoneUser: { type: String, required: true },
 		addressDelivery: { type: String, required: true },
+		note: { type: String, default: '' },
 
 		purchasedProducts: [
 			new Schema(
 				{
 					productId: { type: mongoose.Schema.ObjectId, ref: 'Product', required: true },
-					image: { type: String, required: true },
+					imageCover: { type: String, required: true },
 					name: { type: String, required: true },
 					price: { type: Number, required: true },
 					quantity: { type: Number, required: true },
@@ -29,6 +29,7 @@ const Order = new Schema(
 					color: { type: String, required: true },
 					discount: { type: Number, required: true },
 					finalPrice: { type: Number, required: true },
+					stateRating: { type: Boolean, required: true, default: false },
 				},
 				{ _id: false }
 			),

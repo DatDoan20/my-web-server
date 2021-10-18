@@ -51,7 +51,10 @@
 	cursor: default;
 	background-color: #0faf14;
 }
-
+.history-info-group-received {
+	cursor: default;
+	background-color: #555555;
+}
 .history-info-made-name {
 	text-decoration: none;
 }

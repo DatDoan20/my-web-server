@@ -9,18 +9,18 @@ block content
 		.grid.wide
 			.order-history.row
 				.order-history-img
-					img(src='/img/otter.png' style='width:50px; height:50px;' alt='a')
+					img(src=`/img/users/${order.userId.avatar}` style='width:50px; height:50px; border-radius:50%; border:1px solid #555;' alt='avatar' title=`${order.userId.name}`)
 				.order-history-info
 					.history-info-name
 						| Order id: 
-						span.history-info-label.history-info-group-name= `${order._id}`
+						a.history-info-label.history-info-group-name(href=`/admin/orders-detail/${order._id}` target='_blank')= `${order._id}`
 						| 
 						if order.state === 'waiting'
-							span.history-info-label.history-info-group-waiting Chờ xác nhận ⏳
+							span.history-info-label.history-info-group-waiting(state=`${order.state}` id=`state-order-${order._id}`) Chờ xác nhận ⏳
 						else if order.state === 'accepted'
-							span.history-info-label.history-info-group-accepted Đã xác nhận, chờ giao hàng...✔️️
+							span.history-info-label.history-info-group-accepted(state=`${order.state}` id=`state-order-${order._id}`) Đã xác nhận, chờ giao hàng...✔️️
 						else if order.state === 'canceled'
-							span.history-info-label.history-info-group-canceled Đã hủy ❌️️
+							span.history-info-label.history-info-group-canceled(state=`${order.state}` id=`state-order-${order._id}`) Đã hủy ❌
 					each product, index in order.purchasedProducts
 						p= `${index+1}. ${product.name}`
 					div(style='border: 1px solid #000; width:400px;')
@@ -28,17 +28,22 @@ block content
 						if(order.totalPayment > 1000)
 							span.info-need= (order.totalPayment/1000).toFixed(3) + 'đ' 
 						else 
-							span.info-need= `${order.totalPayment}đ`						
+							span.info-need= `${order.totalPayment}đ`
 					p.history-info-quantity Hình thức thanh toán:
 						span.info-need= `${order.paymentMode}`
 					p.history-info-made Ngày đặt:	
 						span.info-need= `${order.createdAt.toLocaleString('vi-vn')}`
-					p.history-info-made Người đặt: 
+					p.history-info-made Người nhận: 
 						span.info-need= `${order.nameUser}`
+					p.history-info-made Địa chỉ: 
+						span.info-need= `${order.addressDelivery}`
+					p.history-info-made Phone: 
+						span.info-need= `${order.phoneUser}`
+					p.history-info-made Email: 
+						span.info-need= `${order.emailUser}`
 					.history-info-btn
 						.flex-shrink-0.px-2.py-4.space-y-2
 							a.btnRestore.flex.items-center.justify-center.w-full.px-4.py-2.text-sm.text-white.rounded-md.bg-primary(href='#',style='width:80px; height:30px;' data-id=`${order._id}` data-total=`${order.totalPayment}` class='hover:bg-primary-dark focus:outline-none focus:ring focus:ring-primary-dark focus:ring-offset-1 focus:ring-offset-white dark:focus:ring-offset-dark') ️Restore⏫
-	script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
-	script(src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js')
-	script(src='//cdn.jsdelivr.net/npm/sweetalert2@11')
-	script(src='/js/restoreOrder.js')
+block extraScript
+	script(src='/js/restoreOrder.js' type='module')
+	

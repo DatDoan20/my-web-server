@@ -26,7 +26,7 @@ body
 								h6.mb-3.text-primary Product info
 							.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
 								.form-group
-									label(for='name') Name
+									label(for='name') Name(tên và tất cả thông tin cần thiết)
 									textarea#name.form-control(name="name", cols="32", rows="1" placeholder='Enter name 225 character' required)
 							.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
 								.form-group
@@ -50,19 +50,26 @@ body
 									input#pattern.form-control(type='text' placeholder='Enter pattern',  name='pattern')
 							.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
 								.form-group
-									label(for='type') Type(áo/quần/...)
-									input#type.form-control(type='text' placeholder='Enter type',  name='type')
+									label(for='type') Type(Loại sản phẩm)
+									//input#type.form-control(type='text' placeholder='Enter type',  name='type')
+									br
+									select#type(name='type')
 							.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
 								.form-group
-									label(for='category') Category(Name/Nữ)
-									input#category.form-control(type='text' placeholder='Enter category', name='category')
+									label(for='category') Category(Nam/Nữ)
+									//input#category.form-control(type='text' placeholder='Enter category', name='category')
+									br
+									select#category(name='category' data-category='nam')
+										option(value='nam') Nam
+										option(value='nu') Nữ
+										option(value='nam-nu') Nam và Nữ
 							.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
 								.form-group
-									label(for='size') Size (L - XKg - Xcm, ...)
+									label(for='size') Size (L: Akg-Bkg Acm-Bcm, ...)
 									textarea#size.form-control(type='size' placeholder='Enter size', name='size' , cols='30', rows='1')
 							.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
 								.form-group
-									label(for='color') Color (Trắng, vàng, ...)
+									label(for='color') Color (Tên màu-mã màu, ...)
 									textarea#color.form-control(type='color' placeholder='Enter color', name='color' , cols="30", rows="1")
 							.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
 								.form-group
@@ -81,21 +88,21 @@ body
 							.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
 								.form-group
 									label(for='imageCover') 
-										u Choose Image Cover for Product:
+										u Choose Image Cover for Product(Ảnh đại diện sản phẩm):
 									input#imageCover(type='file' accept='image/*' name='imageCover' onchange="preview()")
 							.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
 								.form-group
 									label(for='images') 
-										u Choose Images For Product:
+										u Choose Images For Product(Ảnh thông tin sản phẩm):
 									input#images(type='file' accept='image/*' name='images' multiple)
 							.col-xl-12.col-lg-12.col-md-12.col-sm-12.col-12
 								.text-right
-									button#submit.btn.btn-primary(type='submit' name='submit' ) Update
+									button#submit.btn.btn-primary(type='submit' name='submit' ) Create 
 	script(src='https://code.jquery.com/jquery-1.10.2.min.js')
 	script(src='https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js')
 	//-handle click slideShowImg
 	script(src='/js/slideShowImg.js')
-	script(src='/js/createProduct.js')
+	script(src='/js/createProduct.js' type='module')
 	//-lib
 	script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js")
 	script(src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js')

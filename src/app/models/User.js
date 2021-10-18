@@ -7,7 +7,8 @@ const crypto = require('crypto');
 const User = new Schema(
 	{
 		phone: { type: String, unique: true, required: true },
-		email: { type: String, unique: true, lowercase: true, default: '' },
+		email: { type: String, unique: true, lowercase: true, required: true },
+		stateVerifyEmail: { type: Boolean, default: false },
 		name: { type: String, maxLength: 50, required: true },
 		password: { type: String, minLength: 8, required: true },
 		avatar: { type: String, default: 'default.png' },
@@ -17,13 +18,14 @@ const User = new Schema(
 		passwordResetExpires: { type: Date },
 		sex: { type: String, enum: ['male', 'female'], default: 'female' },
 		birthYear: { type: String, default: '0000' },
-
+		readAllOrderNoti: { type: Date, default: new Date() },
+		readAllCommentNoti: { type: Date, default: new Date() },
 		cart: [
 			new Schema(
 				{
 					infoProduct: { type: mongoose.Schema.ObjectId, ref: 'Product' },
 					quantity: { type: Number, required: true },
-					finalPrice: { type: Number },
+					price: { type: Number },
 					size: { type: String, required: true },
 					color: { type: String, required: true },
 				},
@@ -93,7 +95,7 @@ User.methods.createPasswordResetToken = function () {
 	this.passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
 
 	//10 minutes, * this line is assign value but not really update document-> need to save it
-	this.passwordResetExpires = Date.now() + 60 * 60 * 1000;
+	this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
 	return resetToken;
 };
 

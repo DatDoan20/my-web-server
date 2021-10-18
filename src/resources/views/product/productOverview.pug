@@ -1,105 +1,56 @@
 extends ../dashboard 
 
 block content   
-    .body-tb-generic
-        h1.h1-tb-generic= `Product ( ${products.length} )`
-        img(src='/icon/icon-product.png' style='width:50px; height:50px; margin-left: auto; margin-right: auto;')
-        .flex-shrink-0.px-2.py-4.space-y-2
-            a.flex.items-center.justify-center.w-full.px-4.py-2.text-sm.text-white.rounded-md.bg-primary(href='/admin/products/create', target='_blank' style='width:80px; height:30px;' class='hover:bg-primary-dark focus:outline-none focus:ring focus:ring-primary-dark focus:ring-offset-1 focus:ring-offset-white dark:focus:ring-offset-dark') Thêm
-        table.rwd-table(style='width:100%')
-            tr
-                th(style='width:13%') Image
-                th(style='width:13%') Name
-                th(style='width:30%') Description
-                th(style='width:5%') Price
-                th(style='width:5%') Size
-                th(style='width:5%') Color
-                th(style='width:15%') Brand-Material-Pattern
-                th(style='width:2%') %
-                th(style='width:2%') Rating
-                th(style='width:5%') State
-                th(style='width:5%') Updated At
-                    br 
-                    p (day/month/year)
-            each product in products
-                tr
-                    td(data-th='Image')
-                        img(src=`/img/products/${product._id}/${product.imageCover}` style='width:250px; height:165px; border-radius:5px;')
-                    td(data-th='Name')= product.name
-                    td(data-th='Description')= product.description
-                    td(data-th='Price')= `${(product.price/1000).toFixed(3)}đ`
-                    td(data-th='Size')= product.size
-                    td(data-th='Color')= product.color
-                    td(data-th='Info')
-                        p=`B: ${product.brand}`
-                        p=`M: ${product.material}`
-                        p=`P: ${product.pattern}`
-                    td(data-th='Discount' style='text-align:center')= product.discount+'%'
-                    td(data-th='Rating')= `${product.ratingsAverage}⭐/${product.ratingsQuantity}✔️`
-                    td(data-th='State')
-                        if(product.outOfStock)
-                            img(src='/icon/out-of-stock.png')
-                        else 
-                            img(src='/icon/left-stock.png')
-                    td(data-th='UpdatedAt')= product.updatedAt.toLocaleString('vi-vn')
-                    td
-                        a.btnDelete(href='#' title='Delete' style='text-align:center' data-name=`${product.name}` data-id=`${product._id}`) ❎
-                    td
-                        a#btnEditProduct(href=`/admin/products/${product.slug}` title='Edit' style='text-align:center') 🖊️
-    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
-    script(src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js')
-    script(src='//cdn.jsdelivr.net/npm/sweetalert2@11')
-    script.
-        var btnDelete = $('.btnDelete')
-        btnDelete.click(function(e) {
-            e.preventDefault()
-            Swal.fire({
-                title: 'Are you sure? (this action will make this product out of stock)',
-                text: $(this).data('name'),
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!',               
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    deleteProduct($(this).data('id'));
-                }
-            })
-        })
-        async function deleteProduct(id){
-             try{
-                const alertWaiting = Swal.fire({
-                    title: 'Deleting..., Please wait a moment, Do not dismiss!',
-                    icon: 'warning',
-                    showConfirmButton: false,
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                    closeOnClickOutside: false,
-                })
-                const res = await axios({
-                    method: 'DELETE',
-                    url: `http://127.0.0.1:3000/api/products/${id}`                    
-                })
-
-                if(res.data.status === 'success'){
-                    alertWaiting.close();
-                    await Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: 'Deleted!',
-                        text: 'Your product has been deleted.',
-                        showConfirmButton: false,
-                        timerProgressBar: true,
-                        timer: 1500,
-                    });  
-                    location.reload()
-                }
-            }catch(err){
-                await Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Something went wrong, can not sing out now! please try again',
-                })
-            }
-        }
+	.body-tb-generic
+		h1.h1-tb-generic= `Product ( ${products.length} )`
+		img(src='/icon/icon-product.png' style='width:50px; height:100px; margin-left: auto; margin-right: auto;')
+		.flex-shrink-0.px-2.py-4.space-y-2
+			a.flex.items-center.justify-center.w-full.px-4.py-2.text-sm.text-white.rounded-md.bg-primary(href='/admin/products/create', target='_blank' style='width:80px; height:30px;' class='hover:bg-primary-dark focus:outline-none focus:ring focus:ring-primary-dark focus:ring-offset-1 focus:ring-offset-white dark:focus:ring-offset-dark') Thêm
+		table.rwd-table(style='width:100%')
+			tr
+				th(style='width:15%; text-align:center;') Image
+				th(style='width:15%; text-align:center;') Name...
+				th(style='width:35%; text-align:center;') Description...
+				th(style='width:10%; text-align:center;') Brand-Material-Pattern-Size-Discount-Prize
+				th(style='width:16%; text-align:center;') Color
+				th(style='width:5%; text-align:center;') Rating
+				th(style='width:2%') State
+				th(style='width:2%') Updated At
+					br 
+					p (day/month/year)
+			each product in products
+				tr
+					td(data-th='Image')
+						if product.imageCover
+							img(src=`/img/products/${product._id}/${product.imageCover}` style='width:250px; height:165px; border-radius:5px;')
+					td(data-th='Name') 
+						a.name-product(href=`/admin/review-detail/${product._id}` target='_blank')= product.name
+					td(data-th='Description')
+						div(style='height:200px; overflow:hidden;')= product.description
+					td(data-th='Info')
+						div(style='width:250px;')
+							p=`*Brand: ${product.brand}`
+							p=`*Material: ${product.material}`
+							p=`*Pattern: ${product.pattern}`
+							p= `*Size: ${product.size}`
+							p= `*Discount: ${product.discount+'%'}`
+							p= `*Price: ${(product.price/1000).toFixed(3)}đ`
+					td(data-th='Color')
+						each item in product.color.split(',')
+							- const items = item.split('-')
+							div(style='overflow: hidden; margin-top: 0.5em;')
+								p(style=`height: 25px;width: 25px;background-color: #${items[1].trim()};border-radius: 50%;display: inline-block; float: left;`)
+								p(style='float: right;')= items[0].trim()
+					td(data-th='Rating' style='text-align:center;')= `${product.ratingsAverage}⭐/${product.ratingsQuantity}✔️`
+					td(data-th='State')
+						if(product.outOfStock)
+							img(src='/icon/out-of-stock.png')
+						else 
+							img(src='/icon/left-stock.png')
+					td(data-th='UpdatedAt')= product.updatedAt.toLocaleString('vi-vn')
+					td
+						a.link.btnDelete(href='#' title='Delete' style='text-align:center' data-name=`${product.name}` data-id=`${product._id}`) ❎
+					td
+						a#btnEditProduct.link(href=`/admin/products/${product.slug}` title='Edit' style='text-align:center') 🖊️
+block extraScript    
+	script(src='/js/deleteSoftProduct.js' type='module')

@@ -3,6 +3,12 @@ const express = require('express');
 const morgan = require('morgan');
 require('dotenv').config({ path: `${__dirname}/setup.env` });
 const app = express();
+//help secure cookie(send token) check https
+app.enable('trust proxy');
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
+const multer = require('multer');
+
 const methodOverride = require('method-override');
 const mainRouter = require('./routes/mainRouter.js');
 const database = require('./config/database');
@@ -10,14 +16,18 @@ const port = process.env.PORT || 3000;
 const appError = require('./app/handler/appError');
 const errController = require('./app/handler/ErrorController');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 
 const compression = require('compression');
+
 //import SECURITY Lib
 const rateLimit = require('express-rate-limit');
+const limitRouter = require('./utils/limitRouter.js');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+const { options } = require('./routes/reviewRouter.js');
 
 //--CATCH-ERROR: uncaughtException have to happening in beginning
 process.on('uncaughtException', (err) => {
@@ -26,6 +36,7 @@ process.on('uncaughtException', (err) => {
 	process.exit(1);
 });
 //----------------------------------------------------------------
+
 database.connect();
 //-----------------CONFIG structure file
 app.set('view engine', 'pug');
@@ -33,6 +44,18 @@ app.set('views', path.join(__dirname, 'resources', 'views')); //use join auto jo
 app.use(express.static(path.join(__dirname, 'public')));
 
 //-----------------MIDDLEWARE
+// Implement CORS
+// Access-Control-Allow-Origin * in header: GET, POST
+app.use(cors());
+//Specific otherDomain use api
+//app.use(cors({
+// 	origin: 'hppts://www.ortherdomain.com'
+// }));
+// DELETE, PATCH
+app.options('*', cors());
+//Only use DELETE, PATCH with below api
+//app.options('/api/users/:id', cors());
+
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 app.use(methodOverride('_method'));
@@ -45,8 +68,8 @@ app.use(cookieParser());
 //     console.log(req.cookies)
 //     next()
 // })
-// -------------- SECURITY: **(Make sure the body is parsed beforehand)**
 
+// -------------- SECURITY: **(Make sure the body is parsed beforehand)**
 // Set security HTTP headers
 app.use(helmet());
 app.use(
@@ -57,25 +80,19 @@ app.use(
 				"'self'",
 				"'unsafe-eval'",
 				"'unsafe-inline'",
-				' cdnjs.cloudflare.com',
+				'cdnjs.cloudflare.com',
 				'code.jquery.com',
 				'ajax.googleapis.com',
 				'cdn.jsdelivr.net',
 				'kit.fontawesome.com',
+				'cdn.socket.io',
 			],
 			'script-src-attr': ["'self'", "'unsafe-inline'"],
 		},
 	})
 );
 
-// Limit request same IP - have to run before "mainRouter(app)"
-const limiter = rateLimit({
-	windowMs: 60 * 60 * 1000, // 1h
-	max: 100, // limit each IP to 100 request in 1h
-	message: 'Too many requests from this IP, please try again in an hour',
-});
-app.use('/api', limiter);
-
+limitRouter(app);
 // Data sanitization against NoSQL query injection: (look at the request body/query/params, and filter signs "$" and ".")
 app.use(mongoSanitize());
 
@@ -85,9 +102,10 @@ app.use(xss());
 // prevent parameter pollution (eg. name=a&name=b -> query with name=b)
 app.use(hpp());
 
-// COMPRESSION
+// COMPRESSION ALL MIDDLEWARE
 app.use(compression());
-//run routes and handle error for those routes
+
+//RUN ROUTER & HANDLE ERR
 mainRouter(app);
 //error handlers for routers
 app.all('*', (req, res, next) => {
@@ -96,19 +114,41 @@ app.all('*', (req, res, next) => {
 });
 app.use(errController);
 
-//listen port
-const server = app.listen(port, () => {
-	console.log(`App listening at http://127.0.0.1:${port}`);
+//LISTEN PORT
+server.listen(port, () => {
+	console.log(`App running on port: ${port}`);
 });
-// const server = https.createServer(app).listen(port, () => {
-//     console.log(`App listening at https://127.0.0.1:${port}`)
-// })
+//LISTEN SOCKET IO
+app.io = io;
+app.socketIds = [];
+io.on('connection', (socket) => {
+	var userId;
+	socket.on('ConnectLogin', (_id) => {
+		userId = _id;
+		app.socketIds[userId.toString()] = { socketId: socket.id };
+		console.log(
+			'---' + userId + ' -connected with socketId: ' + app.socketIds[userId].socketId
+		);
+	});
+	socket.on('disconnect', () => {
+		delete app.socketIds[userId];
+	});
+});
 
+//error handlers for routers
 //---CATCH-ERROR: can't connect to server
 process.on('unhandledRejection', (err) => {
 	console.log(err.name, err.message);
 	console.log('UNHANDLED REJECTION! 🔥 Shutting down...');
 	server.close(() => {
 		process.exit(1);
+	});
+});
+
+//SIGTERM  config heroku
+process.on('SIGTERM', () => {
+	console.log('👋SIGTERM RECEIVED. Shutting down gracefully');
+	server.close(() => {
+		console.log('👋Process terminated!');
 	});
 });

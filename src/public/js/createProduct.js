@@ -1,29 +1,42 @@
-async function showAlert(icon, title, text, value) {
-	await Swal.fire({
-		position: 'center',
-		icon: icon,
-		title: title,
-		text: text,
-		showConfirmButton: value,
-		timer: 1500,
-	});
-}
+import {
+	showAlertWaiting,
+	showAlertSuccess,
+	catchAsyncAction,
+	showAlertWarning,
+} from './handlerActionGeneric.js';
+import { capitalize } from './handleString.js';
+import {
+	EventCategoryAndType,
+	checkCurrentCategoryAndType,
+} from './handleCategoryAndTypeProduct.js';
+
+//handle category and type list
+checkCurrentCategoryAndType();
+EventCategoryAndType();
+
 const infoFormProduct = document.querySelector('.form-info-product-add');
-//set Event, USE UPLOAD IMAGE WITH POST, NOT USE FORMDATA UP LOAD IMAGE WITH POST, OBJECT NORMAL CAN NOT UPLOAD IMAGE
+
+//set Event, POST use URLSEARCHPARAMS/ PATCH use FORMDATA to upload image
 infoFormProduct.addEventListener('submit', async (e) => {
 	e.preventDefault();
 	const color = document.getElementById('color').value.replace(/\s+/g, ' ').trim();
 	const size = document.getElementById('size').value.replace(/\s+/g, ' ').trim();
+	const category = $('#category').val();
+	const type = $('#type').val();
+	const name = capitalize(document.getElementById('name').value.trim());
+	const description = capitalize(document.getElementById('description').value.trim());
+	const material = capitalize(document.getElementById('material').value.trim());
+	const pattern = capitalize(document.getElementById('pattern').value.trim());
 	var formData = new URLSearchParams();
-	formData.append('name', document.getElementById('name').value.trim());
-	formData.append('description', document.getElementById('description').value.trim());
+	formData.append('name', name);
+	formData.append('description', description);
 	formData.append('price', document.getElementById('price').value.trim());
 	formData.append('brand', document.getElementById('brand').value.trim());
-	formData.append('material', document.getElementById('material').value.trim());
-	formData.append('pattern', document.getElementById('pattern').value.trim());
+	formData.append('material', material);
+	formData.append('pattern', pattern);
 	formData.append('discount', document.getElementById('discount').value.trim());
-	formData.append('type', document.getElementById('type').value.trim());
-	formData.append('category', document.getElementById('category').value.trim());
+	formData.append('type', type);
+	formData.append('category', category);
 	formData.append('color', color);
 	formData.append('size', size);
 
@@ -34,36 +47,30 @@ infoFormProduct.addEventListener('submit', async (e) => {
 		formData.append('outOfStock', true);
 	}
 
-	//Ok create product, then check if it's have img... -> update that product + it's images
-	var resultCreate;
-	try {
-		const alertWaiting = Swal.fire({
-			title: 'Product is being added..., Please wait a moment, Do not dismiss!',
-			icon: 'warning',
-			showConfirmButton: false,
-			allowOutsideClick: false,
-			allowEscapeKey: false,
-			closeOnClickOutside: false,
-		});
+	//Ok create product
+	catchAsyncAction(async function () {
+		const alertWaiting = showAlertWaiting('Product is being added');
+		//(1)create product
 		var resultCreate = await axios({
 			method: 'POST',
 			url: 'http://127.0.0.1:3000/api/products',
 			data: formData,
 		});
 
-		//updateload image if product create success
+		// (2)create success -> upload image for that product
 		if (resultCreate.data.status === 'success') {
-			//create product success -> upload image
 			var idProduct = resultCreate.data.data._id;
 			var formDataUploadSecond = new FormData();
-			//add imageCover
+
+			// (2.1)check and add imageCover
 			if (document.getElementById('imageCover').files.length > 0) {
 				formDataUploadSecond.append(
 					'imageCover',
 					document.getElementById('imageCover').files[0]
 				);
 			}
-			//add images
+
+			// (2.2) check and add images
 			if (document.getElementById('images').files.length > 0) {
 				var numberFileOfImages = document.getElementById('images').files.length;
 
@@ -74,42 +81,29 @@ infoFormProduct.addEventListener('submit', async (e) => {
 					);
 				}
 			}
+
+			// (2.3) upload
 			if (formDataUploadSecond.has('imageCover') || formDataUploadSecond.has('images')) {
-				resultUpImage = await axios({
+				var resultUpImage = await axios({
 					method: 'PATCH',
 					url: `http://127.0.0.1:3000/api/products/${idProduct}`,
 					data: formDataUploadSecond,
 				});
+				alertWaiting.close();
 				if (resultUpImage.data.status === 'success') {
-					alertWaiting.close();
-					await showAlert(
-						'success',
+					await showAlertSuccess(
 						'Create product successfully!',
-						'Page will automatically reloaded',
-						false
+						'Page will automatically reloaded'
 					);
 					location.reload();
 				}
 			} else {
 				alertWaiting.close();
-				await Swal.fire({
-					position: 'center',
-					icon: 'warning',
-					title: 'WARNING',
-					text: '⚠️⚡Create product was missing images⚡⚠️, please update product with image later 😥',
-					showConfirmButton: true,
-				});
-				location.reload();
+				showAlertWarning(
+					'WARNING',
+					'Created product has not any image, please add image later 😥'
+				);
 			}
 		}
-	} catch (err) {
-		console.log(err);
-		await showAlert(
-			'error',
-			'Oops...!',
-			'Something went wrong!, please try again later.',
-			false
-		);
-		location.reload();
-	}
+	});
 });

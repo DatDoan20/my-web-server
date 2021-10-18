@@ -1,0 +1,162 @@
+doctype html
+head
+	meta(charset='utf-8')
+	title info product
+	meta(name='viewport' content='width=device-width, initial-scale=1')
+	link(href='https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css' rel='stylesheet')
+	link(rel='stylesheet' href='https://www.w3schools.com/w3css/4/w3.css')
+	link(href='/css/profileAdmin.css', rel='stylesheet')
+	link(rel='stylesheet' href='/css/reviewDetail.css')
+	link(rel="shortcut icon" href="#")
+body
+	.container
+		.row.gutters
+			.col-xl-4.col-lg-3.col-md-12.col-sm-12.col-12
+				.card.h-100
+					.card-body
+						.account-settings
+							.w3-content(style='max-width: 300px')
+								img.mySlides(src=`/img/products/${product._id}/${product.imageCover}` style='width: 300px; height=400px; border-radius: 5px;')
+								each imgItem, index in product.images								 
+									img.mySlides(src=`/img/products/${product._id}/${imgItem}` style='width: 300px; height=400px; border-radius: 5px; display: none;')
+								.w3-row-padding.w3-section
+									.w3-col.s4
+										img.demo.w3-opacity.w3-hover-opacity-off(src=`/img/products/${product._id}/${product.imageCover}` style='width: 60px; height=80px; border-radius: 5px; cursor: pointer; margin-top: 8px; border: solid; border-color:sienna;' onclick=`currentDiv(1)`)
+									each imgItem, index in product.images
+										.w3-col.s4
+											img.demo.w3-opacity.w3-hover-opacity-off(src=`/img/products/${product._id}/${imgItem}` style='width: 60px; height=80px; border-radius: 5px; cursor: pointer; margin-top: 8px; border: solid; border-color:sienna;' onclick=`currentDiv(${index+2})`)
+							.user-profile
+								h5.user-name= product.name
+							.about 
+								h5.b-2= product.description
+			.col-xl-8.col-lg-9.col-md-12.col-sm-12.col-12        
+				.card.h-100
+					.card-body
+						form.form-info-product.row.gutters(action="#", method='GET')
+							.col-xl-12.col-lg-12.col-md-12.col-sm-12.col-12
+								h6.mb-3.text-primary Product info
+							.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
+								.form-group
+									label(for='name') Name
+									textarea#name.form-control(name="name", cols="32", rows="1" readonly='readonly' style='color:black;')= product.name
+							.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
+								.form-group
+									label(for='description') Description
+									textarea#description.form-control(name="description", cols="32", rows="1" readonly='readonly' style='color:black;')= product.description
+							.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
+								.form-group
+									label(for='price') Price (Giá: Đơn vị đ)     
+									input#price.form-control(type='text' placeholder='Enter price ', value=`${product.price}` name='price' readonly='readonly' style='color:black;')                                                    
+							.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
+								.form-group
+									label(for='brand') Brand (Thương hiệu)
+									input#brand.form-control(type='text' placeholder='Enter brand', value=`${product.brand}` name='brand' readonly='readonly' style='color:black;')
+							.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
+								.form-group
+									label(for='material') Material (Chất liệu)
+									input#material.form-control(type='text' placeholder='Enter material', value=`${product.material}` name='material' readonly='readonly' style='color:black;')
+							.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
+								.form-group
+									label(for='pattern') Pattern (Kiểu dáng)
+									input#pattern.form-control(type='text' placeholder='Enter pattern', value=`${product.pattern}` name='pattern' readonly='readonly' style='color:black;')
+							.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
+								.form-group
+									label(for='type') Type(áo/quần/...)
+									input#type.form-control(type='text' placeholder='Enter type', value=`${product.type}` name='type' readonly='readonly' style='color:black;')
+							.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
+								.form-group
+									label(for='category') Category(Name/Nữ)
+									input#category.form-control(type='text' placeholder='Enter category', value=`${product.category}` name='category' readonly='readonly' style='color:black;')
+							.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
+								.form-group
+									label(for='size') Size (L - XKg - Xcm, ...)
+									textarea#size.form-control(type='size' placeholder='Enter size', name='size' , cols="30", rows="1" readonly='readonly' style='color:black;')= `${product.size}`
+							.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
+								.form-group
+									label(for='color') Color (Trắng, vàng, ...)
+									textarea#color.form-control(type='color' placeholder='Enter color', name='color' , cols="30", rows="1" readonly='readonly' style='color:black;')= `${product.color}`									
+							.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
+								.form-group
+									label(for='discount') Discount (giảm giá %)
+									input#discount.form-control(type='number' placeholder='Enter discount', value=`${product.discount}` name='discount' readonly='readonly' style='color:black;')
+							.col-xl-6.col-lg-6.col-md-6.col-sm-6.col-12
+								label Sate
+								if product.outOfStock === false
+									.custom-control.custom-radio
+										input#rdoAvailable.custom-control-input(type='radio' name='outOfStock' value='false' checked)
+										label.custom-control-label(for='rdoAvailable') còn hàng
+								else
+									.custom-control.custom-radio
+										input#rdoOutOfStock.custom-control-input(type='radio' name='outOfStock' value='true'  checked)
+										label.custom-control-label(for='rdoOutOfStock') hết hàng
+							.col-xl-12.col-lg-6.col-md-6.col-sm-6.col-12
+								h6.mb-3.text-primary Statistic Rating
+								label(style='font-size:21px; item-content:center;')= `${product.ratingsAverage}⭐/ ${product.reviews.length} lượt đánh giá`								
+								br
+								label= `5⭐ ${statisticsRating.five} đánh giá`
+								br
+								label= `4⭐ ${statisticsRating.four} đánh giá`
+								br
+								label= `3⭐ ${statisticsRating.three} đánh giá`
+								br
+								label= `2⭐ ${statisticsRating.two} đánh giá`														
+								br
+								label= `1⭐ ${statisticsRating.one} đánh giá`
+		br
+		.row.gutters
+			.col-xl-12.col-lg-3.col-md-12.col-sm-12.col-12
+				.card.h-100
+						.mess__container
+							.mess__rating
+								each review, index in product.reviews
+									.mess__comment
+										img.mess__comment-img(src=`/img/users/${review.userId.avatar}` alt='')
+										.mess__comment-content
+											.comment__content-header
+												span.comment__content-name= review.userId.name
+												| 
+												span.comment__content-time= `- ${review.updatedAt.toLocaleString('vi-vn')}`
+												| 
+											-for (var i = 0; i < review.rating; i++) {
+												img(src='/img/shop/star-gold.png' style='width:21px; height:21px;')
+											- }
+											-for (var i = 0; i < (5 - review.rating); i++) {
+												img(src='/img/shop/star-black.png' style='width:21px; height:21px;')
+											- }
+											br
+											span.comment__content-text= review.review
+											br
+											img(src='/img/shop/reply.png' style='width:21px; height:21px;' class=`btn-reply-${index}` review-id=`${review._id}`)
+									each commentItem in review.comments
+										ul.mess__rep-list
+											li.mess__rep-item
+												.mess__comment
+													img.mess__comment-img(src=`/img/users/${commentItem.userId.avatar}` alt='' )
+													.mess__comment-content
+														.comment__content-header
+															span.comment__content-name= commentItem.userId.name
+															|
+															span.comment__content-time= `-${commentItem.updatedAt.toLocaleString('vi-vn')}`
+														span.comment__content-text= commentItem.comment
+														br
+														img(src='/img/shop/reply.png' style='width:21px; height:21px;' class=`btn-reply-${index}` review-id=`${review._id}`)
+														img(src='/img/shop/delete.png' style='width:18px; height:18px; margin-left:10px;' class=`btn-delete-${commentItem._id}`)
+									li.mess__rep-item
+										.mess__comment(style='display:none;' id=`box-reply-${index}`)
+											img.mess__comment-img(src=`/img/users/${avatarAdmin}` alt='')
+											.mess__comment-content.wid-100
+												.comment__content-header
+													span.comment__content-name Shop - Admin										
+												textarea.comment__content-textarea(placeholder='Enter your comment to reply' id=`content-reply-${index}`)
+												div.send__btn(class=`btn-send-${index}`)
+													img.img-send(src='/img/shop/send.png')
+													span.text-send Send
+	script(src='https://code.jquery.com/jquery-1.10.2.min.js')
+	script(src='https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js')
+	//-handle click slideShowImg
+	script(src='/js/slideShowImg.js')
+	script(src='/js/handlerReviewComment.js' type='module')
+	//-lib
+	script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js")
+	script(src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js')
+	script(src='//cdn.jsdelivr.net/npm/sweetalert2@11')

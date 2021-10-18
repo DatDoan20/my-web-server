@@ -16,7 +16,7 @@ exports.protectUsers = catchAsync(async (req, res, next) => {
 	if (!token) {
 		return next(new appError('You are not login!!!', 401));
 	}
-	//verify
+	//verify -> here decode if token was expired it throw exception
 	const decoded = jwt.verify(token, process.env.JWT_SECRET);
 	// console.log(decoded)
 

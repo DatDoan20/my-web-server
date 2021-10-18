@@ -1,0 +1,113 @@
+/* base */
+:root {
+	--primary-color: purple;
+	--white-color: rgb(226, 222, 222);
+	--black-color: #000;
+	--text-color: #333;
+}
+
+.dis-none {
+	display: none;
+}
+
+.wid-100 {
+	width: 100%;
+}
+
+/* WEB */
+.mess__rep-list {
+	padding-left: 0;
+}
+
+.mess__rep-item {
+	list-style: none;
+	margin-left: 80px;
+}
+
+.mess__comment {
+	display: inline-flex;
+	margin-top: 10px;
+	width: 100%;
+}
+
+.mess__comment-img {
+	margin: 0 10px;
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+}
+
+.mess__comment-content {
+	background-color: var(--white-color);
+	border-radius: 8px;
+	padding: 5px;
+	margin: 0px 13px 5px 0px;
+}
+
+.comment__content-header {
+	margin: 5px 0;
+}
+
+.comment__content-name {
+	font-size: 1rem;
+	font-weight: bold;
+	color: var(--black-color);
+}
+
+.comment__content-time {
+	font-size: 1rem;
+	opacity: 80%;
+	color: var(--black-color);
+}
+
+.comment__content-text {
+	font-size: 1rem;
+	color: var(--black-color);
+	text-align: justify;
+}
+
+.comment__content-textarea {
+	padding: 0;
+	font-size: 1rem;
+	background-color: var(--white-color);
+	color: var(--black-color);
+	border: none;
+	outline: none;
+	width: 100%;
+}
+.send__btn {
+	border-radius: 8px;
+	padding: 3px;
+	width: 100px;
+	height: 30px;
+	margin-left: auto;
+	display: flex;
+	justify-content: center;
+	background-color: #0e669a;
+}
+.send__btn:hover {
+	cursor: pointer;
+	opacity: 0.8;
+}
+.img-send {
+	margin-right: 8px;
+}
+img:hover {
+	cursor: pointer;
+}
+/* BREAK POINT */
+/* PC */
+@media only screen and (min-width: 1024px) {
+}
+
+/* Tablet & Mobile */
+@media only screen and (max-width: 1023px) {
+}
+
+/* Tablet */
+@media only screen and (min-width: 740px) and (max-width: 1023px) {
+}
+
+/* Mobile */
+@media only screen and (max-width: 739px) {
+}

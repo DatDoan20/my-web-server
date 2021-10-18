@@ -33,6 +33,7 @@ header.relative.bg-white(class='dark:bg-darker')
       // Notification button
       button.p-2.transition-colors.duration-200.rounded-full.text-primary-lighter.bg-primary-50(@click='openNotificationsPanel', class='hover:text-primary hover:bg-primary-100 dark:hover:text-light dark:hover:bg-primary-dark dark:bg-dark focus:outline-none focus:bg-primary-100 dark:focus:bg-primary-dark focus:ring-primary-darker')
         span.sr-only Open Notification panel
+        h#icon-notify-generic
         svg.w-7.h-7(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke='currentColor', aria-hidden='true')
           path(stroke-linecap='round', stroke-linejoin='round', stroke-width='2', d='M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9')
       // Search button
@@ -50,7 +51,7 @@ header.relative.bg-white(class='dark:bg-darker')
       .relative(x-data='{ open: false }')
         button.transition-opacity.duration-200.rounded-full(@click='open = !open; $nextTick(() => { if(open){ $refs.userMenu.focus() } })', type='button', aria-haspopup='true', :aria-expanded="open ? 'true' : 'false'", class='dark:opacity-75 dark:hover:opacity-100 focus:outline-none focus:ring dark:focus:opacity-100')
           span.sr-only User menu
-          img.w-10.h-10.rounded-full(src='/img/otter.png', alt='Otter')
+          img#img-avatar-admin.w-10.h-10.rounded-full(src=`/img/users/${userAdmin.avatar}`, alt='avatar-admin', data-id=`${userAdmin._id}`)
         // User dropdown menu
         .absolute.right-0.w-48.py-1.bg-white.rounded-md.shadow-lg.top-12.ring-1.ring-black.ring-opacity-5(x-show='open', x-ref='userMenu', x-transition:enter='transition-all transform ease-out', x-transition:enter-start='translate-y-1/2 opacity-0', x-transition:enter-end='translate-y-0 opacity-100', x-transition:leave='transition-all transform ease-in', x-transition:leave-start='translate-y-0 opacity-100', x-transition:leave-end='translate-y-1/2 opacity-0', @click.away='open = false', @keydown.escape='open = false', class='dark:bg-dark focus:outline-none', tabindex='-1', role='menu', aria-orientation='vertical', aria-label='User menu')
           a.block.px-4.py-2.text-sm.text-gray-700.transition-colors(href='/admin/my-profile', role='menuitem', class='hover:bg-gray-100 dark:text-light dark:hover:bg-primary')
@@ -59,6 +60,7 @@ header.relative.bg-white(class='dark:bg-darker')
             | Settings
           a.block.px-4.py-2.text-sm.text-gray-700.transition-colors#MyBtnLogout(href='#', role='menuitem', class='hover:bg-gray-100 dark:text-light dark:hover:bg-primary')
             | Logout
+      span a
     // Mobile sub menu
     nav.absolute.flex.items-center.p-4.bg-white.rounded-md.shadow-lg.top-16.inset-x-4(x-transition:enter='transition duration-200 ease-in-out transform sm:duration-500', x-transition:enter-start='-translate-y-full opacity-0', x-transition:enter-end='translate-y-0 opacity-100', x-transition:leave='transition duration-300 ease-in-out transform sm:duration-500', x-transition:leave-start='translate-y-0 opacity-100', x-transition:leave-end='-translate-y-full opacity-0', x-show='isMobileSubMenuOpen', @click.away='isMobileSubMenuOpen = false', class='dark:bg-darker md:hidden', aria-label='Secondary')               
       .space-x-2

@@ -4,11 +4,12 @@ const factory = require('./HandlerFactory');
 
 //POST api/users/reviews/:id/comment
 exports.setCommentInfo = (req, res, next) => {
+	console.log('a');
 	req.body.userId = req.user._id;
 	req.body.reviewId = req.params.id;
 	next();
 };
-exports.createComment = factory.createOneDocument(Comment);
+exports.createComment = factory.createOneDocument(Comment, 'Comment');
 
 //DELETE api/users/reviews/comment/:id/force
 exports.deleteComment = factory.forceDeleteOneDocument(Comment);

@@ -22,14 +22,18 @@ Review.virtual('comments', {
 	foreignField: 'reviewId',
 	localField: '_id',
 });
-Review.index({ productId: 1, userId: 1 }, { unique: true });
+Review.index({ productId: 1 });
+Review.index({ userId: 1 });
 
 //middleware
 //get info user who is review
 Review.pre(/^find/, function (next) {
 	this.populate({
 		path: 'userId',
-		select: 'name avatar',
+		select: '_id name avatar',
+	}).populate({
+		path: 'comments',
+		select: '-createdAt',
 	});
 	next();
 });

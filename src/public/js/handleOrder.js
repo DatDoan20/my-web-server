@@ -1,71 +1,62 @@
-async function showAlertResult(icon, title, text) {
-	await Swal.fire({
-		position: 'center',
-		icon: icon,
-		title: title,
-		text: text,
-		showConfirmButton: false,
-		timer: 1500,
-	});
-}
+import {
+	showAlertWaiting,
+	showAlertFail,
+	showAlertSuccess,
+	showAlertConfirmAction,
+	catchAsyncAction,
+	showAlertWarning,
+} from './handlerActionGeneric.js';
 
-function showAlertConfirmAction(idOrder, totalPaymentOrder, title) {
-	return Swal.fire({
-		title: `Are you sure? (this action will ${title} this order)`,
-		text: `Order - ${idOrder} - TotalPayment: ${totalPaymentOrder}`,
-		icon: 'warning',
-		showCancelButton: true,
-		confirmButtonColor: '#3085d6',
-		cancelButtonColor: '#d33',
-		confirmButtonText: `Yes, ${title} it!`,
-	});
-}
-
-async function actionOrder(actionMethod, titleWaiting, titleResult, url, actionType, idOrder) {
-	try {
-		const alertWaiting = Swal.fire({
-			title: `${titleWaiting}..., Please wait a moment, Do not dismiss!`,
-			icon: 'warning',
-			showConfirmButton: false,
-			allowOutsideClick: false,
-			allowEscapeKey: false,
-			closeOnClickOutside: false,
-		});
+function actionOrder(actionMethod, titleWaiting, titleResult, url, actionType, idOrder) {
+	catchAsyncAction(async function () {
+		var alertWaiting = showAlertWaiting(titleWaiting);
 		var resultUpdate = await axios({
 			method: actionMethod,
 			url: url,
 		});
+		alertWaiting.close();
 		if (resultUpdate.data.status === 'success') {
-			alertWaiting.close();
-			await showAlertResult('success', `${titleResult}`, 'Page will automatically reloaded');
+			alertWaiting = showAlertWaiting(`${titleResult}, sending email...`);
+
 			if (actionType === 'cancel' || actionType === 'accept') {
-				//can nnot use resultUpdate.data.data._id to get idOrder because update(PATCH) will get it,
+				//can not use resultUpdate.data.data._id to get idOrder because update(PATCH) will get it,
 				//but update(Delete) will not return _id to get
-				await axios({
+				var resultSendEmail = await axios({
 					method: 'GET',
 					url: `http://127.0.0.1:3000/admin/orders/send-email/${idOrder}/${actionType}`,
 				});
+				alertWaiting.close();
+				if (resultSendEmail.data.status === 'success') {
+					await showAlertSuccess(
+						`Sending email success`,
+						'Page will automatically reloaded'
+					);
+				} else {
+					await showAlertFail(
+						`Sending email error after accepted Order`,
+						'Something wrong happened, please try again!'
+					);
+				}
+				location.reload();
 			}
-			location.reload();
 		}
-	} catch (err) {
-		console.log(err);
-		await showAlertResult(
-			'error',
-			'Oops...!',
-			'Something went wrong!, please try again later.'
-		);
-		location.reload();
-	}
+	});
 }
 var btnAccept = $('.btnAccept');
 btnAccept.click(function (e) {
 	e.preventDefault();
-	showAlertConfirmAction($(this).data('id'), $(this).data('total'), 'accept').then((result) => {
+	if ($(`#state-order-${$(this).data('id')}`).attr('state') === 'accepted') {
+		showAlertWarning('Can not do it', 'this order is already accepted');
+		return;
+	}
+	showAlertConfirmAction(
+		`Order - ${$(this).data('id')} - TotalPayment: ${$(this).data('total')}`,
+		'Are you sure? (this action will accept this order)'
+	).then((result) => {
 		if (result.isConfirmed) {
 			actionOrder(
 				'PATCH',
-				'Order is being processed(accepted)',
+				'Order is being accepted',
 				'Accepted Order successfully!',
 				`http://127.0.0.1:3000/admin/orders/accept/${$(this).data('id')}`,
 				'accept',
@@ -78,6 +69,7 @@ btnAccept.click(function (e) {
 var btnCancel = $('.btnCancel');
 btnCancel.click(function (e) {
 	e.preventDefault();
+<<<<<<< HEAD
 
 	showAlertConfirmAction($(this).data('id'), $(this).data('total'), 'delete').then(
 		async (result) => {
@@ -86,18 +78,74 @@ btnCancel.click(function (e) {
 				var resultCancel = await axios({
 					method: 'PATCH',
 					url: `http://127.0.0.1:3000/admin/orders/cancel/${$(this).data('id')}`,
+=======
+	showAlertConfirmAction(
+		`Order - ${$(this).data('id')} - TotalPayment: ${$(this).data('total')}`,
+		'Are you sure? (this action will delete this order)'
+	).then(async (result) => {
+		if (result.isConfirmed) {
+			var alertWaiting = showAlertWaiting('Changing state order...');
+			//update state canceled -> delete soft notify order -> -> delete soft order -> send email
+			var resultCancel = await axios({
+				method: 'PATCH',
+				url: `/admin/orders/cancel/${$(this).data('id')}`,
+			});
+			if (resultCancel.data.status === 'success') {
+				// delete soft notify order
+				var resultDeleteSoftNotifyOrder = await axios({
+					method: 'DELETE',
+					url: `/api/users/notify-orders/${$(this).data('id')}/soft`,
+>>>>>>> eaa34651602afc38a974c107c972af0beb3203b7
 				});
-				if (resultCancel.data.status === 'success') {
+				alertWaiting.close();
+				//delete soft order + send email
+				if (resultDeleteSoftNotifyOrder.data.status === 'success') {
 					actionOrder(
 						'DELETE',
 						'Order is being Cancel(delete)',
+<<<<<<< HEAD
 						'Canceled Order successfully!, You can check in Bin late. 🗑️',
 						`http://127.0.0.1:3000/admin/${$(this).data('id')}/soft`,
+=======
+						'Canceled Order successfully!🗑️',
+						`/admin/${$(this).data('id')}/soft`,
+>>>>>>> eaa34651602afc38a974c107c972af0beb3203b7
 						'cancel',
 						$(this).data('id')
 					);
 				}
 			}
 		}
-	);
+	});
+});
+
+var btnReceive = $('.btnReceive');
+btnReceive.click(function (e) {
+	e.preventDefault();
+	if ($(`#state-order-${$(this).data('id')}`).attr('state') === 'received') {
+		showAlertWarning('Can not do it', 'Customer has successfully received');
+		return;
+	}
+	showAlertConfirmAction(
+		`Order - ${$(this).data('id')} - TotalPayment: ${$(this).data('total')}`,
+		'Are you sure? (this action will check customer has received)'
+	).then(async (result) => {
+		if (result.isConfirmed) {
+			var alertWaiting = showAlertWaiting('Order is being handled');
+			var resultUpdateReceived = await axios({
+				method: 'PATCH',
+				url: `/admin/orders/receive/${$(this).data('id')}`,
+			});
+			alertWaiting.close();
+			if (resultUpdateReceived.data.status === 'success') {
+				await showAlertSuccess(`Handle success`, 'Page will automatically reloaded');
+			} else {
+				await showAlertFail(
+					`Check customer has received fail`,
+					'Something wrong happened, please try again!'
+				);
+			}
+			location.reload();
+		}
+	});
 });
