@@ -65,7 +65,7 @@ infoFormProduct.addEventListener('submit', async (e) => {
 		const alertWaiting = showAlertWaiting('Product is being updated');
 		resultUpdate = await axios({
 			method: 'PATCH',
-			url: `http://127.0.0.1:3000/api/products/${$('#submit').data('id')}`,
+			url: `/api/products/${$('#submit').data('id')}`,
 			data: formData,
 		});
 		if (resultUpdate.data.status === 'success') {

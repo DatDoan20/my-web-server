@@ -29,7 +29,7 @@ export function handleReply(contentReply, reviewId, reload) {
 		var data = { comment: contentReply };
 		var resultReply = await axios({
 			method: 'POST',
-			url: `http://127.0.0.1:3000/api/users/reviews/${reviewId}/comment`,
+			url: `/api/users/reviews/${reviewId}/comment`,
 			data: data,
 		});
 		alertWaiting.close();

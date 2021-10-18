@@ -33,7 +33,7 @@ function deleteProduct(id) {
 		const alertWaiting = showAlertWaiting('Deleting');
 		const res = await axios({
 			method: 'DELETE',
-			url: `http://127.0.0.1:3000/api/products/${id}`,
+			url: `/api/products/${id}`,
 		});
 
 		if (res.data.status === 'success') {

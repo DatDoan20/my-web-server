@@ -10,7 +10,7 @@ function handleRestore(productId) {
 		const alertWaiting = showAlertWaiting('Product is being processed(restore)');
 		var resultUpdate = await axios({
 			method: 'PATCH',
-			url: `http://127.0.0.1:3000/api/products/restore/${productId}`,
+			url: `/api/products/restore/${productId}`,
 		});
 		if (resultUpdate.data.status === 'success') {
 			alertWaiting.close();
@@ -25,7 +25,7 @@ function handleDestroy(productId) {
 		const alertWaiting = showAlertWaiting('Product is being Deleting');
 		var resultDestroy = await axios({
 			method: 'DELETE',
-			url: `http://127.0.0.1:3000/api/products/${productId}/force`,
+			url: `/api/products/${productId}/force`,
 		});
 		if (resultDestroy.data.status === 'success') {
 			alertWaiting.close();

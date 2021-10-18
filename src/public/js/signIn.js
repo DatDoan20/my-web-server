@@ -4,7 +4,7 @@ const singIn = async (formData) => {
 	try {
 		const res = await axios({
 			method: 'POST',
-			url: 'http://127.0.0.1:3000/api/users/sign-in-admin',
+			url: '/api/users/sign-in-admin',
 			data: formData,
 		});
 		if (res.data.status === 'success') {
