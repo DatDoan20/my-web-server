@@ -34,7 +34,7 @@ html(lang='en')
 				});
 				const res = await axios({
 					method: 'POST',
-					url: 'http://127.0.0.1:3000/api/users/forgot-password',
+					url: '/api/users/forgot-password',
 					data: formData	
 				})
 				if(res.data.status ==='success'){

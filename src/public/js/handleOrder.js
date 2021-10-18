@@ -23,7 +23,7 @@ function actionOrder(actionMethod, titleWaiting, titleResult, url, actionType, i
 				//but update(Delete) will not return _id to get
 				var resultSendEmail = await axios({
 					method: 'GET',
-					url: `http://127.0.0.1:3000/admin/orders/send-email/${idOrder}/${actionType}`,
+					url: `/admin/orders/send-email/${idOrder}/${actionType}`,
 				});
 				alertWaiting.close();
 				if (resultSendEmail.data.status === 'success') {
@@ -58,7 +58,7 @@ btnAccept.click(function (e) {
 				'PATCH',
 				'Order is being accepted',
 				'Accepted Order successfully!',
-				`http://127.0.0.1:3000/admin/orders/accept/${$(this).data('id')}`,
+				`/admin/orders/accept/${$(this).data('id')}`,
 				'accept',
 				$(this).data('id')
 			);
@@ -69,16 +69,6 @@ btnAccept.click(function (e) {
 var btnCancel = $('.btnCancel');
 btnCancel.click(function (e) {
 	e.preventDefault();
-<<<<<<< HEAD
-
-	showAlertConfirmAction($(this).data('id'), $(this).data('total'), 'delete').then(
-		async (result) => {
-			if (result.isConfirmed) {
-				//update state -> canceled -> delete soft
-				var resultCancel = await axios({
-					method: 'PATCH',
-					url: `http://127.0.0.1:3000/admin/orders/cancel/${$(this).data('id')}`,
-=======
 	showAlertConfirmAction(
 		`Order - ${$(this).data('id')} - TotalPayment: ${$(this).data('total')}`,
 		'Are you sure? (this action will delete this order)'
@@ -95,7 +85,6 @@ btnCancel.click(function (e) {
 				var resultDeleteSoftNotifyOrder = await axios({
 					method: 'DELETE',
 					url: `/api/users/notify-orders/${$(this).data('id')}/soft`,
->>>>>>> eaa34651602afc38a974c107c972af0beb3203b7
 				});
 				alertWaiting.close();
 				//delete soft order + send email
@@ -103,13 +92,8 @@ btnCancel.click(function (e) {
 					actionOrder(
 						'DELETE',
 						'Order is being Cancel(delete)',
-<<<<<<< HEAD
-						'Canceled Order successfully!, You can check in Bin late. 🗑️',
-						`http://127.0.0.1:3000/admin/${$(this).data('id')}/soft`,
-=======
 						'Canceled Order successfully!🗑️',
 						`/admin/${$(this).data('id')}/soft`,
->>>>>>> eaa34651602afc38a974c107c972af0beb3203b7
 						'cancel',
 						$(this).data('id')
 					);

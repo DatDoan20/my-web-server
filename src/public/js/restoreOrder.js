@@ -40,12 +40,8 @@ btnRestore.click(function (e) {
 				'PATCH',
 				'Order is being processed(restore)',
 				'Restore Order successfully!',
-<<<<<<< HEAD
-				`http://127.0.0.1:3000/admin/orders/restore/${idOrder}`
-=======
 				`/admin/orders/restore/${orderId}`,
 				orderId
->>>>>>> eaa34651602afc38a974c107c972af0beb3203b7
 			);
 		}
 	});
