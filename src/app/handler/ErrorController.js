@@ -48,7 +48,7 @@ const sendErrorProd = (err, req, res) => {
 	return res.status(err.statusCode).render('errorPage', {
 		statusCode: err.statusCode,
 		title: 'Something went wrong!',
-		msg: 'Please try again later',
+		message: 'Please try again later',
 	});
 };
 
