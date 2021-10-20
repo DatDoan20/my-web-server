@@ -67,8 +67,6 @@ head
 				.product-header-label.col.l-2.m-2.c-2 Tạm tính
 			each product in order.purchasedProducts
 				.product-contain.grid.wide.row
-					.product-img.col.l-1.m-2.c-1
-						img(src=`/img/products/${product._id}/${product.imageCover}` alt='ảnh sản phẩm')
 					p.product-name.col.l-6.m-2.c-3= product.name
 					span.product-cost.col.l-1.m-2.c-2= customDisplayPrice(product.price) + 'đ'
 					span.product-quantity.col.l-1.m-2.c-2= product.quantity

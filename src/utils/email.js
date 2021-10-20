@@ -7,30 +7,27 @@ module.exports = class Email {
 		this.to = user.email;
 		this.firstName = user.name.split(' ')[0];
 		this.url = url;
-		this.from = `Admin Clothes Shop <${process.env.EMAIL_FROM}>`;
+		this.from = process.env.EMAIL_FROM;
 		this.data = data;
 		this.nameKey = nameKey;
 	}
 	createNewTransport() {
 		if (process.env.NODE_ENV === 'production') {
-			//sendgrid (lib use real email)
 			return nodemailer.createTransport({
-				host: process.env.EMAIL_HOST,
-				port: process.env.EMAIL_PORT,
+				service: 'gmail',
 				auth: {
-					user: process.env.EMAIL_USERNAME,
-					pass: process.env.EMAIL_PASSWORD,
+					user: process.env.EMAIL_USERNAME_PRO,
+					pass: process.env.EMAIL_PASSWORD_PRO,
 				},
 			});
-			// return 1;
 		} else {
-			// 1. create a transporter
+			//mail trap
 			return nodemailer.createTransport({
 				host: process.env.EMAIL_HOST,
 				port: process.env.EMAIL_PORT,
 				auth: {
-					user: process.env.EMAIL_USERNAME,
-					pass: process.env.EMAIL_PASSWORD,
+					user: process.env.EMAIL_USERNAME_DEV,
+					pass: process.env.EMAIL_PASSWORD_DEV,
 				},
 			});
 		}
