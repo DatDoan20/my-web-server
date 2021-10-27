@@ -196,27 +196,30 @@ exports.updateEmail = catchAsync(async (req, res, next) => {
 //----------------------------------------------------------------
 //PATCH api/users/add-to-cart
 exports.addToCart = catchAsync(async (req, res, next) => {
-	let user = req.user;
-	const cartItem = req.body;
+	var user = req.user;
+	const cartReqAdd = req.body;
 
 	//find if product is exist in cart? - "haven't check yet"
-	const id = user.cart.findIndex((cartItem) => cartItem.infoProduct == cartItem.infoProduct);
+	const id = user.cart.findIndex((cartItem) => cartItem.infoProduct == cartReqAdd.infoProduct);
 	if (id !== -1) {
-		returnResultOfRequest(res, 200, 'Product was added to cart of user', user);
+		console.log('exist');
+		returnResultOfRequest(res, 200, 'Product was added to cart of user');
 	}
 
 	//product is not exist in cart
-	user.cart.push(cartItem);
+	user.cart.push(cartReqAdd);
 	await user.save();
-	user = await user
-		.populate({ path: 'cart.infoProduct', select: 'name discount imageCover  _id' })
-		.execPopulate();
+	user = await user.populate({
+		path: 'cart.infoProduct',
+		select: 'name discount imageCover  _id',
+	});
+	// .execPopulate();
 
 	returnResultOfRequest(res, 200, 'Add product to cart of user successfully', user);
 });
 //PATCH api/users/delete-product-in-cart
 exports.deleteProductInCart = catchAsync(async (req, res, next) => {
-	let user = req.user;
+	var user = req.user;
 	const productId = req.body;
 	// console.log(user.cart.findIndex((cartItem) => cartItem.infoProduct == productId.id));
 	// use == is not care datatype so request is string and datatype in DB is ObjectID
@@ -225,9 +228,11 @@ exports.deleteProductInCart = catchAsync(async (req, res, next) => {
 		1
 	);
 	await user.save();
-	user = await user
-		.populate({ path: 'cart.infoProduct', select: 'name discount imageCover  _id' })
-		.execPopulate();
+	user = await user.populate({
+		path: 'cart.infoProduct',
+		select: 'name discount imageCover  _id',
+	});
+	// .execPopulate();
 
 	returnResultOfRequest(res, 200, 'remove product in cart of user successfully', user);
 });

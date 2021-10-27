@@ -60,7 +60,8 @@ const emitSocketNotifyReview = async (nameEventEmit, req, createdReview) => {
 	var newNotifyReview = await NotifyReview.create(bodyNewNotifyReview);
 
 	// (3) populate to get extra information
-	newNotifyReview = await newNotifyReview.populate({ path: 'reviewId' }).execPopulate();
+	newNotifyReview = await newNotifyReview.populate({ path: 'reviewId' });
+	// .execPopulate();
 
 	// (4) emit socket to admin
 	if (req.app.socketIds[newNotifyReview.receiverId]) {
@@ -74,9 +75,11 @@ const emitSocketNotifyComment = async (nameEventEmit, req, createdComment) => {
 	//**THIS FUNCTION CREATE 'notifyComment' FOR 'createdComment' */
 
 	// (1) 'createdComment' is comment for review 'A', FORM review 'A' GET all comments of review 'A'
-	createdComment = await createdComment
-		.populate({ path: 'reviewId', select: '_id comments userId' })
-		.execPopulate();
+	createdComment = await createdComment.populate({
+		path: 'reviewId',
+		select: '_id comments userId',
+	});
+	// .execPopulate();
 
 	// (2) push 'userId' of 'who was review' into Array, so Array will contain 'userIdCommented' and 'userIdReviewed'
 	createdComment.reviewId.comments.push({
@@ -109,7 +112,8 @@ const emitSocketNotifyComment = async (nameEventEmit, req, createdComment) => {
 	var newNotifyComment = await NotifyComment.create(bodyNewNotifyComment);
 
 	// (5) populate notifyComment to get extra info
-	newNotifyComment = await newNotifyComment.populate({ path: 'commentId' }).execPopulate();
+	newNotifyComment = await newNotifyComment.populate({ path: 'commentId' });
+	// .execPopulate();
 
 	//(6) emit socket notifyComment to user in receiverIds
 	// console.log(newNotifyComment);
@@ -140,9 +144,11 @@ const emitSocketNotifyOrder = async (nameEventEmit, req, createdOrder) => {
 
 	// (3) create
 	var newNotifyOrder = await NotifyOrder.create(newBodyNotifyOrder);
-	newNotifyOrder = await newNotifyOrder
-		.populate({ path: 'orderId', populate: { path: 'userId' } })
-		.execPopulate();
+	newNotifyOrder = await newNotifyOrder.populate({
+		path: 'orderId',
+		populate: { path: 'userId' },
+	});
+	// .execPopulate();
 
 	// (4) check if admin is online? to emit
 	var adminId = newNotifyOrder.receiverIds[0].receiverId;

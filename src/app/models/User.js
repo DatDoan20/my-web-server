@@ -29,7 +29,11 @@ const User = new Schema(
 					size: { type: String, required: true },
 					color: { type: String, required: true },
 				},
-				{ _id: false }
+				{
+					_id: false,
+					toJSON: { virtuals: true },
+					toObject: { virtuals: true },
+				}
 			),
 		],
 
