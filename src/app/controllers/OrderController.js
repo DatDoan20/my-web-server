@@ -5,6 +5,8 @@ const Email = require('../../utils/email');
 const NotifyOrder = require('../models/NotifyOrder');
 const Response = require('../../utils/response');
 const appError = require('../handler/appError');
+const { google } = require('googleapis');
+
 // GET /api/orders/me (query to get all order of current user)
 exports.setOrderIdOfUser = catchAsync(async (req, res, next) => {
 	if (!req.query.userId) {
@@ -97,6 +99,14 @@ const emitStateNotifyOrder = async (req, notifyOrder) => {
 };
 //GET	admin/orders/send-email/:idOrder/:actionType
 exports.sendEmailInfoOrder = catchAsync(async (req, res, next) => {
+	// const oauth2ClientGoogle = new google.auth.OAuth2(
+	// 	'1092081683304-h3inrfgp2ogp6m54s0iupk6mbcuqpeiv.apps.googleusercontent.com',
+	// 	'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',
+	// 	'http://localhost:3000'
+	// );
+	// const accessToken = await oauth2ClientGoogle.getAccessToken();
+	// console.log('ahihi', accessToken);
+
 	var resultSendEmail;
 	if (req.params.actionType === 'accept') {
 		const order = await Order.findOne({ _id: req.params.idOrder });
