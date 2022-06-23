@@ -196,18 +196,40 @@ exports.updateEmail = catchAsync(async (req, res, next) => {
 //----------------------------------------------------------------
 //PATCH api/users/add-to-cart
 exports.addToCart = catchAsync(async (req, res, next) => {
+	const TYPE = {
+		NEED_PUSH_NEW: 0,
+		NEED_UPDATE: 1,
+	};
 	var user = req.user;
+	const timestamp = new Date().getUTCMilliseconds();
+	req.body.id = timestamp.toString();
 	const cartReqAdd = req.body;
 
 	//find if product is exist in cart? - "haven't check yet"
-	const id = user.cart.findIndex((cartItem) => cartItem.infoProduct == cartReqAdd.infoProduct);
-	if (id !== -1) {
-		console.log('exist');
-		returnResultOfRequest(res, 200, 'Product was added to cart of user');
+	let indexNeedUpdate = -1;
+	user.cart.forEach((cartItem, index) => {
+		if (
+			cartItem.infoProduct == cartReqAdd.infoProduct &&
+			cartItem.size === cartReqAdd.size &&
+			cartItem.color === cartReqAdd.color &&
+			cartItem.quantity > 0
+		) {
+			indexNeedUpdate = index;
+			return;
+		} else if (
+			(cartItem.infoProduct == cartReqAdd.infoProduct && cartItem.size !== cartReqAdd.size) ||
+			(cartItem.color !== cartReqAdd.color && cartItem.quantity > 0)
+		) {
+			return;
+		}
+	});
+
+	if (indexNeedUpdate !== -1) {
+		user.cart[indexNeedUpdate].quantity += cartReqAdd.quantity;
+	} else {
+		user.cart.push(cartReqAdd);
 	}
 
-	//product is not exist in cart
-	user.cart.push(cartReqAdd);
 	await user.save();
 	user = await user.populate({
 		path: 'cart.infoProduct',
@@ -220,11 +242,8 @@ exports.addToCart = catchAsync(async (req, res, next) => {
 //PATCH api/users/delete-product-in-cart
 exports.deleteProductInCart = catchAsync(async (req, res, next) => {
 	var user = req.user;
-	const productId = req.body;
-	// console.log(user.cart.findIndex((cartItem) => cartItem.infoProduct == productId.id));
-	// use == is not care datatype so request is string and datatype in DB is ObjectID
 	user.cart.splice(
-		user.cart.findIndex((cartItem) => cartItem.infoProduct == productId.id),
+		user.cart.findIndex((cartItem) => cartItem.id === req.body.id),
 		1
 	);
 	await user.save();
