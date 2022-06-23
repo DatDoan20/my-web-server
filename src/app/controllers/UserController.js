@@ -236,7 +236,6 @@ exports.addToCart = catchAsync(async (req, res, next) => {
 		select: 'name discount imageCover  _id',
 	});
 	// .execPopulate();
-
 	returnResultOfRequest(res, 200, 'Add product to cart of user successfully', user);
 });
 //PATCH api/users/delete-product-in-cart
