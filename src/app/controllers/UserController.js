@@ -226,6 +226,7 @@ exports.addToCart = catchAsync(async (req, res, next) => {
 
 	if (indexNeedUpdate !== -1) {
 		user.cart[indexNeedUpdate].quantity += cartReqAdd.quantity;
+		user.cart[indexNeedUpdate].price += cartReqAdd.price;
 	} else {
 		user.cart.push(cartReqAdd);
 	}
