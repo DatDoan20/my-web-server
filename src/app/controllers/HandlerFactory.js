@@ -206,6 +206,7 @@ exports.getOneDocument = (Model, populateOption) =>
 // GET ALL
 exports.getAllDocuments = (Model, populateOption) =>
 	catchAsync(async (req, res, next) => {
+		console.log(req.query);
 		let query;
 		//EXECUTE QUERY
 		let apiFeature = new APIFeature(Model, req.query)

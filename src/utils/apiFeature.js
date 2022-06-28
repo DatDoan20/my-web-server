@@ -17,11 +17,30 @@ class APIFeature {
 				$options: 'i',
 			};
 		}
+		if (
+			queryObjectInput.hasOwnProperty('fromPrice') &&
+			queryObjectInput.hasOwnProperty('toPrice')
+		) {
+			// queryObjectInput.price = {
+			// 	$and: [
+			// 		{ price: { gte: queryObjectInput.fromPrice } },
+			// 		{ price: { lte: queryObjectInput.toPrice } },
+			// 	],
+			// };
+			queryObjectInput.price = {
+				gte: queryObjectInput.fromPrice,
+				lte: queryObjectInput.toPrice,
+			};
+
+			delete queryObjectInput.fromPrice;
+			delete queryObjectInput.toPrice;
+		}
 
 		//BUILD QUERY CONDITION
 		let queryJsonInput = JSON.stringify(queryObjectInput);
 		//g means that is will happen multiple times
 		queryJsonInput = queryJsonInput.replace(/\b(gte|gt|lte|lt|ne)\b/g, (match) => `$${match}`);
+		console.log(JSON.parse(queryJsonInput));
 		//convert to object to find
 		this.queryOutput = this.queryOutput.find(JSON.parse(queryJsonInput));
 		return this;
