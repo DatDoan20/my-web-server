@@ -47,10 +47,23 @@ class APIFeature {
 	}
 	sort() {
 		if (this.queryStringInput.sort) {
-			// if(req.query.sort === 'top-seller'){
-
-			// }
-			this.queryOutput = this.queryOutput.sort({ price: this.queryStringInput.sort }); //price:desc/asc
+			switch (this.queryStringInput.sort) {
+				case 'price-asc':
+					this.queryOutput = this.queryOutput.sort('-price');
+					break;
+				case 'price-desc':
+					this.queryOutput = this.queryOutput.sort('price');
+					break;
+				case 'newest':
+					this.queryOutput = this.queryOutput.sort('-createdAt'); // newest
+					break;
+				case 'top-sale':
+					this.queryOutput = this.queryOutput.sort('-discount');
+					break;
+				default: //price:desc/asc
+					this.queryOutput = this.queryOutput.sort('-price');
+					break;
+			}
 		} else {
 			//"-" is descending
 			this.queryOutput = this.queryOutput.sort('-createdAt'); //newest
