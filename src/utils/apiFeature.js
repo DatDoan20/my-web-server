@@ -48,20 +48,22 @@ class APIFeature {
 	sort() {
 		if (this.queryStringInput.sort) {
 			switch (this.queryStringInput.sort) {
+				// tăng
 				case 'price-asc':
-					this.queryOutput = this.queryOutput.sort('-price');
+					this.queryOutput = this.queryOutput.sort({ price: 1 });
 					break;
+				// giảm
 				case 'price-desc':
-					this.queryOutput = this.queryOutput.sort('price');
+					this.queryOutput = this.queryOutput.sort({ price: -1 });
 					break;
 				case 'newest':
 					this.queryOutput = this.queryOutput.sort('-createdAt'); // newest
 					break;
 				case 'top-sale':
-					this.queryOutput = this.queryOutput.sort('-discount');
+					this.queryOutput = this.queryOutput.sort({ discount: -1 });
 					break;
 				default: //price:desc/asc
-					this.queryOutput = this.queryOutput.sort('-price');
+					this.queryOutput = this.queryOutput.sort({ price: 1 });
 					break;
 			}
 		} else {
